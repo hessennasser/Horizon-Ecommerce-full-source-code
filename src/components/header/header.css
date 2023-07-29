@@ -1,0 +1,34 @@
+.openMenuHeader {
+    width: 100vw;
+    height: 100vh;
+    background: #6259a8;
+    position: fixed;
+    top: 0 !important;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 99;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+}
+
+
+/* Arabic Styles */
+
+body[dir="rtl"] .lang-toggler button svg:nth-child(1) {
+    margin-inline: 10px;
+}
+
+body[dir="rtl"] .search-holder [data-testid="right-icon"] {
+    width: 100%;
+}
+
+body[dir="rtl"] .search-holder [data-testid="right-icon"] svg {
+    position: absolute;
+    left: 10px;
+}

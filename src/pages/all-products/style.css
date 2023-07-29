@@ -1,0 +1,23 @@
+.filters {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    row-gap: 1rem;
+    transition: 0.4s;
+    -webkit-transition: 0.4s;
+    -moz-transition: 0.4s;
+    -ms-transition: 0.4s;
+    -o-transition: 0.4s;
+}
+/* 
+.show-filters {
+    width: 320px !important;
+    max-width: 80%;
+} */
+
+/* Media queries for tablet and phone screens */
+/* @media only screen and (max-width: 776px) {
+    .filters.show-filters {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+} */
