@@ -10,6 +10,8 @@ import { AppContext } from '../../AppContext'
 const Home = () => {
     const { products, getAllCategories, categories } = useContext(AppContext);
     const userLogged = localStorage.getItem("userLogged");
+    const sellerLogged = localStorage.getItem("sellerLogged");
+
     useEffect(() => {
         getAllCategories();
         console.log(categories);
@@ -27,7 +29,7 @@ const Home = () => {
             <HomeCategories categories={categories} />
 
             {
-                !userLogged && <StartedCard />
+                (!userLogged && !sellerLogged) && <StartedCard />
             }
             {/* <PaymentMethods /> */}
         </>

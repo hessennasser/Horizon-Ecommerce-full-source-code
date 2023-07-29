@@ -40,7 +40,7 @@ const ProfilePage = () => {
     const [phone, setPhone] = useState(userLogged ? userInfoState?.phone : sellerInfoState?.phone);
     const [cashNumber, setCashNumber] = useState(sellerInfoState?.cash_number);
     const [password, setPassword] = useState("");
-    const [confermPassword, setConfermPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [selectedGovernorate, setSelectedGovernorate] = useState("");
 
     const togglePasswordVisibility = () => {
@@ -69,8 +69,8 @@ const ProfilePage = () => {
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
     };
-    const handleConfarmParsswordChange = (e) => {
-        setConfermPassword(e.target.value);
+    const handleConfirmPasswordChange = (e) => {
+        setConfirmPassword(e.target.value);
     };
     // 
     const handleEditProfile = async (event) => {
@@ -103,11 +103,11 @@ const ProfilePage = () => {
             toast.info(i18n.language === "en" ? "please enter new password" : "ادخل كلمة المرور الجديده");
             return;
         }
-        if (!confermPassword) {
+        if (!confirmPassword) {
             toast.info(i18n.language === "en" ? "please enter confirmation password" : "ادخل تاكيد كلمة المرور");
             return;
         }
-        if (password !== confermPassword) {
+        if (password !== confirmPassword) {
             toast.info(i18n.language === "en" ? "password and confirmation password not match" : "كلمة المرور وتاكيد كلمة المرور غير متطابقين");
             return;
         }
@@ -121,7 +121,7 @@ const ProfilePage = () => {
                 governorate_id: sellerInfoState.governorate_id,
                 cash_number: cashNumber,
                 password: password,
-                password_confirmation: confermPassword,
+                password_confirmation: confirmPassword,
             };
             const response = await axios.post(`${apiUrl}${userLogged ? "/auth/user-update" : "/vendor/auth/vendor-update"}`, updatedData);
             toast.success("The password updated successfully");
@@ -376,8 +376,8 @@ const ProfilePage = () => {
                                         className={`w-full bg-gray-300`}
                                         id='confirm-password'
                                         type={showPassword ? "text" : "password"}
-                                        value={confermPassword}
-                                        onChange={handleConfarmParsswordChange}
+                                        value={confirmPassword}
+                                        onChange={handleConfirmPasswordChange}
                                     />
                                 </div>
                                 <div className='w-full grid grid-cols-2 gap-3'>
@@ -614,8 +614,8 @@ const ProfilePage = () => {
                                         className={`w-full bg-gray-300`}
                                         id='confirm-password'
                                         type={showPassword ? "text" : "password"}
-                                        value={confermPassword}
-                                        onChange={handleConfarmParsswordChange}
+                                        value={confirmPassword}
+                                        onChange={handleConfirmPasswordChange}
                                     />
                                 </div>
                                 <div className='w-full grid grid-cols-2 gap-3'>
