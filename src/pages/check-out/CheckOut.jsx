@@ -86,13 +86,6 @@ const CheckOut = () => {
             setLoading(false);
             return;
         }
-        // Regular expression for Egyptian phone numbers
-        const egyptianPhoneRegex = /^(?:01)(?:0|1|2|5)[0-9]{8}$/;
-        if (!egyptianPhoneRegex.test(phone) || !egyptianPhoneRegex.test(formData.phoneNumber) || !egyptianPhoneRegex.test(cashNumber) || !egyptianPhoneRegex.test(formData.phoneNumber)) {
-            toast.error(i18n.language === "en" ? "Invalid Egyptian phone number" : "رقم هاتف مصري غير صالح");
-            setLoading(false);
-            return;
-        }
 
         const checkoutData = { ...formData, governorate_id: selectedGovernorate.value, city: selectedGovernorate.label, token: userToken };
         console.log(selectedGovernorate);
@@ -115,11 +108,24 @@ const CheckOut = () => {
         formReqData.append('vodafone_cash_number', cashNumber);
         formReqData.append('photo', cashPhoto);
         console.log(selectedGovernorate);
-        if (!Object.values(checkoutData).every(value => value)) {
+        if (!Object.values(checkoutData).every(value => value) && checkoutData.selectedPaymentMethod !== 'cash-on-delivery') {
             toast.info(i18n.language === "en" ? "Please fill all fields" : "من فضلك ادخل جميع البيانات");
             setLoading(false);
             return;
         }
+        
+        // Create an array of keys to exclude from the check
+        const keysToExclude = ['vodafone_cash_number', 'photo'];
+
+        // Check if all values in checkoutData (excluding the excluded keys) are truthy
+        if (checkoutData.selectedPaymentMethod === 'cash-on-delivery' && !Object.entries(checkoutData)
+            .filter(([key, value]) => !keysToExclude.includes(key)) // Exclude specified keys
+            .every(([key, value]) => value)) {
+            toast.info(i18n.language === "en" ? "Please fill all fields" : "من فضلك ادخل جميع البيانات");
+            setLoading(false);
+            return;
+        }
+
         try {
             const response = await mainRequest.post(`${apiUrl}/payment`, formReqData);
             toast.success(i18n.language === "en" ? "Your Oreder Succsesfly Done" : "تم ارسال طلبك بنجاح");
