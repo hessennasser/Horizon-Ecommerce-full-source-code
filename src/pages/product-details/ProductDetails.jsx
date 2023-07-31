@@ -7,15 +7,14 @@ import { AiFillStar } from "react-icons/ai"
 import { BsCart4 } from "react-icons/bs"
 import "../cart/style.css"
 import { AppContext } from '../../AppContext';
-import { set } from 'react-hook-form';
-import { Dna } from 'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
+import ImagesGallery from './ImagesGallery';
+
 const ProductDetails = () => {
     const { id } = useParams()
     const { i18n } = useTranslation();
-    const { addToCart, getProductsForCategory, handelUpdateQuantity, setCartItems } = useContext(AppContext)
-    const [userQuantity, setUserQuantity] = useState(1);
+    const { addToCart } = useContext(AppContext)
     const [product, setProduct] = useState({})
-    const [productsInCategory, setProductsInCategory] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const getProduct = async () => {
@@ -43,31 +42,29 @@ const ProductDetails = () => {
                 loading ? (
                     <div className="container py-10 flex flex-col gap-5 items-center justify-center">
                         <h2 className="text-xl font-bold">{i18n.language === "en" ? "Loading..." : "جاري التحميل..."}</h2>
-                        <Dna
+                        <Oval
                             visible={true}
                             height="160"
                             width="160"
-                            ariaLabel="dna-loading"
+                            ariaLabel="Oval-loading"
                             wrapperStyle={{}}
-                            wrapperClass="dna-wrapper"
+                            wrapperClass="Oval-wrapper"
                         />
                     </div>
                 ) : (
                     <div className='container py-10'>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-
                             {images && images.length > 0 && (
-                                <div className="img-holder p-5 bg-gray-200 flex items-center justify-center rounded-lg shadow-md">
+                                <div className="img-holder col-span-1 p-5 bg-gray-200 flex items-center justify-center rounded-lg shadow-md">
                                     <img className='h-72 w-full object-contain' src={`https://admin.horriizon.com/public/assets/${images[0]?.path}`} alt={i18n.language === "en" ? title?.en : title?.ar} />
                                 </div>
                             )}
-                            <div className="product-details flex flex-col col-span-2 gap-5 px-5">
+                            <div className="product-details flex flex-col gap-5 px-5 mt-5 md:col-span-2">
 
                                 <h2 className='text-xl font-bold'>{i18n.language === "en" ? title?.en : title?.ar}</h2>
 
                                 <div className="flex gap-5">
                                     <div className="flex gap-3">
-                                        {/* <span>15 sales</span> */}
                                         <span className="flex items-center gap-2"><AiFillStar className="text-[#FFC831]" />5.0 (10)</span>
                                     </div>
                                     <p>{i18n.language === 'en' ? `quantity in stock : ${quantity}` : `الكميه المتاحه : ${quantity}`}</p>
@@ -90,37 +87,7 @@ const ProductDetails = () => {
                                     <p>{i18n.language === 'en' ? "Expiration date" : "تاريخ الانتهاء"}</p>
                                     <p className='border w-3/5 text-center px-6 py-1'>{start_date}</p>
                                 </div>
-
-                                {/* <div className='flex justify-between items-center text-gray-400 pb-5 border-b'>
-                        <label className="font-bold" htmlFor="quantity">
-                            {i18n.language === 'en' ? 'Quantity' : 'الكمية'}
-                        </label>
-                        <div className="quantity-control flex items-center">
-                            <button className="quantity-button text-black bg-gray-300 mx-2 px-2 font-bold text-2xl" onClick={handleDecrement}>
-                                -
-                            </button>
-                            <input
-                                type="number"
-                                name="quantity"
-                                min={1}
-                                id="quantity"
-                                className="border-none focus:outline-none bg-transparent w-20 text-center"
-                                value={userQuantity}
-                                onChange={handleQuantityChange}
-                            />
-                            <button className="quantity-button text-black bg-gray-300 mx-2 px-2 font-bold text-2xl" onClick={handleIncrement}>
-                                +
-                            </button>
-                        </div>
-                    </div> */}
-
                                 <div className="actoins grid grid-cols-1 justify-items-center items-center gap-3">
-                                    {/* <button
-                            className="m-0 text-sm text-center px-5 bg-secondColor py-2 rounded-md text-white"
-                            type="button"
-                        >
-                            {i18n.language === "en" ? "Buy Now" : "اشتري الان"}
-                        </button> */}
                                     <button
                                         onClick={() => { addToCart(id) }}
                                         className="m-0 text-sm text-center flex items-center justify-center gap-2 px-5 py-2 rounded-md border border-black text-black duration-200 hover:bg-secondColor hover:text-white"

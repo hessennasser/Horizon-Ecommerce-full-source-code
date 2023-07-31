@@ -7,7 +7,7 @@ import 'flowbite';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { AppContext, AppProvider } from './AppContext';
-import { Dna } from 'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
 import { ToastContainer } from "react-toastify";
 
 const Home = lazy(() => import('./components/home/Home'));
@@ -27,7 +27,9 @@ const Cart = lazy(() => import('./pages/cart/Cart'));
 const CheckOut = lazy(() => import('./pages/check-out/CheckOut'));
 const ContactUs = lazy(() => import('./pages/contact-us/contactUs'));
 const AboutUs = lazy(() => import('./pages/about-us/AboutUs'));
-const ProductDetails = lazy(() => import('./pages/product-details/ProductDetails'));
+// const ProductDetails = lazy(() => import('./pages/product-details/ProductDetails'));
+import ProductDetails from './pages/product-details/ProductDetails';
+import ScrollToTopButton from './components/ScrollToTopButton';
 
 function AppContent() {
   const { i18n } = useTranslation();
@@ -49,13 +51,13 @@ function AppContent() {
     <div className="App bg-[#F4F4F4]">
       <Suspense fallback={
         <div className="h-screen w-screen grid place-content-center">
-          <Dna
+          <Oval
             visible={true}
             height="160"
             width="160"
-            ariaLabel="dna-loading"
+            ariaLabel="Oval-loading"
             wrapperStyle={{}}
-            wrapperClass="dna-wrapper"
+            wrapperClass="Oval-wrapper"
           />
         </div>
       }>
@@ -93,7 +95,10 @@ function AppContent() {
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/about-us" element={<AboutUs />} />
         </Routes>
+
         <MyFooter />
+        {/* Go To Top button */}
+        <ScrollToTopButton />
       </Suspense>
     </div>
   );

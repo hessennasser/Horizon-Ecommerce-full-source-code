@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import CartItem from './CartItem';
 import { AppContext } from '../../AppContext';
 import { useTranslation } from 'react-i18next';
-import { Dna } from 'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
 
 const Cart = () => {
     const { i18n } = useTranslation();
@@ -73,13 +73,13 @@ const { getCartItems, getTotalPriceInCart, total: itemsTotal, cartItems, setCart
                     (
                         <div className="container py-10 flex flex-col gap-5 items-center justify-center">
                             <h2 className="text-xl font-bold">{i18n.language === "en" ? "Loading..." : "جاري التحميل..."}</h2>
-                            <Dna
+                            <Oval
                                 visible={true}
                                 height="160"
                                 width="160"
-                                ariaLabel="dna-loading"
+                                ariaLabel="Oval-loading"
                                 wrapperStyle={{}}
-                                wrapperClass="dna-wrapper"
+                                wrapperClass="Oval-wrapper"
                             />
                         </div>
                     )

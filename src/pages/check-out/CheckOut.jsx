@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import Select from 'react-select';
 import apiUrl from '../../apiUrl';
 import { toast } from 'react-toastify';
-import { Dna } from 'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
 import { set } from 'react-hook-form';
 
 const CheckOut = () => {
@@ -200,13 +200,13 @@ const CheckOut = () => {
                 loading && (
                     <div className="fixed top-0 left-0 w-full h-full bg-[#F4F4F4] bg-opagovernorate_id-60 z-50">
                         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                            <Dna
+                            <Oval
                                 visible={true}
                                 height="260"
                                 width="260"
-                                ariaLabel="dna-loading"
+                                ariaLabel="Oval-loading"
                                 wrapperStyle={{}}
-                                wrapperClass="dna-wrapper"
+                                wrapperClass="Oval-wrapper"
                             />
                         </div>
                     </div>

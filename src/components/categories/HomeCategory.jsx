@@ -14,7 +14,7 @@ export const HomeCategory = ({ category }) => {
                     src={`https://admin.horriizon.com/public/assets/${category.image}`}
                     alt="" />
             </div>
-            <div className="flex items-center gap-2 justify-between">
+            <div className="flex items-center gap-2 justify-between mt-5">
                 <h3 className="font-semibold">
                     {i18n.language === "en" ? category.title.en : category.title.ar}
                 </h3>

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import apiUrl from '../../apiUrl';
 import { AppContext } from '../../AppContext';
-import { Dna } from 'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
 import Breadcrumbs from '../../components/Breadcrumbs';
 import DataTable from 'react-data-table-component';
 
@@ -205,7 +205,7 @@ const Order = () => {
                     <h2 className="text-xl font-bold">
                         {i18n.language === 'en' ? 'Loading...' : 'جاري التحميل...'}
                     </h2>
-                    <Dna visible={true} height="160" width="160" ariaLabel="dna-loading" wrapperStyle={{}} wrapperClass="dna-wrapper" />
+                    <Oval visible={true} height="160" width="160" ariaLabel="Oval-loading" wrapperStyle={{}} wrapperClass="Oval-wrapper" />
                 </div>
             ) : allOrders?.length > 0 ? (
                 <div>

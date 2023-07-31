@@ -5,7 +5,7 @@ import "swiper/css/pagination";
 import "./styles.css";
 
 // import required modules
-import { Autoplay, Pagination } from "swiper";
+import { Autoplay, Pagination } from "swiper/modules";
 import SingleProductCard from "../products/SingleProductCard";
 import { useTranslation } from "react-i18next";
 

@@ -15,9 +15,10 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
     const sellerToken = JSON.parse(localStorage.getItem('sellerToken'));
 
     // add new product in dashboard
-    const addNewProduct = async ({ title_ar, title_en, start_date, category, quantity, price, image }, setIsLoading, setAddModal) => {
+    const addNewProduct = async ({ title_ar, title_en, start_date, category, quantity, price, images }, setIsLoading, setAddModal) => {
+        setIsLoading(true);
         try {
-            // Create the form data with the modified image
+            // Create the form data with the modified images
             const formData = new FormData();
             formData.append('token', sellerToken);
             formData.append('title_ar', title_ar);
@@ -26,13 +27,16 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
             formData.append('quantity', quantity);
             formData.append('price', price);
             formData.append('start_date', start_date);
-            formData.append('images', image, image.name);
+            formData.append('images', images[0], images[0].name);
+
+            // for (let i = 0; i < images.length; i++) {
+            //     formData.append(`images[${i}]`, images[i], images[i].name);
+            // }
 
             const response = await mainRequest.post(`${apiUrl}/vendor/products/create`, formData, {
                 headers: {
                     'accept': 'application/json',
                     'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${sellerToken}`,
                 },
             });
 
@@ -42,7 +46,7 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
             getSellerProducts(setAllProducts);
         } catch (error) {
             console.log(error);
-            toast.error(i18n.language === "en" ? "There is an error, please try again later" : "يوجد خطأ ما، الرجاء المحاولة مره اخري");
+            toast.error(i18n.language === "en" ? "There is an error, please try again later" : "يوجد خطأ ما، الرجاء المحاولة مرة أخرى");
         }
         finally {
             setIsLoading(false);
@@ -61,27 +65,48 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
         start_date: '',
     });
 
-    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedImages, setSelectedImages] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     const handleAddNew = () => {
-        if (!selectedImage || !formData.title_ar || !formData.category || !formData.quantity || !formData.price || !formData.start_date) {
+        if (!selectedImages || selectedImages.length === 0 || !formData.title_ar || !formData.category || !formData.quantity || !formData.price || !formData.start_date) {
             toast.error(i18n.language === 'en' ? 'Please enter all required fields' : 'برجاء إدخال جميع الحقول المطلوبة');
             return;
         }
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            const blob = new Blob([reader.result], { type: selectedImage.type });
+
+        const readerPromises = [];
+        const imageBlobs = [];
+
+        for (let i = 0; i < selectedImages?.length; i++) {
+            const reader = new FileReader();
+            readerPromises.push(
+                new Promise((resolve) => {
+                    reader.onloadend = () => {
+                        const blob = new Blob([reader.result], { type: selectedImages[i].type });
+                        imageBlobs.push(blob);
+                        resolve();
+                    };
+                })
+            );
+            reader.readAsArrayBuffer(selectedImages[i]);
+        }
+
+        Promise.all(readerPromises).then(() => {
             const updatedFormData = {
                 ...formData,
-                image: blob
+                title_en: formData.title_en?.trim() || formData.title_ar.trim(),
+                images: imageBlobs
             };
-            console.log(updatedFormData);
             addNewProduct(updatedFormData, setIsLoading, setAddModal, getSellerProducts, setAllProducts);
-        };
-        reader.readAsArrayBuffer(selectedImage);
-
+        });
     };
+
+    const handleRemovePhoto = (index) => {
+        const updatedImages = [...selectedImages];
+        updatedImages.splice(index, 1);
+        setSelectedImages(updatedImages);
+    };
+
 
     return (
         <div className="fixed z-[10000] inset-0 overflow-y-auto">
@@ -120,9 +145,44 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
                                 <FileInput
                                     id='image'
                                     required
-                                    onChange={(e) => setSelectedImage(e.target.files[0])}
+                                    multiple // Allow multiple file selection
+                                    accept='image/*' // Limit to only image files
+                                    onChange={(e) => {
+                                        const files = e.target.files;
+                                        const updatedImages = [...selectedImages];
+                                        for (let i = 0; i < files.length; i++) {
+                                            if (updatedImages.length >= 4) {
+                                                toast.error(i18n.language === 'en' ? 'You can only upload up to 4 photos' : 'يمكنك تحميل ما يصل إلى 4 صور فقط');
+                                                break;
+                                            }
+                                            updatedImages.push(files[i]);
+                                        }
+                                        setSelectedImages(updatedImages);
+                                    }}
                                 />
                             </div>
+                            <div className='col-span-2'>
+                                {selectedImages.length > 0 && (
+                                    <div className="flex flex-wrap gap-2 justify-center">
+                                        {selectedImages.map((image, index) => (
+                                            <div key={index} className="relative">
+                                                <img
+                                                    src={URL.createObjectURL(image)}
+                                                    alt={`Image ${index}`}
+                                                    className="h-20 w-20 object-cover rounded-md"
+                                                />
+                                                <button
+                                                    className="absolute top-0 right-0 text-red-600 p-1 bg-white rounded-full hover:bg-red-100"
+                                                    onClick={() => handleRemovePhoto(index)}
+                                                >
+                                                    <FaTimes />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
                             <div className='col-span-2'>
                                 <div className='mb-2 block'>
                                     <Label
@@ -137,7 +197,6 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
                                 <TextInput
                                     id='title_en'
                                     type='text'
-                                    required
                                     value={formData.title_en}
                                     onChange={(e) =>
                                         setFormData({ ...formData, title_en: e.target.value })

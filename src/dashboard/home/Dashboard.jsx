@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import "../style.css"
 import { AppContext } from '../../AppContext';
 import { useTranslation } from 'react-i18next';
-import { Dna } from 'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
 import OrderModal from './components/OrderModal';
 import apiUrl from '../../apiUrl';
 
@@ -96,13 +96,13 @@ const Dashboard = () => {
                     (
                         <div className="container py-10 flex flex-col gap-5 items-center justify-center">
                             <h2 className="text-xl font-bold">{i18n.language === "en" ? "Loading..." : "جاري التحميل..."}</h2>
-                            <Dna
+                            <Oval
                                 visible={true}
                                 height="160"
                                 width="160"
-                                ariaLabel="dna-loading"
+                                ariaLabel="Oval-loading"
                                 wrapperStyle={{}}
-                                wrapperClass="dna-wrapper"
+                                wrapperClass="Oval-wrapper"
                             />
                         </div>
 
@@ -119,7 +119,7 @@ const Dashboard = () => {
                             </div>
                             {
                                 allProducts.length > 0 ? (
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl::grid-cols-5 gap-5">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl::grid-cols-5 gap-5">
                                         {
                                             allProducts.map(item => {
                                                 const { id, category, title, images, price, quantity, start_date } = item;

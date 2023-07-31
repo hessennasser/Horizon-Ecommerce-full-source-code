@@ -13,7 +13,7 @@ input::placeholder {
 }
 
 button[type="submit"]:not(.m-0) {
-    background-color: #B3005E;
+    background-color: #125ed4;
     color: #fff;
     margin-inline: auto;
     padding: 10px 12px;

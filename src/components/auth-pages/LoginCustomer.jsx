@@ -74,7 +74,7 @@ const LoginCustomer = () => {
                     <div className="flex flex-col items-center justify-center w-2/3">
                         <div className="relative mb-7">
                             <h2 className="font-bold text-2xl text-center sm:text-3xl">{i18n.language === "en" ? "Log in as a Customer" : "سجل دخولك كمستخدم"}</h2>
-                            <img className="absolute -top-14 -right-7 w-2/3 hidden md:block" src={circle} alt="horizon" />
+                            {/* <img className="absolute -top-14 -right-7 w-2/3 hidden md:block" src={circle} alt="horizon" /> */}
                         </div>
                         <p className="mb-2 text-secondColor">{i18n.language === "en" ? "For Your better experience" : "لجعل تجربتك افضل"}</p>
                         <form

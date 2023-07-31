@@ -12,7 +12,7 @@ const Home = () => {
     const userLogged = localStorage.getItem("userLogged");
     const sellerLogged = localStorage.getItem("sellerLogged");
 
-    useEffect(() => {
+useEffect(() => {
         getAllCategories();
         console.log(categories);
     }, [])

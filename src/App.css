@@ -17,5 +17,5 @@ body[dir="rtl"] .breadcrumb svg.mx-1.h-6.w-6.text-gray-400.group-first\:hidden.m
     background-color: #060047;
 }
 .search-results::-webkit-scrollbar-thumb {
-    background-color: #B3005E;
+    background-color: #125ed4;
 }

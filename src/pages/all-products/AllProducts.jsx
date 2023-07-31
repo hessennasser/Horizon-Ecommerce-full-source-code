@@ -8,7 +8,7 @@ import 'rc-slider/assets/index.css';
 import "./style.css";
 import { useParams } from 'react-router-dom';
 
-const AllProducts = ({}) => {
+const AllProducts = ({ }) => {
     const categoryId = useParams().id;
 
     const { products, categories } = useContext(AppContext);
@@ -153,21 +153,30 @@ const AllProducts = ({}) => {
                             <ul className="pagination flex items-center gap-3">
                                 {currentPage > 1 && (
                                     <li className="page-item text-blue-500">
-                                        <button className="page-link w-full h-full py-2 px-2 text-2xl" onClick={() => paginate(currentPage - 1)}>
+                                        <button className="page-link w-full h-full py-2 px-2 text-2xl" onClick={() => {
+                                            paginate(currentPage - 1);
+                                            window.scrollTo(0, 0);
+                                        }}>
                                             {i18n.language === 'en' ? <BsChevronLeft /> : <BsChevronRight />}
                                         </button>
                                     </li>
                                 )}
                                 {Array.from({ length: Math.ceil(filteredProducts.length / productsPerPage) }, (_, index) => (
                                     <li key={index} className={`page-item bg-gray-600 hover:bg-gray-800 text-white rounded-md  ${currentPage === index + 1 ? 'active bg-secondColor' : ''}`}>
-                                        <button className="page-link w-full h-full py-2 px-4" onClick={() => paginate(index + 1)}>
+                                        <button className="page-link w-full h-full py-2 px-4" onClick={() => {
+                                            paginate(index + 1);
+                                            window.scrollTo(0, 0);
+                                        }}>
                                             {index + 1}
                                         </button>
                                     </li>
                                 ))}
                                 {currentPage < Math.ceil(filteredProducts.length / productsPerPage) && (
                                     <li className="page-item text-blue-500">
-                                        <button className="page-link w-full h-full py-2 px-2 text-2xl" onClick={() => paginate(currentPage + 1)}>
+                                        <button className="page-link w-full h-full py-2 px-2 text-2xl" onClick={() => {
+                                            paginate(currentPage + 1);
+                                            window.scrollTo(0, 0);
+                                        }}>
                                             {i18n.language === 'en' ? <BsChevronRight /> : <BsChevronLeft />}
                                         </button>
                                     </li>

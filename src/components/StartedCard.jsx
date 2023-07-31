@@ -8,7 +8,7 @@ const StartedCard = () => {
     const { t, i18n } = useTranslation();
     return (
         <div className="wrapper ">
-            <div className='grid grid-col-1 md:grid-cols-2 bg-[#B3005E24]'>
+            <div className='grid grid-col-1 md:grid-cols-2 bg-[#125ed424]'>
                 <div className="text-mainColor flex flex-col justify-center items-center py-20">
                     <h2 className="font-semibold text-3xl sm:text-[2rem] md:text-[3rem] mb-10">Let's get started</h2>
                     <p className="px-10 text-gray-700">We need some basic information about you so we can contact you about your booking ✌️</p>

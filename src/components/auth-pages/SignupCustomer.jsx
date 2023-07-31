@@ -87,7 +87,7 @@ const SignupCustomer = () => {
                             <h2 className="font-bold text-2xl text-center sm:text-3xl">
                                 {i18n.language === "ar" ? "سجل معنا كمستخدم" : "Sign Up as a Customer"}
                             </h2>
-                            <img className={`absolute w-2/3 hidden md:block ${i18n.language === "en" ? "-top-16 -right-11" : "-top-12 -left-9"}`} src={circle} alt="horizon" />
+                            {/* <img className={`absolute w-2/3 hidden md:block ${i18n.language === "en" ? "-top-16 -right-11" : "-top-12 -left-9"}`} src={circle} alt="horizon" /> */}
                         </div>
                         <p className="mb-2 text-secondColor">
                             {i18n.language === "ar" ? "لتجربة أفضل" : "For Your better experience"}
