@@ -14,7 +14,6 @@ const Home = () => {
 
 useEffect(() => {
         getAllCategories();
-        console.log(categories);
     }, [])
     return (
         <>

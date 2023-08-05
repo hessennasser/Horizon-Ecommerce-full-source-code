@@ -81,7 +81,9 @@ const CheckOut = () => {
         setLoading(true);
 
         // Check if cash number is provided (required field)
-        if (formData.selectedPaymentMethod !== 'cash-on-delivery' && !cashNumber) {
+        console.log(cashNumber);
+        console.log(formData.selectedPaymentMethod);
+        if (formData.selectedPaymentMethod === 'vodafone-cash' && !cashNumber) {
             toast.info(i18n.language === "en" ? "Please enter your cash number" : "من فضلك أدخل رقم المحفظة الالكترونية");
             setLoading(false);
             return;
@@ -107,7 +109,7 @@ const CheckOut = () => {
         formReqData.append('payment_method', checkoutData.selectedPaymentMethod === "cash-on-delivery" ? 0 : 1);
         formReqData.append('vodafone_cash_number', cashNumber);
         formReqData.append('photo', cashPhoto);
-        console.log(selectedGovernorate);
+
         if (!Object.values(checkoutData).every(value => value) && checkoutData.selectedPaymentMethod !== 'cash-on-delivery') {
             toast.info(i18n.language === "en" ? "Please fill all fields" : "من فضلك ادخل جميع البيانات");
             setLoading(false);

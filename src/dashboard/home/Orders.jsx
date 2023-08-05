@@ -125,7 +125,7 @@ const Order = () => {
             name: i18n.language === 'en' ? 'Status' : 'الحالة', // Conditionally select column name based on language
             selector: 'status',
             sortable: true,
-            cell: (row) => getStatusDescription(row.status),
+            cell: (row) => getStatusDescription(row.status)
         },
     ];
     const tableColumnsAR = [
@@ -219,7 +219,7 @@ const Order = () => {
                         onChange={handleFilter}
                         className="px-4 py-2 w-full mb-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
                     />
-                    <DataTable columns={columns} data={filteredData} />
+                    <DataTable columns={columns} data={filteredData} className='order-table' />
                 </div>
             ) : (
                 <>

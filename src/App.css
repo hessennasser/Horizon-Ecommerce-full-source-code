@@ -12,10 +12,25 @@ body[dir="rtl"] {
 body[dir="rtl"] .breadcrumb svg.mx-1.h-6.w-6.text-gray-400.group-first\:hidden.md\:mx-2 {
     transform: rotate(180deg);
 }
+
 .search-results::-webkit-scrollbar {
     width: 8px;
     background-color: #060047;
 }
+
 .search-results::-webkit-scrollbar-thumb {
     background-color: #125ed4;
 }
+
+.notifications-body::-webkit-scrollbar {
+    width: 8px;
+    background-color: #060047;
+}
+
+.notifications-body::-webkit-scrollbar-thumb {
+    background-color: #125ed4;
+}
+
+/* .order-table div[data-column-id="9"] {
+
+} */

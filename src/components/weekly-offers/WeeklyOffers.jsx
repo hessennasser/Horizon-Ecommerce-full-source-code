@@ -38,7 +38,6 @@ const weeklyOffers = ({ imageCard, isMarginTop, titleEn, titleAr }) => {
             const { data } = response;
             setOffersProducts(data.data);
             setLoading(false);
-            console.log(data.data);
         } catch (error) {
             setError(error);
             setLoading(false);

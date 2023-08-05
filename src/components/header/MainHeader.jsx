@@ -1,15 +1,17 @@
 import { TextInput } from "flowbite-react";
-import { AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineMessage, AiOutlineSearch } from "react-icons/ai";
 import horizonLogo from "../../assets/images/horizon-logo.png";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useContext, useEffect, useState, useRef } from "react";
 import { AppContext } from "../../AppContext";
 import { BsCart3 } from "react-icons/bs";
-import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowDown, IoMdNotificationsOutline } from "react-icons/io";
 import SubMenu from "./SubMenu";
 import userImagePlaceholder from '../../assets/images/user-image-placeholder.png';
-import { SiGoogleanalytics } from "react-icons/si";
+import NotificationMenuComponent from "./notificationMenuComponent";
+import apiUrl from "../../apiUrl";
+import MessagesMenuComponent from "./MessagesMenuComponent";
 
 const MainHeader = () => {
     const { t, i18n } = useTranslation();
@@ -18,8 +20,8 @@ const MainHeader = () => {
     const userLogged = localStorage.getItem("userLogged");
     const sellerToken = JSON.parse(localStorage.getItem("sellerToken"));
     const sellerLogged = localStorage.getItem("sellerLogged");
-    const { products, getCartItems, getTotalPriceInCart, total } = useContext(AppContext);
-    const { showSubMenu, setShowSubMenu } = useContext(AppContext);
+    const { products, getCartItems, getTotalPriceInCart, total, mainRequest } = useContext(AppContext);
+    const { showSubMenu, setShowSubMenu, notificationMenu, setNotificationMenu, messagesMenu, setMessagesMenu } = useContext(AppContext);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const searchResultsRef = useRef(null);
@@ -27,12 +29,81 @@ const MainHeader = () => {
     const handleSubMenuClick = (e) => {
         e.stopPropagation();
         setShowSubMenu(!showSubMenu);
+        setNotificationMenu(false);
     };
+    const handelNotificationClick = (e) => {
+        e.stopPropagation();
+        setNotificationMenu(!notificationMenu);
+        setShowSubMenu(false);
+        setMessagesMenu(false);
+    };
+    const handelMessagesClick = (e) => {
+        e.stopPropagation();
+        setMessagesMenu(!messagesMenu);
+        setNotificationMenu(false);
+        setShowSubMenu(false);
+    };
+
+    // Handle Notification Menu 
+    const [notificationsNumber, setNotificationsNumber] = useState(0);
+    const [notifications, setNotifications] = useState([]);
+    const [notificationLoading, setNotificationLoading] = useState(false);
+    const [notificationError, setNotificationError] = useState(false);
+    const getNotifications = async () => {
+        setNotificationLoading(true);
+        try {
+            const response = await mainRequest.post(`${apiUrl}/vendorNotifications`, {
+                token: sellerToken
+            });
+            const { data } = response;
+            setNotifications(data.data);
+            console.log(data.data.length);
+            setNotificationsNumber(data.data.length);
+        } catch (error) {
+            console.log(error);
+            setNotificationError(true);
+        }
+        finally {
+            setNotificationLoading(false);
+        }
+    };
+    useEffect(() => {
+        if (sellerLogged) getNotifications()
+    }, [sellerToken, notificationMenu === true]);
+
+    // Handle Messages Menu
+    const [messagesNumber, setMessagesNumber] = useState(0);
+    const [messages, setMessages] = useState([]);
+    const [messagesLoading, setMessagesLoading] = useState(false);
+    const [messagesError, setMessagesError] = useState(false);
+    const getMessages = async () => {
+        setMessagesLoading(true);
+        try {
+            const response = await mainRequest.post(`${apiUrl}/vendorMessages`, {
+                token: sellerToken
+            });
+            const { data } = response;
+            setMessages(data.data);
+            console.log(data.data.length);
+            setMessagesNumber(data.data.length);
+        } catch (error) {
+            console.log(error);
+            setMessagesError(true);
+        }
+        finally {
+            setMessagesLoading(false);
+        }
+    };
+    useEffect(() => {
+        if (sellerLogged) getMessages()
+    }, [sellerToken, messagesMenu]);
+
+
 
     useEffect(() => {
         if (userLogged && userToken) {
             getTotalPriceInCart();
-            getCartItems(userToken, setCartItems);
+            getCartItems(userToken, setCartItems, );
         }
     }, [userLogged, userToken, sellerLogged, sellerToken, total]);
 
@@ -68,14 +139,14 @@ const MainHeader = () => {
 
     const [userInfoState, SetUserInfo] = useState({})
     const [sellerInfoState, setSellerInfo] = useState({})
-    const { getUserInfo, getSallerInfo } = useContext(AppContext);
+    const { getUserInfo, getSellerInfo } = useContext(AppContext);
 
     useEffect(() => {
         if (userLogged) getUserInfo(userToken, SetUserInfo);
     }, [sellerLogged, sellerToken, userLogged, userToken, total])
 
     useEffect(() => {
-        if (sellerLogged) getSallerInfo(sellerToken, setSellerInfo);
+        if (sellerLogged) getSellerInfo(sellerToken, setSellerInfo);
     }, [sellerLogged, sellerToken, userLogged, userToken, total])
 
 
@@ -141,6 +212,44 @@ const MainHeader = () => {
                                 </Link>
                             )
                         }
+                        {
+                            sellerLogged && (
+                                <>
+                                    <button button
+                                        className="relative p-2"
+                                        onClick={handelMessagesClick}
+                                    >
+                                        <AiOutlineMessage className="text-2xl" />
+                                        {
+                                            messagesNumber > 0 && (
+                                                <span className="text-lg absolute -top-4 -right-2 grid place-content-center w-7 h-7 rounded-full bg-white text-secondColor">
+                                                    {messagesNumber || 0}
+                                                </span>
+                                            )
+                                        }
+                                    </button>
+
+                                    <button
+                                        className="relative p-2"
+                                        onClick={handelNotificationClick}
+                                    >
+                                        <IoMdNotificationsOutline className="text-2xl" />
+                                        {
+                                            notificationsNumber > 0 && (
+                                                <span className="text-lg absolute -top-4 -right-2 grid place-content-center w-7 h-7 rounded-full bg-white text-secondColor">
+                                                    {notificationsNumber || 0}
+                                                </span>
+                                            )
+                                        }
+                                    </button>
+                                </>
+                            )
+                        }
+                        {/* Messages Button And Menu */}
+                        {messagesMenu && <MessagesMenuComponent messages={messages} messageLoading={messagesLoading} messageError={messagesError} />}
+                        {/* Notification Button And Menu */}
+                        {notificationMenu && <NotificationMenuComponent notifications={notifications} notificationLoading={notificationLoading} notificationError={notificationError} />}
+                        {/* User info & menu */}
                         <button
                             className="flex items-center gap-2"
                             onClick={handleSubMenuClick}
@@ -162,6 +271,7 @@ const MainHeader = () => {
                         </button>
                         {showSubMenu && <SubMenu name={userLogged ? userInfoState.name : sellerInfoState.name} image={
                             userLogged ? userInfoState.image ? `https://admin.horriizon.com/public/assets/${userInfoState.image}` : userImagePlaceholder : sellerInfoState.image ? `https://admin.horriizon.com/public/assets/${sellerInfoState.image}` : userImagePlaceholder} />}
+
                     </div>
                 ) : (
                     <>
@@ -184,7 +294,7 @@ const MainHeader = () => {
                     </>
                 )}
             </div>
-        </div>
+        </div >
     );
 };
 

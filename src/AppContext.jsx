@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import FormData from 'form-data';
-import { get } from 'react-hook-form';
+import { get, set } from 'react-hook-form';
 
 export const AppContext = createContext();
 export const AppProvider = ({ children }) => {
@@ -18,6 +18,8 @@ export const AppProvider = ({ children }) => {
     const sellerToken = JSON.parse(localStorage.getItem('sellerToken'));
     const userLogged = localStorage.getItem("userLogged");
     const [showSubMenu, setShowSubMenu] = useState(false);
+    const [notificationMenu, setNotificationMenu] = useState(false);
+    const [messagesMenu, setMessagesMenu] = useState(false);
     const [total, setTotal] = useState(0);
     const [governorates, setGovernorates] = useState([]);
     const [cartItems, setCartItems] = useState([]);
@@ -228,7 +230,7 @@ export const AppProvider = ({ children }) => {
             toast.error(error.response.data?.product_id[0] || "There is an error");
         }
     };
-    // get prducts in single category
+    // get products in single category
     const getProductsForCategory = async (categoryId, setProducts) => {
         try {
             const response = await mainRequest(`${apiUrl}/productWithCategory/${categoryId}`);
@@ -238,8 +240,9 @@ export const AppProvider = ({ children }) => {
             console.log(error);
         }
     };
-    // get ietms in cart
-    const getCartItems = async (userToken, setCartItems) => {
+    // get items in cart
+    const getCartItems = async (userToken, setCartItems, setLoading) => {
+        if (setLoading) setLoading(true);
         try {
             const response = await mainRequest.post(`${apiUrl}/cart`, {
                 token: userToken
@@ -248,6 +251,9 @@ export const AppProvider = ({ children }) => {
             setCartItems(data.data);
         } catch (error) {
             console.log(error);
+        }
+        finally {
+            if (setLoading) setLoading(false);
         }
     };
     // get Total Price In Cart
@@ -288,7 +294,7 @@ export const AppProvider = ({ children }) => {
         }
     };
     // get seller profile info
-    const getSallerInfo = async (SallerToken, setSallerInfo, setName, setEmail, setPhone) => {
+    const getSellerInfo = async (SallerToken, setSallerInfo, setName, setEmail, setPhone) => {
         try {
             const response = await mainRequest(`${apiUrl}/vendor/auth/user-profile?token=${SallerToken}`);
             const { data } = response;
@@ -336,10 +342,11 @@ export const AppProvider = ({ children }) => {
     useEffect(() => {
         getAllProducts();
         getAllCategories();
+        setNotificationMenu(false)
     }, [userToken, userLogged]);
 
     return (
-        <AppContext.Provider value={{ isSidebarOpen, setIsSidebarOpen, toggleSidebar, showSubMenu, setShowSubMenu, products, getAllCategories, categories, getAllProducts, getProductsForCategory, logout, getUserInfo, getSallerInfo, refreshToken, addToCart, handelUpdateQuantity, getCartItems, getTotalPriceInCart, total, governorates, getGovernorates, getSellerProducts, removeBackground, mainRequest, cartItems, setCartItems }}>
+        <AppContext.Provider value={{ isSidebarOpen, setIsSidebarOpen, toggleSidebar, showSubMenu, setShowSubMenu, notificationMenu, setNotificationMenu, messagesMenu, setMessagesMenu, products, getAllCategories, categories, getAllProducts, getProductsForCategory, logout, getUserInfo, getSellerInfo, refreshToken, addToCart, handelUpdateQuantity, getCartItems, getTotalPriceInCart, total, governorates, getGovernorates, getSellerProducts, removeBackground, mainRequest, cartItems, setCartItems }}>
             {children}
         </AppContext.Provider>
     );
