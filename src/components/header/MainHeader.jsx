@@ -31,12 +31,14 @@ const MainHeader = () => {
         setShowSubMenu(!showSubMenu);
         setNotificationMenu(false);
     };
+
     const handelNotificationClick = (e) => {
         e.stopPropagation();
         setNotificationMenu(!notificationMenu);
         setShowSubMenu(false);
         setMessagesMenu(false);
     };
+
     const handelMessagesClick = (e) => {
         e.stopPropagation();
         setMessagesMenu(!messagesMenu);
@@ -97,8 +99,6 @@ const MainHeader = () => {
     useEffect(() => {
         if (sellerLogged) getMessages()
     }, [sellerToken, messagesMenu]);
-
-
 
     useEffect(() => {
         if (userLogged && userToken) {

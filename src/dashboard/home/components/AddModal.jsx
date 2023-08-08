@@ -69,6 +69,7 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
     const [isLoading, setIsLoading] = useState(false);
 
     const handleAddNew = () => {
+
         if (!selectedImages || selectedImages.length === 0 || !formData.title_ar || !formData.category || !formData.quantity || !formData.price || !formData.start_date) {
             toast.error(i18n.language === 'en' ? 'Please enter all required fields' : 'برجاء إدخال جميع الحقول المطلوبة');
             return;
@@ -268,6 +269,7 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
                                 <TextInput
                                     id='quantity'
                                     type='number'
+                                    min={1}
                                     required
                                     value={formData.quantity}
                                     onChange={(e) =>
@@ -285,6 +287,7 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
                                 <TextInput
                                     id='Price'
                                     type='number'
+                                    min={1}
                                     required
                                     value={formData.price}
                                     onChange={(e) =>

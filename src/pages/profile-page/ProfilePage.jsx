@@ -24,7 +24,7 @@ const ProfilePage = () => {
 
     const navigate = useNavigate();
     const { i18n } = useTranslation();
-    const { getUserInfo, getSallerInfo, logout, governorates, getGovernorates } = useContext(AppContext);
+    const { getUserInfo, getSellerInfo, logout, governorates, getGovernorates } = useContext(AppContext);
 
     if (!userLogged && !sellerLogged) {
         navigate("/customer-login");
@@ -185,7 +185,7 @@ const ProfilePage = () => {
     }, [userLogged, userToken])
 
     useEffect(() => {
-        if (sellerLogged) getSallerInfo(sellerToken, setSellerInfo, setName, setEmail, setPhone);
+        if (sellerLogged) getSellerInfo(sellerToken, setSellerInfo, setName, setEmail, setPhone);
     }, [sellerLogged, sellerToken])
 
     const engovernoratesOptions = governorates.map((gov) => ({

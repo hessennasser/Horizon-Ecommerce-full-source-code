@@ -294,11 +294,11 @@ export const AppProvider = ({ children }) => {
         }
     };
     // get seller profile info
-    const getSellerInfo = async (SallerToken, setSallerInfo, setName, setEmail, setPhone) => {
+    const getSellerInfo = async (SellerToken, setSellerInfo, setName, setEmail, setPhone) => {
         try {
-            const response = await mainRequest(`${apiUrl}/vendor/auth/user-profile?token=${SallerToken}`);
+            const response = await mainRequest(`${apiUrl}/vendor/auth/user-profile?token=${SellerToken}`);
             const { data } = response;
-            setSallerInfo(data);
+            setSellerInfo(data);
         } catch (error) {
             console.log(error);
         }
