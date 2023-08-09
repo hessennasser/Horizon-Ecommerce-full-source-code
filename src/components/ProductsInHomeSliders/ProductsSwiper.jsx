@@ -8,9 +8,23 @@ import "./styles.css";
 import { Autoplay, Pagination } from "swiper/modules";
 import SingleProductCard from "../products/SingleProductCard";
 import { useTranslation } from "react-i18next";
+import Loading from "../Loading";
+import Error from "../Error";
 
-const ProductsSwiper = ({ products }) => {
+const ProductsSwiper = ({ products, loading, error }) => {
     const { i18n, t } = useTranslation();
+
+    if (loading) {
+        return (
+            <Loading />
+        )
+    }
+
+    if (error) {
+        return (
+            <Error />
+        )
+    }
 
     return (
         <div className="max-w-[98%] mx-auto py-10 select-none">
@@ -22,7 +36,7 @@ const ProductsSwiper = ({ products }) => {
                 }}
                 modules={[Pagination, Autoplay]}
                 className="productsSwiper w-full"
-                // loop={true}
+                loop={true}
                 // centeredSlides={true}
                 autoplay={{
                     delay: 3000,

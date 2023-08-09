@@ -209,6 +209,8 @@ const CheckOut = () => {
                                 ariaLabel="Oval-loading"
                                 wrapperStyle={{}}
                                 wrapperClass="Oval-wrapper"
+                                color='#125ed4'
+                                secondaryColor='#060047'    
                             />
                         </div>
                     </div>

@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import apiUrl from '../../apiUrl';
 import { AppContext } from '../../AppContext';
-import { Oval } from 'react-loader-spinner';
 import Breadcrumbs from '../../components/Breadcrumbs';
 import DataTable from 'react-data-table-component';
+import Loading from '../../components/Loading';
 
 const Order = () => {
     const { i18n } = useTranslation();
@@ -191,23 +191,22 @@ const Order = () => {
                 return (
                     order.id.toString().includes(keyword) ||
                     order.product_id.toString().includes(keyword) ||
+                    order.product.title.en.toString().includes(keyword) ||
+                    order.product.title.ar.toString().includes(keyword) ||
                     order.user_id.toString().includes(keyword)
                 );
             });
             setFilteredData(filteredResults);
         }
     };
-
+    if (isLoading) {
+        return (
+            <Loading />
+        )
+    }
     return (
         <div className="container py-10 min-h-[40dvh]">
-            {isLoading ? (
-                <div className="flex flex-col items-center justify-center">
-                    <h2 className="text-xl font-bold">
-                        {i18n.language === 'en' ? 'Loading...' : 'جاري التحميل...'}
-                    </h2>
-                    <Oval visible={true} height="160" width="160" ariaLabel="Oval-loading" wrapperStyle={{}} wrapperClass="Oval-wrapper" />
-                </div>
-            ) : allOrders?.length > 0 ? (
+            {allOrders?.length > 0 ? (
                 <div>
                     <div className="mb-10 flex flex-col items-start gap-2 sm:flex-row sm:items-center justify-between">
                         <Breadcrumbs />
@@ -215,7 +214,7 @@ const Order = () => {
                     {/* Add the search bar */}
                     <input
                         type="text"
-                        placeholder="Search by Order ID, Product ID, or User ID..."
+                        placeholder="Search by Order ID, Product ID, Product Title or User ID..."
                         onChange={handleFilter}
                         className="px-4 py-2 w-full mb-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
                     />

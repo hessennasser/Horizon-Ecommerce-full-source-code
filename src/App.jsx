@@ -24,12 +24,14 @@ const AllProducts = lazy(() => import('./pages/all-products/AllProducts'));
 const ProfilePage = lazy(() => import('./pages/profile-page/ProfilePage'));
 const ProductsInCategory = lazy(() => import('./pages/products-in-category/productsInCategory'));
 const Cart = lazy(() => import('./pages/cart/Cart'));
+const Payments = lazy(() => import('./pages/payments/Payments'));
 const CheckOut = lazy(() => import('./pages/check-out/CheckOut'));
 const ContactUs = lazy(() => import('./pages/contact-us/contactUs'));
 const AboutUs = lazy(() => import('./pages/about-us/AboutUs'));
 // const ProductDetails = lazy(() => import('./pages/product-details/ProductDetails'));
 import ProductDetails from './pages/product-details/ProductDetails';
 import ScrollToTopButton from './components/ScrollToTopButton';
+import WhatsAppButtons from './components/WhatsAppButtons';
 
 function AppContent() {
   const { i18n } = useTranslation();
@@ -58,6 +60,8 @@ function AppContent() {
             ariaLabel="Oval-loading"
             wrapperStyle={{}}
             wrapperClass="Oval-wrapper"
+            color='#125ed4'
+            secondaryColor='#060047'
           />
         </div>
       }>
@@ -92,6 +96,7 @@ function AppContent() {
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<CheckOut />} />
+          <Route path="/payments" element={<Payments />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/about-us" element={<AboutUs />} />
         </Routes>
@@ -99,6 +104,8 @@ function AppContent() {
         <MyFooter />
         {/* Go To Top button */}
         <ScrollToTopButton />
+        {/* WhatsApp Button */}
+        <WhatsAppButtons />
       </Suspense>
     </div>
   );

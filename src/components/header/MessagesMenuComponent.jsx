@@ -20,7 +20,8 @@ const MessagesMenuComponent = ({ setMessagesNumber, messages, messageLoading, me
 
                 {
                     messageLoading && <div className="flex justify-center items-center h-32">
-                        <Oval color="#0d6efd" height={50} width={50} />
+                        <Oval  height={50} width={50} color='#125ed4'
+                secondaryColor='#060047' />
                     </div>
                 }
                 {

@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import { Oval } from 'react-loader-spinner';
 
-const NotificationMenuComponent = ({ setNotificationsNumber, notifications, notificationLoading, notificationError }) => {
+const NotificationMenuComponent = ({ notifications, notificationLoading, notificationError }) => {
     const { i18n } = useTranslation();
     return (
         <div className={`submenu z-[10000] absolute rounded-lg shadow-lg bg-white w-[340px] max-w-[90%] sm:max-w-[340px] p-8 ${i18n.language === "en" ? "right-2" : "left-2"} top-12 text-black`}>
@@ -19,7 +19,8 @@ const NotificationMenuComponent = ({ setNotificationsNumber, notifications, noti
 
                 {
                     notificationLoading && <div className="flex justify-center items-center h-32">
-                        <Oval color="#0d6efd" height={50} width={50} />
+                        <Oval height={50} width={50} color='#125ed4'
+                            secondaryColor='#060047' />
                     </div>
                 }
                 {

@@ -20,7 +20,7 @@ const MainHeader = () => {
     const userLogged = localStorage.getItem("userLogged");
     const sellerToken = JSON.parse(localStorage.getItem("sellerToken"));
     const sellerLogged = localStorage.getItem("sellerLogged");
-    const { products, getCartItems, getTotalPriceInCart, total, mainRequest } = useContext(AppContext);
+    const { categories, getCartItems, getTotalPriceInCart, total, mainRequest } = useContext(AppContext);
     const { showSubMenu, setShowSubMenu, notificationMenu, setNotificationMenu, messagesMenu, setMessagesMenu } = useContext(AppContext);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
@@ -30,6 +30,7 @@ const MainHeader = () => {
         e.stopPropagation();
         setShowSubMenu(!showSubMenu);
         setNotificationMenu(false);
+        setMessagesMenu(false);
     };
 
     const handelNotificationClick = (e) => {
@@ -71,7 +72,7 @@ const MainHeader = () => {
     };
     useEffect(() => {
         if (sellerLogged) getNotifications()
-    }, [sellerToken, notificationMenu === true]);
+    }, [sellerToken, notificationMenu]);
 
     // Handle Messages Menu
     const [messagesNumber, setMessagesNumber] = useState(0);
@@ -103,21 +104,23 @@ const MainHeader = () => {
     useEffect(() => {
         if (userLogged && userToken) {
             getTotalPriceInCart();
-            getCartItems(userToken, setCartItems, );
+            getCartItems(userToken, setCartItems,);
         }
     }, [userLogged, userToken, sellerLogged, sellerToken, total]);
 
     useEffect(() => {
-        if (searchQuery.trim() !== "" && products) {
-            const results = products.filter((product) =>
-                product.title.en.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                product.title.ar.toLowerCase().includes(searchQuery.toLowerCase())
+        if (searchQuery.trim() !== "" && categories) {
+            console.log(categories);
+            const results = categories.filter((item) =>
+                item.title.en.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                item.title.ar.toLowerCase().includes(searchQuery.toLowerCase())
             );
+            console.log(results);
             setSearchResults(results);
         } else {
             setSearchResults([]);
         }
-    }, [searchQuery, products]);
+    }, [searchQuery, categories]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -135,7 +138,7 @@ const MainHeader = () => {
         return () => {
             window.removeEventListener("click", handleClickOutside);
         };
-    }, [showSubMenu]);
+    }, [showSubMenu, searchResultsRef]);
 
     const [userInfoState, SetUserInfo] = useState({})
     const [sellerInfoState, setSellerInfo] = useState({})
@@ -153,9 +156,11 @@ const MainHeader = () => {
     return (
         <div className="main-header flex items-center justify-between gap-5 flex-col md:flex-row">
             <div className="flex items-center gap-3 w-full flex-1">
+                {/* Logo */}
                 <Link to={"/home"} className="flex items-center">
                     <img className="w-16 md:w-24" src={horizonLogo} alt="horizon" />
                 </Link>
+                {/* Search */}
                 <div className="flex-1 w-full text-xs search-holder relative">
                     <TextInput
                         id="search"
@@ -175,13 +180,8 @@ const MainHeader = () => {
                             {
                                 searchResults.length > 0 ? (
                                     searchResults.map((result) => (
-                                        <Link key={result.id} to={`/product/${result.id}`}>
-                                            <div className="search-result-item flex items-center justify-between gap-5 border-b py-1">
-                                                <img
-                                                    src={`https://admin.horriizon.com/public/assets/${result.images[0].path}`}
-                                                    alt={i18n.language === "en" ? result.title.en : result.title.ar}
-                                                    className="w-20"
-                                                />
+                                        <Link key={result.id} to={`/categories/${result.id}`} className="h-10 flex items-center border-b">
+                                            <div className="search-result-item flex items-center justify-between gap-5 py-1">
                                                 <h4>{i18n.language === "en" ? result.title.en : result.title.ar}</h4>
                                             </div>
                                         </Link>

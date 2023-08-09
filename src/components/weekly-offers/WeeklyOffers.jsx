@@ -13,6 +13,7 @@ const weeklyOffers = ({ imageCard, isMarginTop, titleEn, titleAr }) => {
     const [weeklyProducts, setWeeklyProducts] = useState([]);
     const [weeklyLoading, setWeeklyLoading] = useState(false);
     const [weeklyError, setWeeklyError] = useState(null);
+    
     const getWeeklyOffers = async () => {
         setWeeklyLoading(true);
         try {
@@ -20,11 +21,9 @@ const weeklyOffers = ({ imageCard, isMarginTop, titleEn, titleAr }) => {
             const { data } = response;
             setWeeklyProducts(data.data);
             setWeeklyLoading(false);
-            console.log(data.data);
         } catch (error) {
             setWeeklyError(error);
             setWeeklyLoading(false);
-            console.log(weeklyError);
         }
     };
     // get offers

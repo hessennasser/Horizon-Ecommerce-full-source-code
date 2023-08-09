@@ -1,18 +1,17 @@
 import { AiOutlineArrowRight, AiOutlineArrowLeft } from "react-icons/ai";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { useSSR, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Autoplay, Navigation } from "swiper/modules";
 import SingleProductCard from "../products/SingleProductCard";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import apiUrl from "../../apiUrl";
 import { Link } from "react-router-dom";
-import { Oval } from "react-loader-spinner";
+import Loading from "../Loading";
+import Error from "../Error";
 
 
-const WeeklyOffersCards = ({ imageCard, widthFull,getWeeklyOffers, products, setProducts, loading, error, titleEn, titleAr }) => {
+const WeeklyOffersCards = ({ imageCard, widthFull, getWeeklyOffers, products, setProducts, loading, error, titleEn, titleAr }) => {
     const { i18n, t } = useTranslation();
     // ${i18n.language === "en" || !imageCard ? "md:rounded-l-xl" : "md:rounded-r-xl"}
 
@@ -36,16 +35,7 @@ const WeeklyOffersCards = ({ imageCard, widthFull,getWeeklyOffers, products, set
                     </Link>
                 </div>
                 {/* Loader */}
-                <div className="flex flex-col gap-5 items-center justify-center">
-                    <Oval
-                        visible={true}
-                        height="160"
-                        width="160"
-                        ariaLabel="Oval-loading"
-                        wrapperStyle={{}}
-                        wrapperClass="Oval-wrapper"
-                    />
-                </div>
+                <Loading />
             </div>
         )
     }
@@ -64,7 +54,7 @@ const WeeklyOffersCards = ({ imageCard, widthFull,getWeeklyOffers, products, set
                     }
                 </Link>
             </div>
-            <h1>There is an error</h1>
+            <Error />
         </div>
     }
 
