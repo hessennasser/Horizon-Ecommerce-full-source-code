@@ -11,7 +11,7 @@ export const HomeCategory = ({ category }) => {
             <div className="img flex-1 flex items-center justify-center w-48 mx-auto overflow-hidden">
                 <img
                     className="h-full object-cover group-hover:scale-110 transition-all duration-200"
-                    src={`https://admin.horriizon.com/public/assets/${category.image}`}
+                    src={`https://admin.horriizon.com/public//${category.image}`}
                     alt="" />
             </div>
             <div className="flex items-center gap-2 justify-between mt-5">

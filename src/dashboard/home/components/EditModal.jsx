@@ -158,7 +158,7 @@ const EditModal = ({
                             <div className='col-span-2'>
                                 {productData && (
                                     <div className='mb-2 flex items-center justify-center'>
-                                        <img src={`https://admin.horriizon.com/public/assets/${oldImg}`} alt={i18n.language === "en" ? formData.title_en : formData.title_ar} className='w-32 h-32' />
+                                        <img src={`https://admin.horriizon.com/public/${oldImg}`} alt={i18n.language === "en" ? formData.title_en : formData.title_ar} className='w-32 h-32' />
                                     </div>
                                 )}
                                 <div className='mb-2 block'>

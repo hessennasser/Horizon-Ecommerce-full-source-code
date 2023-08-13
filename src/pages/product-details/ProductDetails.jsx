@@ -58,7 +58,7 @@ const ProductDetails = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                             {images && images.length > 0 && (
                                 <div className="img-holder col-span-1 p-5 bg-gray-200 flex items-center justify-center rounded-lg shadow-md">
-                                    <img className='h-72 w-full object-contain' src={`https://admin.horriizon.com/public/assets/${images[0]?.path}`} alt={i18n.language === "en" ? title?.en : title?.ar} />
+                                    <img className='h-72 w-full object-contain' src={`https://admin.horriizon.com/public/${images[0]?.path}`} alt={i18n.language === "en" ? title?.en : title?.ar} />
                                 </div>
                             )}
                             <div className="product-details flex flex-col gap-5 px-5 mt-5 md:col-span-2">

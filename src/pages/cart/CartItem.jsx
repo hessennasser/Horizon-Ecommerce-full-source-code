@@ -45,7 +45,7 @@ const CartItem = ({ id, title, image, price, quantity, quantityOnStock, productT
     return (
         <div className="cart-item w-full flex flex-col md:flex-row justify-between gap-3 border-b " key={id}>
             <div className="img-holder w-48 h-48">
-                <img className="w-full h-full object-cover" src={`https://admin.horriizon.com/public/assets/${image}`} alt={i18n.language === 'en' ? title.en : title.ar} />
+                <img className="w-full h-full object-cover" src={`https://admin.horriizon.com/public/${image}`} alt={i18n.language === 'en' ? title.en : title.ar} />
             </div>
             <div className="details flex-1 grid gap-3">
                 <h3 className="font-bold text-xl">{title}</h3>

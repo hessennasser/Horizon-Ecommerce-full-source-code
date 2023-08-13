@@ -49,7 +49,7 @@ const WhatsAppButtons = () => {
                     href="https://api.whatsapp.com/send?phone="
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block  box-border text-white bg-secondColor text-center cursor-pointer w-fit px-5 mx-auto my-10 rounded-full no-underline"
+                    className="block box-border text-white bg-secondColor text-center cursor-pointer w-fit px-5 mx-auto my-10 rounded-full no-underline"
                 >
                     {i18n.language === "en" ? "Contact Us" : "تواصل معنا"}
                 </a>
@@ -61,7 +61,7 @@ const WhatsAppButtons = () => {
                 onClick={openModal}
                 data-toggle="back-to-top"
                 aria-label="Scroll To Top"
-                className={`fixed rounded-full z-10 start-5 h-9 w-9 text-center bg-secondColor bg-opacity-70 text-2xl grid place-content-center text-white justify-center items-center transition-all duration-300 animate-bounce ${showButton ? 'bottom-10' : '-bottom-16'} backdrop-blur-lg`}
+                className={`fixed rounded-full z-10 start-5 h-14 w-14 text-center bg-secondColor bg-opacity-70 text-2xl grid place-content-center text-white justify-center items-center transition-all duration-300 animate-bounce ${showButton ? 'bottom-10' : '-bottom-18'} backdrop-blur-lg`}
             >
                 {
                     showModal ? <FaTimes/> : <BsWhatsapp />

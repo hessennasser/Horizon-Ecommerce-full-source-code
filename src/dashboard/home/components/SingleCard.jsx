@@ -7,7 +7,7 @@ const SingleCard = ({ id, openEditModal, openDeleteModal,openOrderModal, categor
     return (
         <div className='grid gap-2 bg-white p-3 rounded-lg shadow-md'>
             <div className="img-holder  flex justify-center items-center">
-                <img className='w-32 object-contain' src={`https://admin.horriizon.com/public/assets/${image}`} alt={i18n.language === "en" ? title?.en : title?.ar} />
+                <img className='w-32 object-contain' src={`https://admin.horriizon.com/public/${image}`} alt={i18n.language === "en" ? title?.en : title?.ar} />
             </div>
             <div className="info grid gap-y-3">
                 <div className="grid grid-cols-2 gap-2">

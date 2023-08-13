@@ -1,8 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { FcGoogle } from "react-icons/fc";
-import { MdFacebook } from "react-icons/md";
-import { BsApple } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import GoogleSignInButton from "./auth-pages/GoogleSignInButton";
+import FacebookSignInButton from "./auth-pages/FacebookSignInButton";
 
 const StartedCard = () => {
     const { t, i18n } = useTranslation();
@@ -22,23 +21,8 @@ const StartedCard = () => {
                         <Link to="/customer-login" type="button" className="border border-mainColor text-mainColor w-48 p-2 rounded-lg text-xs md:text-sm text-center">
                             {t('weeklyOffers.registerCard.sugnInButtons.customer')}
                         </Link>
-                        <div className="flex gap-5 text-2xl text-white">
-                            <div className="facebook bg-[#1877F2] px-8 py-2 rounded-lg shadow-xl">
-                                <button aria-label="facebook" type="button">
-                                    <MdFacebook />
-                                </button>
-                            </div>
-                            <div className="google px-8 py-2 rounded-lg shadow-xl">
-                                <button type="button" aria-label="google">
-                                    <FcGoogle />
-                                </button>
-                            </div>
-                            <div className="apple bg-black px-8 py-2 rounded-lg shadow-xl">
-                                <button type="button" aria-label="apple">
-                                    <BsApple />
-                                </button>
-                            </div>
-                        </div>
+                        <GoogleSignInButton />
+                        <FacebookSignInButton />
                     </div>
 
                     <div className="flex items-center justify-center my-5">

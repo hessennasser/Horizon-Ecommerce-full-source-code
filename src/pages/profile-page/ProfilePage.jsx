@@ -223,7 +223,7 @@ const ProfilePage = () => {
                                         !image?.photo ?
                                             <>
                                                 <div className="img-holder relative -top-10 overflow-hidden w-32 h-32 bg-secondColor text-white grid place-content-center rounded-[50%] mx-auto">
-                                                    <img src={userInfoState.image ? `https://admin.horriizon.com/public/assets/${userInfoState.image}` : userImagePlaceholder}
+                                                    <img src={userInfoState.image ? `https://admin.horriizon.com/public/${userInfoState.image}` : userImagePlaceholder}
                                                         className='h-full w-full' alt={userInfoState.name} />
                                                 </div>
                                                 <label htmlFor="photoInput" className="flex flex-col items-center justify-center">

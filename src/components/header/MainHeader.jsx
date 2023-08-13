@@ -257,7 +257,7 @@ const MainHeader = () => {
                             <div className="flex gap-2">
                                 <img
                                     src={
-                                        userLogged ? userInfoState.image ? `https://admin.horriizon.com/public/assets/${userInfoState.image}` : userImagePlaceholder : sellerInfoState.image ? `https://admin.horriizon.com/public/assets/${sellerInfoState.image}` : userImagePlaceholder
+                                        userLogged ? userInfoState.image ? `https://admin.horriizon.com/public/${userInfoState.image}` : userImagePlaceholder : sellerInfoState.image ? `https://admin.horriizon.com/public/${sellerInfoState.image}` : userImagePlaceholder
                                     }
                                     className="w-12 h-12 bg-secondColor rounded-full"
                                     alt={userLogged ? userInfoState.name : sellerInfoState.name}
@@ -270,7 +270,7 @@ const MainHeader = () => {
                             <IoIosArrowDown className="text-xl" />
                         </button>
                         {showSubMenu && <SubMenu name={userLogged ? userInfoState.name : sellerInfoState.name} image={
-                            userLogged ? userInfoState.image ? `https://admin.horriizon.com/public/assets/${userInfoState.image}` : userImagePlaceholder : sellerInfoState.image ? `https://admin.horriizon.com/public/assets/${sellerInfoState.image}` : userImagePlaceholder} />}
+                            userLogged ? userInfoState.image ? `https://admin.horriizon.com/public/${userInfoState.image}` : userImagePlaceholder : sellerInfoState.image ? `https://admin.horriizon.com/public/${sellerInfoState.image}` : userImagePlaceholder} />}
 
                     </div>
                 ) : (

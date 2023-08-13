@@ -40,7 +40,7 @@ const HeroSlider = () => {
                     slider.map(slide => {
                         return (
                             <SwiperSlide key={slide.id}>
-                                <img className="w-full h-[350px] object-cover" src={`https://admin.horriizon.com/public/assets/${slide.image}`} alt={`${i18n.language === "en" ? slide.title.en : slide.title.ar }`} />
+                                <img className="w-full h-[350px] object-cover" src={`https://admin.horriizon.com/public/${slide.image}`} alt={`${i18n.language === "en" ? slide.title.en : slide.title.ar }`} />
                             </SwiperSlide>
                         )
                     })

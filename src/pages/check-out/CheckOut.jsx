@@ -426,7 +426,7 @@ const CheckOut = () => {
                     {cartItems.map(item => {
                         const { id, title, images, price, quantity_of_cart } = item;
                         return (
-                            <CheckOutItem key={id} quantity={quantity_of_cart.quantity} title={title} price={price} productTotalPrice={quantity_of_cart.total} image={`https://admin.horriizon.com/public/assets/${images[0].path}`} />
+                            <CheckOutItem key={id} quantity={quantity_of_cart.quantity} title={title} price={price} productTotalPrice={quantity_of_cart.total} image={`https://admin.horriizon.com/public/${images[0].path}`} />
                         )
                     })}
                     <div className="flex justify-between items-center font-medium py-4 border-dotted border-b-2">

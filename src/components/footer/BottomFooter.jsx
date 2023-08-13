@@ -31,7 +31,7 @@ const BottomFooter = () => {
                 </li>
             </ul>
             <p className="text-gray-400">
-                Copyright © {new Date().getFullYear()} • <Link to="/" className="text-white">Horizon</Link> • Develop with ❤️ by <a href="https://sm8rtdev.online/" target="_blank" rel="noopener noreferrer" className="text-white">Hessen Nasser</a> All rights reserved.
+                Copyright © {new Date().getFullYear()} • <Link to="/" className="text-white">Horizon</Link> • All rights reserved.
             </p>
         </div>
     )
