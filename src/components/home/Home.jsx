@@ -68,7 +68,6 @@ const Home = () => {
         }
     };
 
-
     useEffect(() => {
         getAllCategories();
         getProductsOnSectionOne();

@@ -5,8 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
 import { AppContext } from '../../../AppContext';
 import apiUrl from '../../../apiUrl';
-import { FaTimes } from 'react-icons/fa';
+import { FaPlus, FaTimes } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import UpdateImagesModal from './UpdateImagesModal';
 
 const EditModal = ({
     productId,
@@ -23,8 +24,15 @@ const EditModal = ({
     const { mainRequest } = useContext(AppContext);
     const sellerToken = JSON.parse(localStorage.getItem('sellerToken'));
 
+    const [updateImagesModal, setUpdateImagesModal] = useState(false);
+
+    const openUpdateImagesModal = () => {
+        setUpdateImagesModal(true);
+    };
+
+
     const [productData, setProductData] = useState(null);
-    const [oldImg, setOldImg] = useState(null);
+
     const getProductData = async () => {
         try {
             const response = await mainRequest.post(`${apiUrl}/vendor/products/get`, {
@@ -54,7 +62,6 @@ const EditModal = ({
 
     useEffect(() => {
         if (productData) {
-            setOldImg(productData.images[0].path);
             setFormData({
                 image: null,
                 title_en: productData.title.en,
@@ -67,7 +74,6 @@ const EditModal = ({
         }
     }, [productData, productId]);
 
-    const [selectedImage, setSelectedImage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
     // edit product in dashboard
@@ -126,7 +132,6 @@ const EditModal = ({
         }
     };
 
-
     return (
         <div className="fixed z-[10000] inset-0 overflow-y-auto">
             <div className="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 sm:block sm:p-0">
@@ -152,152 +157,163 @@ const EditModal = ({
                     </div>
 
                     {/* Modal content goes here */}
-                    <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 flex items-center justify-center">
-
-                        <div className='space-y-6 grid grid-cols-2 gap-3 w-full'>
-                            <div className='col-span-2'>
-                                {productData && (
-                                    <div className='mb-2 flex items-center justify-center'>
-                                        <img src={`https://admin.horriizon.com/public/${oldImg}`} alt={i18n.language === "en" ? formData.title_en : formData.title_ar} className='w-32 h-32' />
+                    <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 flex items-center justify-center flex-1">
+                        {updateImagesModal ? (
+                            <UpdateImagesModal productId={productId} productData={productData} getProductData={getProductData} setIsLoading={setIsLoading} getSellerProducts={getSellerProducts} setAllProducts={setAllProducts} setLoadingAllProducts={setLoadingAllProducts} />
+                        ) : (
+                            <div className='space-y-6 grid grid-cols-2 gap-3 w-full'>
+                                <div className='col-span-2'>
+                                    {productData && productData.images.length > 0 && (
+                                        <div className='flex flex-wrap gap-2 justify-center'>
+                                            {productData.images.map((image, index) => (
+                                                <img
+                                                    src={`https://admin.horriizon.com/public/${image.path}`}
+                                                    alt={`Image ${index}`}
+                                                    className='h-20 w-20 object-contain'
+                                                />
+                                            ))}
+                                        </div>
+                                    )}
+                                    <div className='mb-2 block'>
                                     </div>
-                                )}
-                                <div className='mb-2 block'>
-                                    <Label
-                                        htmlFor='image'
-                                        value={i18n.language === 'en' ? 'Image ' : 'الصوره '}
+                                    <button
+                                        type="button"
+                                        className='flex items-center justify-center gap-2 w-full bg-green-500 duration-200 py-1 px-4 rounded-md hover:brightness-110 text-white'
+                                        onClick={() => {
+                                            openUpdateImagesModal();
+                                        }}
+                                    >
+                                        {i18n.language === 'en' ? 'Edit Images' : 'تعديل الصور '}
+                                    </button>
+                                </div>
+                                <div className='col-span-2'>
+                                    <div className='mb-2 block'>
+                                        <Label
+                                            htmlFor='title_en'
+                                            value={
+                                                i18n.language === 'en'
+                                                    ? 'Product Name English '
+                                                    : 'اسم المنتج بالانجليزية '
+                                            }
+                                        />
+                                    </div>
+                                    <TextInput
+                                        id='title_en'
+                                        type='text'
+                                        value={formData.title_en}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, title_en: e.target.value })
+                                        }
                                     />
                                 </div>
-                                <FileInput
-                                    id='image'
-                                    onChange={(e) => setSelectedImage(e.target.files[0])}
-                                />
-                            </div>
-                            <div className='col-span-2'>
-                                <div className='mb-2 block'>
-                                    <Label
-                                        htmlFor='title_en'
-                                        value={
+                                <div className='col-span-2'>
+                                    <div className='mb-2 block'>
+                                        <Label
+                                            htmlFor='title_ar'
+                                            value={
+                                                i18n.language === 'en'
+                                                    ? 'Product Name Arabic '
+                                                    : 'اسم المنتج بالعربية '
+                                            }
+                                        />
+                                    </div>
+                                    <TextInput
+                                        id='title_ar'
+                                        type='text'
+                                        value={formData.title_ar}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, title_ar: e.target.value })
+                                        }
+                                    />
+                                </div>
+                                <div className='col-span-2'>
+                                    <div className='mb-2 block'>
+                                        <Label
+                                            htmlFor='category'
+                                            value={
+                                                i18n.language === 'en'
+                                                    ? 'Product Category '
+                                                    : 'تصنيف المنتج '
+                                            }
+                                        />
+                                    </div>
+                                    <Select
+                                        name='category'
+                                        id='category'
+                                        className='w-full'
+                                        options={
                                             i18n.language === 'en'
-                                                ? 'Product Name English '
-                                                : 'اسم المنتج بالانجليزية '
+                                                ? encategoriesOptions
+                                                : arcategoriesOptions
                                         }
-                                    />
-                                </div>
-                                <TextInput
-                                    id='title_en'
-                                    type='text'
-                                    value={formData.title_en}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, title_en: e.target.value })
-                                    }
-                                />
-                            </div>
-                            <div className='col-span-2'>
-                                <div className='mb-2 block'>
-                                    <Label
-                                        htmlFor='title_ar'
-                                        value={
+                                        placeholder={
                                             i18n.language === 'en'
-                                                ? 'Product Name Arabic '
-                                                : 'اسم المنتج بالعربية '
+                                                ? 'Product Category'
+                                                : 'تصنيف المنتج'
+                                        }
+                                        isRtl={i18n.language === 'ar'}
+                                        isSearchable
+                                        value={formData.category}
+                                        onChange={(selectedOption) =>
+                                            setFormData({ ...formData, category: selectedOption })
                                         }
                                     />
                                 </div>
-                                <TextInput
-                                    id='title_ar'
-                                    type='text'
-                                    value={formData.title_ar}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, title_ar: e.target.value })
-                                    }
-                                />
-                            </div>
-                            <div className='col-span-2'>
-                                <div className='mb-2 block'>
-                                    <Label
-                                        htmlFor='category'
-                                        value={
-                                            i18n.language === 'en'
-                                                ? 'Product Category '
-                                                : 'تصنيف المنتج '
+                                <div className='col-span-1'>
+                                    <div className='mb-2 block'>
+                                        <Label
+                                            htmlFor='quantity'
+                                            value={i18n.language === 'en' ? 'Quantity ' : ' الكمية'}
+                                        />
+                                    </div>
+                                    <TextInput
+                                        id='quantity'
+                                        type='number'
+                                        min={1}
+                                        value={formData.quantity}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, quantity: e.target.value })
                                         }
                                     />
                                 </div>
-                                <Select
-                                    name='category'
-                                    id='category'
-                                    className='w-full'
-                                    options={
-                                        i18n.language === 'en'
-                                            ? encategoriesOptions
-                                            : arcategoriesOptions
-                                    }
-                                    placeholder={
-                                        i18n.language === 'en'
-                                            ? 'Product Category'
-                                            : 'تصنيف المنتج'
-                                    }
-                                    isRtl={i18n.language === 'ar'}
-                                    isSearchable
-                                    value={formData.category}
-                                    onChange={(selectedOption) =>
-                                        setFormData({ ...formData, category: selectedOption })
-                                    }
-                                />
-                            </div>
-                            <div className='col-span-1'>
-                                <div className='mb-2 block'>
-                                    <Label
-                                        htmlFor='quantity'
-                                        value={i18n.language === 'en' ? 'Quantity ' : ' الكمية'}
-                                    />
-                                </div>
-                                <TextInput
-                                    id='quantity'
-                                    type='number'
-                                    min={1}
-                                    value={formData.quantity}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, quantity: e.target.value })
-                                    }
-                                />
-                            </div>
-                            <div className='col-span-1'>
-                                <div className='mb-2 block'>
-                                    <Label
-                                        htmlFor='Price'
-                                        value={i18n.language === 'en' ? 'Price ' : ' السعر'}
-                                    />
-                                </div>
-                                <TextInput
-                                    id='Price'
-                                    type='number'
-                                    min={1}
-                                    value={formData.price}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, price: e.target.value })
-                                    }
-                                />
-                            </div>
-                            <div className='col-span-2'>
-                                <div className='mb-2 block'>
-                                    <Label
-                                        htmlFor='expiry-date'
-                                        value={
-                                            i18n.language === 'en' ? 'Expiry date ' : 'تاريخ الانتهاء '
+                                <div className='col-span-1'>
+                                    <div className='mb-2 block'>
+                                        <Label
+                                            htmlFor='Price'
+                                            value={i18n.language === 'en' ? 'Price ' : ' السعر'}
+                                        />
+                                    </div>
+                                    <TextInput
+                                        id='Price'
+                                        type='number'
+                                        min={1}
+                                        value={formData.price}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, price: e.target.value })
                                         }
                                     />
                                 </div>
-                                <TextInput
-                                    id='expiry-date'
-                                    type='date'
-                                    value={formData.start_date}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, start_date: e.target.value })
-                                    }
-                                />
+                                <div className='col-span-2'>
+                                    <div className='mb-2 block'>
+                                        <Label
+                                            htmlFor='expiry-date'
+                                            value={
+                                                i18n.language === 'en' ? 'Expiry date ' : 'تاريخ الانتهاء '
+                                            }
+                                        />
+                                    </div>
+                                    <TextInput
+                                        id='expiry-date'
+                                        type='date'
+                                        value={formData.start_date}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, start_date: e.target.value })
+                                        }
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )
+                        }
 
                     </div>
                     {/* Modal actions */}

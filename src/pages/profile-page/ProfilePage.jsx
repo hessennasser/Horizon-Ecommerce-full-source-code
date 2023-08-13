@@ -16,6 +16,7 @@ import userImagePlaceholder from '../../assets/images/user-image-placeholder.png
 const ProfilePage = () => {
     const userLogged = localStorage.getItem("userLogged");
     const userToken = JSON.parse(localStorage.getItem('userToken'));
+    const providerId = JSON.parse(localStorage.getItem('providerId'));
     const [userInfoState, setUserInfo] = useState({})
 
     const sellerLogged = localStorage.getItem("sellerLogged");

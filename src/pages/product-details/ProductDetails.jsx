@@ -8,7 +8,14 @@ import { BsCart4 } from "react-icons/bs"
 import "../cart/style.css"
 import { AppContext } from '../../AppContext';
 import { Oval } from 'react-loader-spinner';
-import ImagesGallery from './ImagesGallery';
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Navigation } from 'swiper/modules';
+
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+
 
 const ProductDetails = () => {
     const { id } = useParams()
@@ -57,8 +64,27 @@ const ProductDetails = () => {
                     <div className='container py-10'>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                             {images && images.length > 0 && (
-                                <div className="img-holder col-span-1 p-5 bg-gray-200 flex items-center justify-center rounded-lg shadow-md">
-                                    <img className='h-72 w-full object-contain' src={`https://admin.horriizon.com/public/${images[0]?.path}`} alt={i18n.language === "en" ? title?.en : title?.ar} />
+                                <div className="img-holder p-5 col-span-1 bg-gray-200 flex items-center justify-center rounded-lg shadow-md">
+                                    <Swiper
+                                        slidesPerView={1}
+                                        spaceBetween={30}
+                                        loop={true}
+                                        pagination={{
+                                            clickable: true,
+                                        }}
+                                        navigation={true}
+                                        modules={[Pagination, Navigation]}
+                                        className="mySwiper"
+                                        style={{ direction: "ltr" }}
+
+                                    >
+                                        {images.map((image) => (
+                                            <SwiperSlide key={image.id}>
+                                                <img className='h-96 w-full object-contain' src={`https://admin.horriizon.com/public/${image.path}`} alt={i18n.language === "en" ? title?.en : title?.ar} />
+                                            </SwiperSlide>
+                                        ))}
+                                    </Swiper>
+
                                 </div>
                             )}
                             <div className="product-details flex flex-col gap-5 px-5 mt-5 md:col-span-2">

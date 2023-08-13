@@ -28,10 +28,10 @@ const Payments = lazy(() => import('./pages/payments/Payments'));
 const CheckOut = lazy(() => import('./pages/check-out/CheckOut'));
 const ContactUs = lazy(() => import('./pages/contact-us/contactUs'));
 const AboutUs = lazy(() => import('./pages/about-us/AboutUs'));
-// const ProductDetails = lazy(() => import('./pages/product-details/ProductDetails'));
-import ProductDetails from './pages/product-details/ProductDetails';
-import ScrollToTopButton from './components/ScrollToTopButton';
-import WhatsAppButtons from './components/WhatsAppButtons';
+const ProductDetails = lazy(() => import('./pages/product-details/ProductDetails'));
+const ScrollToTopButton = lazy(() => import('./components/ScrollToTopButton'));
+const WhatsAppButtons = lazy(() => import('./components/WhatsAppButtons'));
+import ModalAd from './components/ModalAd';
 
 function AppContent() {
   const { i18n } = useTranslation();
@@ -47,6 +47,29 @@ function AppContent() {
     window.scrollTo(0, 0);
     // console.clear();
   }, [location.pathname]);
+
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [showModal, setShowModal] = useState(true);
+
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  useEffect(() => {
+    if (location.pathname === "/" || location.pathname === "/home") {
+      const timer = setTimeout(() => {
+        setModalVisible(true);
+      }, 2000);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, []);
 
 
   return (
@@ -65,6 +88,7 @@ function AppContent() {
           />
         </div>
       }>
+        {showModal && <ModalAd showModal={setShowModal} onOpen={openModal} onClose={closeModal} modalVisible={modalVisible} />}
         <Header toggleSidebar={toggleSidebar} />
         <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
         <ToastContainer

@@ -13,7 +13,7 @@ const SingleProductCard = ({ background, id, title, total_price, price, quantity
 
 
     return (
-        <div loading="lazy" className={`product-card flex flex-col items-start justify-between min-h-[430px] relative bg-${background} ${background ? "py-3 px-2" : ""}`}>
+        <div loading="lazy" className={`product-card flex flex-col items-start justify-between min-h-[400px] relative bg-${background} ${background ? "py-3 px-2" : ""}`}>
             {/* <span className="absolute top-5 right-0 bg-secondColor text-white py-1 px-3">40% OFF</span> */}
             <div className="img-holder flex items-center justify-center w-full">
                 <img loading="lazy" className="product-img object-contain h-44" src={`https://admin.horriizon.com/public/${image}`} alt={i18n.language === "ar" ? title?.ar : title?.en} />

@@ -21,8 +21,8 @@ const MainHeader = () => {
     const sellerToken = JSON.parse(localStorage.getItem("sellerToken"));
     const sellerLogged = localStorage.getItem("sellerLogged");
     const { categories, getCartItems, getTotalPriceInCart, total, mainRequest } = useContext(AppContext);
-    const { showSubMenu, setShowSubMenu, notificationMenu, setNotificationMenu, messagesMenu, setMessagesMenu } = useContext(AppContext);
-    const [searchQuery, setSearchQuery] = useState("");
+    const { showSubMenu, setShowSubMenu, notificationMenu, setNotificationMenu, messagesMenu, setMessagesMenu, showSearchResult, setShowSearchResult, searchQuery, setSearchQuery } = useContext(AppContext);
+    const [searchHeaderQuery, setSearchHeaderQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const searchResultsRef = useRef(null);
 
@@ -109,27 +109,37 @@ const MainHeader = () => {
     }, [userLogged, userToken, sellerLogged, sellerToken, total]);
 
     useEffect(() => {
-        if (searchQuery.trim() !== "" && categories) {
+        if (searchHeaderQuery.length > 0) {
+            setShowSearchResult(true);
+        }
+        else {
+            setShowSearchResult(false);
+            return;
+        }
+        if (searchHeaderQuery.trim() !== "" && categories) {
             console.log(categories);
             const results = categories.filter((item) =>
-                item.title.en.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                item.title.ar.toLowerCase().includes(searchQuery.toLowerCase())
+                item.title.en.toLowerCase().includes(searchHeaderQuery.toLowerCase()) ||
+                item.title.ar.toLowerCase().includes(searchHeaderQuery.toLowerCase())
             );
             console.log(results);
             setSearchResults(results);
         } else {
-            setSearchResults([]);
+            setShowSearchResult(false);
         }
-    }, [searchQuery, categories]);
+    }, [searchHeaderQuery, categories]);
+
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (showSubMenu && !event.target.closest(".sub-menu")) {
-                setShowSubMenu(false);
-            }
+            if (!event.target.closest(".main-header")) {
+                if (showSubMenu && !event.target.closest(".sub-menu")) {
+                    setShowSubMenu(false);
+                }
 
-            if (searchResultsRef.current && !event.target.closest(".search-results")) {
-                setSearchResults([]);
+                if (searchResultsRef.current && !event.target.closest(".search-results")) {
+                    setShowSearchResult(false);
+                }
             }
         };
 
@@ -169,10 +179,14 @@ const MainHeader = () => {
                         placeholder={t("mainHeader.placeholder")}
                         required={false}
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={(e) => {
+                            setSearchHeaderQuery(e.target.value);
+                            setSearchQuery(e.target.value);
+                        }}
                         autoComplete="off"
                     />
-                    {searchResults.length > 0 && (
+                    {/* search Result */}
+                    {showSearchResult && (
                         <div
                             ref={searchResultsRef}
                             className="search-results px-4 absolute top-12 left-0 w-full max-h-[300px] overflow-y-auto bg-white z-[10000] rounded-lg shadow-md text-secondColor"
@@ -190,6 +204,9 @@ const MainHeader = () => {
                                     (
                                         <div className="py-5">
                                             <h4 className="no-search-result text-lg text-center text-red-800 capitalize">{i18n.language === "en" ? "there is no search result to your search words" : "لا توجد نتيجه مطابقه لكلمات البحث"}</h4>
+                                            <Link to={`/all-products?q=${searchQuery}`} className="bg-mainColor text-white text-lg px-3 py-2 mx-auto block w-fit mt-2">
+                                                {i18n.language === "en" ? "Advanced Search" : "بحث متقدم"}
+                                            </Link>
                                         </div>
                                     )
                             }
@@ -198,9 +215,11 @@ const MainHeader = () => {
                 </div>
             </div>
             <div className="buttons-holder md:w-fit flex justify-evenly gap-3">
+                {/* when login */}
                 {userLogged || sellerLogged ? (
                     <div className="flex items-center justify-center gap-4 relative w-full">
                         {
+                            // when user login
                             userLogged && (
                                 <Link to="/cart">
                                     <div className="relative p-2">
@@ -213,6 +232,7 @@ const MainHeader = () => {
                             )
                         }
                         {
+                            // when seller login
                             sellerLogged && (
                                 <>
                                     <button button
@@ -274,6 +294,7 @@ const MainHeader = () => {
 
                     </div>
                 ) : (
+                    // when logout
                     <>
                         <Link to="seller-signup">
                             <button

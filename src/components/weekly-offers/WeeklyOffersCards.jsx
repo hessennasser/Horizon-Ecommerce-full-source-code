@@ -11,7 +11,7 @@ import Loading from "../Loading";
 import Error from "../Error";
 
 
-const WeeklyOffersCards = ({ imageCard, widthFull, getWeeklyOffers, products, setProducts, loading, error, titleEn, titleAr }) => {
+const WeeklyOffersCards = ({ imageCard, getWeeklyOffers, products, setProducts, loading, error, titleEn, titleAr }) => {
     const { i18n, t } = useTranslation();
     // ${i18n.language === "en" || !imageCard ? "md:rounded-l-xl" : "md:rounded-r-xl"}
 
@@ -21,7 +21,7 @@ const WeeklyOffersCards = ({ imageCard, widthFull, getWeeklyOffers, products, se
 
     if (loading) {
         return (
-            <div className={`p-3 ${widthFull ? "col-span-3" : "col-span-2"} bg-[#F4F4F4]  shadow-2xl overflow-hidden`}>
+            <div className={`p-3 col-span-2 bg-[#F4F4F4]  shadow-2xl overflow-hidden`}>
                 <div className="flex flex-col md:flex-row gap-5 justify-between items-start mb-5">
                     <div className="flex-1">
                         <h2 className="font-bold text-2xl mb-2">{i18n.language === "en" ? titleEn : titleAr}</h2>
@@ -41,7 +41,7 @@ const WeeklyOffersCards = ({ imageCard, widthFull, getWeeklyOffers, products, se
     }
 
     if (error) {
-        return <div className={`p-3 ${widthFull ? "col-span-3" : "col-span-2"} bg-[#F4F4F4]  shadow-2xl overflow-hidden`}>
+        return <div className={`p-3 col-span-2 bg-[#F4F4F4]  shadow-2xl overflow-hidden`}>
             <div className="flex flex-col md:flex-row gap-5 justify-between items-start mb-5">
                 <div className="flex-1">
                     <h2 className="font-bold text-2xl mb-2">{i18n.language === "en" ? titleEn : titleAr}</h2>
@@ -59,7 +59,7 @@ const WeeklyOffersCards = ({ imageCard, widthFull, getWeeklyOffers, products, se
     }
 
     return (
-        <div className={`p-3 ${widthFull ? "col-span-3" : "col-span-2"} bg-[#F4F4F4]  shadow-2xl overflow-hidden`}>
+        <div className={`p-3 col-span-2 bg-[#F4F4F4]  shadow-2xl overflow-hidden`}>
             <div className="flex flex-col md:flex-row gap-5 justify-between items-start mb-5">
                 <div className="flex-1">
                     <h2 className="font-bold text-2xl mb-2">{i18n.language === "en" ? titleEn : titleAr}</h2>

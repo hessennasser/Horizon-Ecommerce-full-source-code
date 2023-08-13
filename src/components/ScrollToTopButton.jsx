@@ -29,7 +29,7 @@ function ScrollToTopButton() {
                     onClick={scrollToTop}
                     data-toggle="back-to-top"
                     aria-label="Scroll To Top"
-                    className={`fixed rounded-full z-10 end-5 h-14 w-14 text-center bg-secondColor bg-opacity-70 text-2xl grid place-content-center text-white justify-center items-center transition-all duration-300 animate-bounce ${showButton ? 'bottom-10' : '-bottom-18'} backdrop-blur-lg`}
+                    className={`z-[10000000000000000] fixed rounded-full end-5 h-14 w-14 text-center bg-secondColor bg-opacity-70 text-2xl grid place-content-center text-white justify-center items-center transition-all duration-300 animate-bounce ${showButton ? 'bottom-10' : '-bottom-18'} backdrop-blur-lg`}
                 >
                     <BsArrowUp />
                 </button>

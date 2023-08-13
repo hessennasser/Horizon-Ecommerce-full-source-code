@@ -53,6 +53,7 @@ const Dashboard = () => {
         setOrderModal(true);
     };
 
+    
 
     const { getAllCategories, categories, getSellerProducts } = useContext(AppContext);
     const encategoriesOptions = categories.map((gov) => ({
@@ -137,7 +138,7 @@ const Dashboard = () => {
                             allProducts.map(item => {
                                 const { id, category, title, images, price, quantity, start_date } = item;
                                 return (
-                                    <SingleCard key={id} openEditModal={openEditModal} openDeleteModal={openDeleteModal} openOrderModal={openOrderModal} setOrderId={setOrderId} id={id} title={title} image={images[0].path} category={category} price={price} quantity={quantity} start_date={start_date} setDeleteProductId={setDeleteProductId} setEditProductId={setEditProductId} />
+                                    <SingleCard key={id}  openEditModal={openEditModal} openDeleteModal={openDeleteModal} openOrderModal={openOrderModal} setOrderId={setOrderId} id={id} title={title} images={images} category={category} price={price} quantity={quantity} start_date={start_date} setDeleteProductId={setDeleteProductId} setEditProductId={setEditProductId} />
                                 )
                             })
                         }
@@ -155,7 +156,7 @@ const Dashboard = () => {
                 addModal && <AddModal getSellerProducts={getSellerProducts} setAllProducts={setAllProducts} setIsLoading={setIsLoading} addModal={addModal} setAddModal={setAddModal} encategoriesOptions={encategoriesOptions} arcategoriesOptions={arcategoriesOptions} />
             }
             {
-                editModal && <EditModal getSellerProducts={getSellerProducts} setAllProducts={setAllProducts} setIsLoading={setIsLoading} editModal={editModal} setEditModal={setEditModal} encategoriesOptions={encategoriesOptions} arcategoriesOptions={arcategoriesOptions} productId={editProductId} />
+                editModal && <EditModal  getSellerProducts={getSellerProducts} setAllProducts={setAllProducts} setIsLoading={setIsLoading} editModal={editModal} setEditModal={setEditModal} encategoriesOptions={encategoriesOptions} arcategoriesOptions={arcategoriesOptions} productId={editProductId} />
             }
             {
                 deleteModal && <DeleteModal getSellerProducts={getSellerProducts} setAllProducts={setAllProducts} setIsLoading={setIsLoading} deleteModal={deleteModal} setDeleteModal={setDeleteModal} productId={deleteProductId} />

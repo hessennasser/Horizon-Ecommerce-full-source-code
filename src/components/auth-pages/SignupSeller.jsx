@@ -11,6 +11,7 @@ import { Spinner } from 'flowbite-react';
 import { toast } from 'react-toastify';
 import { AppContext } from "../../AppContext";
 import Select from 'react-select';
+import GoogleSignInButton from "./GoogleSignInButton";
 
 const SignupSeller = () => {
     const navigate = useNavigate();
@@ -185,6 +186,15 @@ const SignupSeller = () => {
                                     : i18n.language === "ar" ? "سجل" : "Sign up"}
                             </button>
                         </form>
+                        <div className="flex items-center justify-center my-5 w-full">
+                            <div className="w-1/2 border-t border-gray-300"></div>
+                            <p className="mx-4 text-gray-500 font-semibold uppercase">
+                                {i18n.language === "en" ? "OR" : "أو"}
+                            </p>
+                            <div className="w-1/2 border-t border-gray-300"></div>
+                        </div>
+                        <GoogleSignInButton role={"seller"} />
+
                         <p className="mt-4 text-lg">
                             {i18n.language === "ar" ? "هل لديك حساب؟" : "Already have an account?"} <Link to="/seller-login" className="text-secondColor font-bold">{i18n.language === "ar" ? "تسجيل الدخول" : "Login"}</Link>
                         </p>

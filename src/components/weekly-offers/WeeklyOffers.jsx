@@ -5,6 +5,8 @@ import ImageCard from "./imageCard";
 import "./styles.css"
 import axios from "axios";
 import apiUrl from "../../apiUrl";
+import { useTranslation } from "react-i18next";
+import BoxAd from "./BoxAd";
 
 const weeklyOffers = ({ imageCard, isMarginTop, titleEn, titleAr }) => {
     const userLogged = localStorage.getItem("userLogged");
@@ -13,7 +15,7 @@ const weeklyOffers = ({ imageCard, isMarginTop, titleEn, titleAr }) => {
     const [weeklyProducts, setWeeklyProducts] = useState([]);
     const [weeklyLoading, setWeeklyLoading] = useState(false);
     const [weeklyError, setWeeklyError] = useState(null);
-    
+
     const getWeeklyOffers = async () => {
         setWeeklyLoading(true);
         try {
@@ -45,7 +47,7 @@ const weeklyOffers = ({ imageCard, isMarginTop, titleEn, titleAr }) => {
     };
 
     return (
-        <div className={`px-5 md:-translate-y-20 relative z-10 grid grid-cols-1 md:grid-cols-3 mt-24 ${isMarginTop ? "md:-translate-y-36" : ""}`}>
+        <div className={`px-5 md:-translate-y-20 relative z-10 grid grid-cols-1 md:grid-cols-3 mt-24 ${isMarginTop ? "md:-translate-y-36" : ""} min-h-[400px]`}>
             {imageCard ?
                 <>
                     <ImageCard />
@@ -53,9 +55,16 @@ const weeklyOffers = ({ imageCard, isMarginTop, titleEn, titleAr }) => {
                 </>
                 :
                 <>
-                    <WeeklyOffersCards titleEn={"Weekly Offers"} titleAr={"العروض الأسبوعية"} getWeeklyOffers={getWeeklyOffers} loading={weeklyLoading} error={weeklyError} products={weeklyProducts} widthFull={userLogged || sellerLogged} />
+                    <WeeklyOffersCards titleEn={"Weekly Offers"} titleAr={"العروض الأسبوعية"} getWeeklyOffers={getWeeklyOffers} loading={weeklyLoading} error={weeklyError} products={weeklyProducts} />
                     {
-                        (!userLogged && !sellerLogged) && <RegisterCard />
+                        (!userLogged && !sellerLogged) ?
+                            (
+                                <RegisterCard />
+                            )
+                            :
+                            (
+                                <BoxAd />
+                            )
                     }
                 </>
             }

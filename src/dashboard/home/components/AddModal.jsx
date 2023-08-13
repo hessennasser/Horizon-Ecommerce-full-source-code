@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
 import { AppContext } from '../../../AppContext';
-import { FaTimes } from 'react-icons/fa';
+import { FaPlus, FaTimes } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import apiUrl from '../../../apiUrl';
 import FormData from 'form-data';
@@ -27,11 +27,10 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
             formData.append('quantity', quantity);
             formData.append('price', price);
             formData.append('start_date', start_date);
-            formData.append('images', images[0], images[0].name);
 
-            // for (let i = 0; i < images.length; i++) {
-            //     formData.append(`images[${i}]`, images[i], images[i].name);
-            // }
+            for (let i = 0; i < images.length; i++) {
+                formData.append(`images[${i}]`, images[i], images[i].name);
+            }
 
             const response = await mainRequest.post(`${apiUrl}/vendor/products/create`, formData, {
                 headers: {
@@ -162,15 +161,27 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
                                     }}
                                 />
                             </div>
+
                             <div className='col-span-2'>
                                 {selectedImages.length > 0 && (
                                     <div className="flex flex-wrap gap-2 justify-center">
+                                        {/* Plus button */}
+                                        {selectedImages.length < 4 && (
+                                            <button
+                                                className='h-20 w-20 flex items-center justify-center rounded-md border-dotted border-2 border-secondColor hover:bg-gray-300'
+                                                onClick={() => {
+                                                    document.getElementById('image').click();
+                                                }}
+                                            >
+                                                <FaPlus />
+                                            </button>
+                                        )}
                                         {selectedImages.map((image, index) => (
                                             <div key={index} className="relative">
                                                 <img
                                                     src={URL.createObjectURL(image)}
                                                     alt={`Image ${index}`}
-                                                    className="h-20 w-20 object-cover rounded-md"
+                                                    className="h-20 w-20 object-contain rounded-md"
                                                 />
                                                 <button
                                                     className="absolute top-0 right-0 text-red-600 p-1 bg-white rounded-full hover:bg-red-100"

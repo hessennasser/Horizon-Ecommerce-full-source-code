@@ -14,7 +14,7 @@ const StartedCard = () => {
                 </div>
                 <div className="bg-white py-20">
 
-                    <div className="buttons-holder flex flex-col items-center gap-3">
+                    <div className="auth-buttons-holder flex flex-col items-center gap-3">
                         <Link to="/seller-login" className="bg-secondColor w-48 text-white p-2 rounded-lg hover:brightness-110 text-xs md:text-sm text-center">
                             {t('weeklyOffers.registerCard.sugnInButtons.seller')}
                         </Link>
@@ -22,7 +22,7 @@ const StartedCard = () => {
                             {t('weeklyOffers.registerCard.sugnInButtons.customer')}
                         </Link>
                         <GoogleSignInButton />
-                        <FacebookSignInButton />
+                        {/* <FacebookSignInButton /> */}
                     </div>
 
                     <div className="flex items-center justify-center my-5">

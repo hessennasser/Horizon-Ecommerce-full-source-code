@@ -28,12 +28,11 @@ const WhatsAppButtons = () => {
         setShowModal(!showModal);
     };
 
-
     return (
         <>
         {
             showModal && (
-                <div className="w-[300px] sticky bottom-24 start-2 sm:start-8 z-[10000] bg-white mb-20 rtl overflow-hidden flex flex-col border rounded border-green-500">
+                <div className="w-[300px] sticky bottom-28 start-2 sm:start-8 z-[10000] bg-white mb-20 rtl overflow-hidden flex flex-col border rounded border-green-500">
                 <div className="bg-mainColor py-10 px-5 box-border text-white text-center">
                     {i18n.language === "en" ? "Contact us By Whatsapp" : "تواصل معنا من خلال واتساب"}
                     </div>
@@ -61,7 +60,7 @@ const WhatsAppButtons = () => {
                 onClick={openModal}
                 data-toggle="back-to-top"
                 aria-label="Scroll To Top"
-                className={`fixed rounded-full z-10 start-5 h-14 w-14 text-center bg-secondColor bg-opacity-70 text-2xl grid place-content-center text-white justify-center items-center transition-all duration-300 animate-bounce ${showButton ? 'bottom-10' : '-bottom-18'} backdrop-blur-lg`}
+                className={`z-[10000000000000000] fixed rounded-full start-5 h-14 w-14 text-center bg-secondColor bg-opacity-70 text-2xl grid place-content-center text-white justify-center items-center transition-all duration-300 animate-bounce ${showButton ? 'bottom-10' : '-bottom-18'} backdrop-blur-lg`}
             >
                 {
                     showModal ? <FaTimes/> : <BsWhatsapp />

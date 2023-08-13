@@ -9,6 +9,7 @@ import axios from 'axios';
 import apiUrl from "../../apiUrl";
 import { Spinner } from 'flowbite-react';
 import { toast } from 'react-toastify';
+import GoogleSignInButton from "./GoogleSignInButton";
 
 const SignupCustomer = () => {
     const navigate = useNavigate();
@@ -171,6 +172,15 @@ const SignupCustomer = () => {
                                 )}
                             </button>
                         </form>
+                        <div className="flex items-center justify-center my-5 w-full">
+                            <div className="w-1/2 border-t border-gray-300"></div>
+                            <p className="mx-4 text-gray-500 font-semibold uppercase">
+                                {i18n.language === "en" ? "OR" : "أو"}
+                            </p>
+                            <div className="w-1/2 border-t border-gray-300"></div>
+                        </div>
+                        <GoogleSignInButton role={"user"} />
+
                         <p className="mt-4 text-lg">
                             {i18n.language === "ar" ? "هل لديك حساب بالفعل؟" : "Already have an account?"}{" "}
                             <Link to="/customer-login" className="text-secondColor font-bold">

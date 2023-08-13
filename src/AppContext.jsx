@@ -8,11 +8,14 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import FormData from 'form-data';
-import { get, set } from 'react-hook-form';
 
 export const AppContext = createContext();
 export const AppProvider = ({ children }) => {
     const navigate = useNavigate();
+    // search states
+    const [showSearchResult, setShowSearchResult] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+
     const savedLanguage = localStorage.getItem('language');
     const userToken = JSON.parse(localStorage.getItem('userToken'));
     const sellerToken = JSON.parse(localStorage.getItem('sellerToken'));
@@ -37,7 +40,7 @@ export const AppProvider = ({ children }) => {
                 en: {
                     translation: {
                         mainHeader: {
-                            placeholder: "Search by product name",
+                            placeholder: "Search by category name",
                             signUpSallerBtn: "Sign up as a seller",
                             signUpCustomerBtn: "Sign up as a Customer",
                             pages: [
@@ -66,7 +69,7 @@ export const AppProvider = ({ children }) => {
                 ar: {
                     translation: {
                         mainHeader: {
-                            placeholder: "اخل اسم المنتج للبحث",
+                            placeholder: "ابحث باستخدام التصنيفات",
                             signUpSallerBtn: "سجل معنا كبائع",
                             signUpCustomerBtn: "سجل معنا كمستخدم",
                             pages: [
@@ -346,7 +349,7 @@ export const AppProvider = ({ children }) => {
     }, [userToken, userLogged]);
 
     return (
-        <AppContext.Provider value={{ isSidebarOpen, setIsSidebarOpen, toggleSidebar, showSubMenu, setShowSubMenu, notificationMenu, setNotificationMenu, messagesMenu, setMessagesMenu, products, getAllCategories, categories, getAllProducts, getProductsForCategory, logout, getUserInfo, getSellerInfo, refreshToken, addToCart, handelUpdateQuantity, getCartItems, getTotalPriceInCart, total, governorates, getGovernorates, getSellerProducts, removeBackground, mainRequest, cartItems, setCartItems }}>
+        <AppContext.Provider value={{ isSidebarOpen, setIsSidebarOpen, toggleSidebar, showSubMenu, setShowSubMenu, notificationMenu, setNotificationMenu, messagesMenu, setMessagesMenu, products, getAllCategories, categories, getAllProducts, getProductsForCategory, logout, getUserInfo, getSellerInfo, refreshToken, addToCart, handelUpdateQuantity, getCartItems, getTotalPriceInCart, total, governorates, getGovernorates, getSellerProducts, removeBackground, mainRequest, cartItems, setCartItems, showSearchResult, setShowSearchResult,searchQuery, setSearchQuery }}>
             {children}
         </AppContext.Provider>
     );

@@ -4,14 +4,15 @@ import FacebookLogin from '@greatsumini/react-facebook-login';
 const FacebookSignInButton = () => {
     const handleFacebookResponse = (response) => {
         console.log('Facebook Login Response:', response);
-        // Handle the response data (e.g., make API calls, set user state, etc.)
-
+        
         if (response.accessToken) {
             // Login Successfully
+            // You can perform actions like making API calls, setting user state, etc.
         } else {
             // Login Failed
-            
+            // Handle the failed login scenario
         }
+
 
     };
 
