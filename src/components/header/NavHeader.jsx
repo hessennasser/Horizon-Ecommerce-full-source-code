@@ -43,7 +43,7 @@ const NavHeader = ({ toggleSidebar }) => {
                 {
                     pages.map(page => {
                         if (!sellerLogged) {
-                            if (page.id === 5) {
+                            if (page.id === 6) {
                                 return null
                             }
                         }

@@ -24,7 +24,6 @@ const Home = () => {
             const { data } = response;
             setProductsOnSectionOne(data.data);
             setProductsOnSectionOneLoading(false);
-            console.log(data.data);
         } catch (error) {
             setProductsOnSectionOneError(error);
             setProductsOnSectionOneLoading(false);
@@ -42,11 +41,9 @@ const Home = () => {
             const { data } = response;
             setProductsOnSectionTwo(data.data);
             setProductsOnSectionTwoLoading(false);
-            console.log(data.data);
         } catch (error) {
             setProductsOnSectionTwoError(error);
             setProductsOnSectionTwoLoading(false);
-            console.log(weeklyError);
         }
     };
     // Section Three
@@ -60,11 +57,9 @@ const Home = () => {
             const { data } = response;
             setProductsOnSectionThree(data.data);
             setProductsOnSectionThreeLoading(false);
-            console.log(data.data);
         } catch (error) {
             setProductsOnSectionThreeError(error);
             setProductsOnSectionThreeLoading(false);
-            console.log(weeklyError);
         }
     };
 

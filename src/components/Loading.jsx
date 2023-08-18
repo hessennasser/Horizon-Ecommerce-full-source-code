@@ -3,7 +3,7 @@ import { Oval } from 'react-loader-spinner'
 
 const Loading = () => {
     return (
-        <div className={`p-3 overflow-hidden min-h-[300px]`}>
+        <div className={`p-3 overflow-hidden min-h-[300px] flex justify-center item-center`}>
             <div className="flex flex-col gap-5 items-center justify-center">
                 <Oval
                     visible={true}

@@ -10,7 +10,7 @@ const Breadcrumbs = () => {
     const { t, i18n } = useTranslation();
 
     return (
-        <Breadcrumb className='breadcrumb' aria-label="breadcrumb">
+        <Breadcrumb className='breadcrumb mb-10' aria-label="breadcrumb">
             <Breadcrumb.Item href="/" icon={HiHome}>
                 <p>{i18n.language === 'ar' ? "الصفحه الرئيسه" : "Home"}</p>
             </Breadcrumb.Item>

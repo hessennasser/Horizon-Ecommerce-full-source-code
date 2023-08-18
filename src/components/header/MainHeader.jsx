@@ -21,7 +21,7 @@ const MainHeader = () => {
     const sellerToken = JSON.parse(localStorage.getItem("sellerToken"));
     const sellerLogged = localStorage.getItem("sellerLogged");
     const { categories, getCartItems, getTotalPriceInCart, total, mainRequest } = useContext(AppContext);
-    const { showSubMenu, setShowSubMenu, notificationMenu, setNotificationMenu, messagesMenu, setMessagesMenu, showSearchResult, setShowSearchResult, searchQuery, setSearchQuery } = useContext(AppContext);
+    const { showSubMenu, setShowSubMenu, notificationMenu, setNotificationMenu, messagesMenu, setMessagesMenu, showSearchResult, setShowSearchResult, searchQuery, setSearchQuery,setUserName } = useContext(AppContext);
     const [searchHeaderQuery, setSearchHeaderQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const searchResultsRef = useRef(null);
@@ -60,7 +60,6 @@ const MainHeader = () => {
             });
             const { data } = response;
             setNotifications(data.data);
-            console.log(data.data.length);
             setNotificationsNumber(data.data.length);
         } catch (error) {
             console.log(error);
@@ -87,7 +86,6 @@ const MainHeader = () => {
             });
             const { data } = response;
             setMessages(data.data);
-            console.log(data.data.length);
             setMessagesNumber(data.data.length);
         } catch (error) {
             console.log(error);
@@ -117,12 +115,10 @@ const MainHeader = () => {
             return;
         }
         if (searchHeaderQuery.trim() !== "" && categories) {
-            console.log(categories);
             const results = categories.filter((item) =>
                 item.title.en.toLowerCase().includes(searchHeaderQuery.toLowerCase()) ||
                 item.title.ar.toLowerCase().includes(searchHeaderQuery.toLowerCase())
             );
-            console.log(results);
             setSearchResults(results);
         } else {
             setShowSearchResult(false);
@@ -161,7 +157,9 @@ const MainHeader = () => {
     useEffect(() => {
         if (sellerLogged) getSellerInfo(sellerToken, setSellerInfo);
     }, [sellerLogged, sellerToken, userLogged, userToken, total])
-
+    useEffect(() => {
+        setUserName(userLogged ? userInfoState.name : sellerInfoState.name)
+    })
 
     return (
         <div className="main-header flex items-center justify-between gap-5 flex-col md:flex-row">
@@ -301,7 +299,7 @@ const MainHeader = () => {
                                 type="button"
                                 className="bg-secondColor p-2 rounded-lg hover:brightness-110 text-xs md:text-sm"
                             >
-                                {t("mainHeader.signUpSallerBtn")}
+                                {t("mainHeader.signUpSellerBtn")}
                             </button>
                         </Link>
                         <Link to="customer-signup">

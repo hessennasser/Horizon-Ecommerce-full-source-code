@@ -26,11 +26,14 @@ export const AppProvider = ({ children }) => {
     const [total, setTotal] = useState(0);
     const [governorates, setGovernorates] = useState([]);
     const [cartItems, setCartItems] = useState([]);
+    const [websiteInfo, setWebsiteInfo] = useState({});
+    const [userName, setUserName] = useState("");
     // Sidebar
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen)
+        setIsSidebarOpen(!isSidebarOpen);
     }
+    
 
     // Setup react-i18next --------------------------------------------------------------
     i18n
@@ -41,14 +44,15 @@ export const AppProvider = ({ children }) => {
                     translation: {
                         mainHeader: {
                             placeholder: "Search by category name",
-                            signUpSallerBtn: "Sign up as a seller",
+                            signUpSellerBtn: "Sign up as a seller",
                             signUpCustomerBtn: "Sign up as a Customer",
                             pages: [
                                 { id: 1, name: "Home", link: "home" },
                                 { id: 2, name: "All Products", link: "all-products" },
                                 { id: 3, name: "contact us", link: "contact-us" },
                                 { id: 4, name: "about us", link: "about-us" },
-                                { id: 5, name: "Dashboard", link: "dashboard" }
+                                { id: 5, name: "Privacy Policy", link: "privacy" },
+                                { id: 6, name: "Dashboard", link: "dashboard" },
                             ]
                         },
                         weeklyOffers: {
@@ -70,14 +74,15 @@ export const AppProvider = ({ children }) => {
                     translation: {
                         mainHeader: {
                             placeholder: "ابحث باستخدام التصنيفات",
-                            signUpSallerBtn: "سجل معنا كبائع",
+                            signUpSellerBtn: "سجل معنا كبائع",
                             signUpCustomerBtn: "سجل معنا كمستخدم",
                             pages: [
                                 { id: 1, name: "الصفحه الرئيسية", link: "home" },
                                 { id: 2, name: "جميع المنتجات", link: "all-products" },
                                 { id: 3, name: "تواصل معنا", link: "contact-us" },
                                 { id: 4, name: "من نحن", link: "about-us" },
-                                { id: 5, name: "لوحة التحكم", link: "dashboard" }
+                                { id: 5, name: "سياسة الخصوصية", link: "privacy" },
+                                { id: 6, name: "لوحة التحكم", link: "dashboard" },
                             ]
                         },
                         weeklyOffers: {
@@ -287,7 +292,8 @@ export const AppProvider = ({ children }) => {
         }
     }
     // get user profile info
-    const getUserInfo = async (userToken, setUserInfo) => {
+    const getUserInfo = async (userToken, setUserInfo, setLoading) => {
+        setLoading ? setLoading(true) : null;
         try {
             const response = await mainRequest(`${apiUrl}/auth/user-profile?token=${userToken}`);
             const { data } = response;
@@ -295,15 +301,22 @@ export const AppProvider = ({ children }) => {
         } catch (error) {
             console.log(error);
         }
+        finally {
+            setLoading ? setLoading(false) : null;
+        }
     };
     // get seller profile info
-    const getSellerInfo = async (SellerToken, setSellerInfo, setName, setEmail, setPhone) => {
+    const getSellerInfo = async (SellerToken, setSellerInfo, setName, setEmail, setPhone, setLoading) => {
+        setLoading ? setLoading(true) : null;
         try {
             const response = await mainRequest(`${apiUrl}/vendor/auth/user-profile?token=${SellerToken}`);
             const { data } = response;
             setSellerInfo(data);
         } catch (error) {
             console.log(error);
+        }
+        finally {
+            setLoading ? setLoading(false) : null;
         }
     };
     // get seller products
@@ -342,14 +355,25 @@ export const AppProvider = ({ children }) => {
             throw new Error('Failed to remove background from image');
         }
     };
+    const getWebsiteInfo = async () => {
+        try {
+            const response = await axios(`${apiUrl}/setting`);
+            const { data } = response;
+            setWebsiteInfo(data.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     useEffect(() => {
         getAllProducts();
         getAllCategories();
-        setNotificationMenu(false)
+        getWebsiteInfo();
+        setNotificationMenu(false);
     }, [userToken, userLogged]);
 
     return (
-        <AppContext.Provider value={{ isSidebarOpen, setIsSidebarOpen, toggleSidebar, showSubMenu, setShowSubMenu, notificationMenu, setNotificationMenu, messagesMenu, setMessagesMenu, products, getAllCategories, categories, getAllProducts, getProductsForCategory, logout, getUserInfo, getSellerInfo, refreshToken, addToCart, handelUpdateQuantity, getCartItems, getTotalPriceInCart, total, governorates, getGovernorates, getSellerProducts, removeBackground, mainRequest, cartItems, setCartItems, showSearchResult, setShowSearchResult,searchQuery, setSearchQuery }}>
+        <AppContext.Provider value={{ isSidebarOpen, setIsSidebarOpen, toggleSidebar, showSubMenu, setShowSubMenu, notificationMenu, setNotificationMenu, messagesMenu, setMessagesMenu, products, getAllCategories, categories, getAllProducts, getProductsForCategory, logout, getUserInfo, getSellerInfo, refreshToken, addToCart, handelUpdateQuantity, getCartItems, getTotalPriceInCart, total, governorates, getGovernorates, getSellerProducts, removeBackground, mainRequest, cartItems, setCartItems, showSearchResult, setShowSearchResult, searchQuery, setSearchQuery, websiteInfo, userName, setUserName }}>
             {children}
         </AppContext.Provider>
     );

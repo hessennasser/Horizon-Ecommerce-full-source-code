@@ -43,14 +43,14 @@ input#image {
     flex-direction: column;
 }
 
-.modal-app::-webkit-scrollbar{
+.modal-app::-webkit-scrollbar {
     display: none;
 }
 
 .modal-app .omMid {
     height: calc(100% - 160px)
 }
+
 .modal-app .onFixed {
     height: 80px;
 }
-

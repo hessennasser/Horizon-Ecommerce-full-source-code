@@ -59,7 +59,7 @@ const SingleCard = ({ id, openEditModal, openDeleteModal, openOrderModal, catego
                     <p className='font-bold'>{start_date}</p>
                 </div>
             </div>
-            <div className='grid gap-2'>
+            <div className='grid gap-2 mt-2'>
                 <button
                     type='button'
                     className='flex items-center justify-center gap-2 bg-secondColor hover:bg-blue-800 duration-200 py-1 px-4 rounded-md hover:brightness-110 text-white'
@@ -93,12 +93,12 @@ const SingleCard = ({ id, openEditModal, openDeleteModal, openOrderModal, catego
                         Delete
                     </button>
                 </div>
-                <Link
+                {/* <Link
                     to={`/product/${id}`}
                     className='flex items-center justify-center gap-2 bg-secondColor hover:bg-blue-800 duration-200 py-1 px-4 rounded-md hover:brightness-110 text-white'
                 >
                     See Details
-                </Link>
+                </Link> */}
             </div>
         </div>
     )

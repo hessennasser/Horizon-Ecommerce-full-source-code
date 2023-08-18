@@ -12,12 +12,14 @@ import axios from 'axios';
 import { Spinner } from 'flowbite-react';
 import Select from 'react-select';
 import userImagePlaceholder from '../../assets/images/user-image-placeholder.png';
+import Loading from '../../components/Loading';
 
 const ProfilePage = () => {
     const userLogged = localStorage.getItem("userLogged");
     const userToken = JSON.parse(localStorage.getItem('userToken'));
     const providerId = JSON.parse(localStorage.getItem('providerId'));
     const [userInfoState, setUserInfo] = useState({})
+    const [loading, setLoading] = useState(false)
 
     const sellerLogged = localStorage.getItem("sellerLogged");
     const sellerToken = JSON.parse(localStorage.getItem('sellerToken'));
@@ -73,7 +75,6 @@ const ProfilePage = () => {
     const handleConfirmPasswordChange = (e) => {
         setConfirmPassword(e.target.value);
     };
-    // 
     const handleEditProfile = async (event) => {
 
         event.preventDefault();
@@ -85,7 +86,7 @@ const ProfilePage = () => {
                 name: userLogged ? name || userInfoState.name : name || sellerInfoState.name,
                 email: userLogged ? email || userInfoState.email : email || sellerInfoState.email,
                 phone: userLogged ? phone || userInfoState.phone : phone || sellerInfoState.phone,
-                governorate_id: editingProfile ? selectedGovernorate : sellerInfoState.governorate_id,
+                governorate_id: selectedGovernorate || sellerInfoState.governorate_id,
                 cash_number: cashNumber
             };
             const response = await axios.post(`${apiUrl}${userLogged ? "/auth/user-update" : "/vendor/auth/vendor-update"}`, updatedProfile);
@@ -95,7 +96,7 @@ const ProfilePage = () => {
         } finally {
             setIsProfileSubmitting(false);
             setEditingProfile(false);
-            userLogged ? getUserInfo(userToken, setUserInfo, setName, setEmail, setPhone) : getSallerInfo(sellerToken, setSellerInfo, setName, setEmail, setPhone);
+            userLogged ? getUserInfo(userToken, setUserInfo, setName, setEmail, setPhone) : getSellerInfo(sellerToken, setSellerInfo, setName, setEmail, setPhone);
         }
     };
     const handleEditPassword = async (event) => {
@@ -131,7 +132,7 @@ const ProfilePage = () => {
         } finally {
             setIPasswordSubmitting(false);
             setEditingPassword(false);
-            userLogged ? getUserInfo(userToken, setUserInfo, setName, setEmail, setPhone) : getSallerInfo(sellerToken, setSellerInfo, setName);
+            userLogged ? getUserInfo(userToken, setUserInfo, setName, setEmail, setPhone) : getSellerInfo(sellerToken, setSellerInfo, setName);
         }
     };
 
@@ -171,7 +172,7 @@ const ProfilePage = () => {
             setIPasswordSubmitting(false);
             setEditingPassword(false);
             setImageSubmitting(false);
-            userLogged ? getUserInfo(userToken, setUserInfo, setName, setEmail, setPhone) : getSallerInfo(sellerToken, setSellerInfo, setName);
+            userLogged ? getUserInfo(userToken, setUserInfo, setName, setEmail, setPhone) : getSellerInfo(sellerToken, setSellerInfo, setName);
         }
     }
     const handleDeletePhoto = () => {
@@ -182,11 +183,11 @@ const ProfilePage = () => {
     };
 
     useEffect(() => {
-        if (userLogged) getUserInfo(userToken, setUserInfo, setName, setEmail, setPhone);
+        if (userLogged) getUserInfo(userToken, setUserInfo, setName, setEmail, setPhone, setLoading);
     }, [userLogged, userToken])
 
     useEffect(() => {
-        if (sellerLogged) getSellerInfo(sellerToken, setSellerInfo, setName, setEmail, setPhone);
+        if (sellerLogged) getSellerInfo(sellerToken, setSellerInfo, setName, setEmail, setPhone, setLoading);
     }, [sellerLogged, sellerToken])
 
     const engovernoratesOptions = governorates.map((gov) => ({
@@ -203,6 +204,8 @@ const ProfilePage = () => {
         getGovernorates()
     }, [])
 
+
+    if (loading) return <Loading />
 
     // the content that render
     if (userLogged) {

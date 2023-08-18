@@ -103,19 +103,17 @@ body[dir="rtl"] .breadcrumb svg.mx-1.h-6.w-6.text-gray-400.group-first\:hidden.m
 .close-button {
     background-color: #125ed4;
     color: #fff;
-    font-size: 1.2rem;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 6px;
     border-radius: 50%;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
     -o-border-radius: 50%;
     transition: all .5s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 @keyframes slideUp {

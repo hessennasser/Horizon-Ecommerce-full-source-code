@@ -32,6 +32,7 @@ const ProductDetails = lazy(() => import('./pages/product-details/ProductDetails
 const ScrollToTopButton = lazy(() => import('./components/ScrollToTopButton'));
 const WhatsAppButtons = lazy(() => import('./components/WhatsAppButtons'));
 import ModalAd from './components/ModalAd';
+import Privacy from './pages/Privacy';
 
 function AppContent() {
   const { i18n } = useTranslation();
@@ -123,6 +124,7 @@ function AppContent() {
           <Route path="/payments" element={<Payments />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/privacy" element={<Privacy />} />
         </Routes>
 
         <MyFooter />

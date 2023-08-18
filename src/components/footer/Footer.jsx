@@ -6,9 +6,12 @@ import logo from "../../assets/images/horizon-logo.png";
 import { Link } from "react-router-dom";
 import BottomFooter from './BottomFooter';
 import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
+import { AppContext } from '../../AppContext';
 
 const MyFooter = () => {
     const { i18n } = useTranslation();
+    const { websiteInfo } = useContext(AppContext);
     return (
         <footer className="bg-mainColor py-10 text-white">
 
@@ -22,35 +25,22 @@ const MyFooter = () => {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                             <div className="flex items-center gap-2 col-span-2">
                                 <GoLocation />
-                                <p className='text-sm'>345 Faulconer Drive, Suite 4 • Charlottesville, CA, 12345</p>
+                                <p className='text-sm'>{i18n.language === "en" ? websiteInfo?.address?.en : websiteInfo?.address?.ar}</p>
                             </div>
                             <div className="flex items-center gap-2 col-span-2 sm:col-span-1">
                                 <BiPhone />
-                                <p className='text-sm' >+92 31304754657</p>
-                            </div>
-                            <div className="flex items-center gap-2 col-span-2 sm:col-span-1">
-                                <BiPhone />
-                                <p className='text-sm' >+92 31304754657</p>
+                                <p className='text-sm' >{websiteInfo?.phone}</p>
                             </div>
                         </div>
                         <div className="mt-5 flex justify-between">
                             <p className='text-gray-400 mx-3'>Social Media</p>
                             <div className="flex-1 flex gap-3 text-2xl items-center justify-center">
-                                <Link to="/" aria-label='facebook'>
+                                <a href={websiteInfo.facebook} target='_blank' aria-label='facebook'>
                                     <AiFillFacebook />
-                                </Link>
-                                <Link to="/" aria-label='twitter'>
-                                    <AiOutlineTwitter />
-                                </Link>
-                                <Link to="/" aria-label='linkedin'>
-                                    <GrLinkedinOption />
-                                </Link>
-                                <Link to="/" aria-label='youtube'>
-                                    <AiFillYoutube />
-                                </Link>
-                                <Link to="/" aria-label='instagram'>
+                                </a>
+                                <a href={websiteInfo.instagram} target='_blank' aria-label='instagram'>
                                     <AiOutlineInstagram />
-                                </Link>
+                                </a>
                             </div>
                         </div>
                     </div>
