@@ -48,7 +48,7 @@ const Order = () => {
         const getStatusText = (statusValue) => {
             switch (statusValue) {
                 case 0:
-                    return i18n.language === 'en' ? 'Under Revision' : 'قيد المراجعة';
+                    return i18n.language === 'en' ? 'Prepared' : 'قيد التحضير';
                 case 1:
                     return i18n.language === 'en' ? 'Prepared' : 'قيد التحضير';
                 case 2:
@@ -65,7 +65,7 @@ const Order = () => {
         const statusText = getStatusText(statusValue);
         const statusColor =
             statusValue === 0
-                ? 'orange' // Under Revision - Orange color
+                ? 'blue' // Under Revision - Orange color
                 : statusValue === 1
                     ? 'blue' // Prepared - Blue color
                     : statusValue === 2

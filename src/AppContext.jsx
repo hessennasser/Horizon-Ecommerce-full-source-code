@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { createContext, useEffect, useState, useContext } from 'react';
+import { createContext, useEffect, useState, useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
@@ -20,20 +20,20 @@ export const AppProvider = ({ children }) => {
     const userToken = JSON.parse(localStorage.getItem('userToken'));
     const sellerToken = JSON.parse(localStorage.getItem('sellerToken'));
     const userLogged = localStorage.getItem("userLogged");
+
     const [showSubMenu, setShowSubMenu] = useState(false);
     const [notificationMenu, setNotificationMenu] = useState(false);
     const [messagesMenu, setMessagesMenu] = useState(false);
     const [total, setTotal] = useState(0);
     const [governorates, setGovernorates] = useState([]);
     const [cartItems, setCartItems] = useState([]);
-    const [websiteInfo, setWebsiteInfo] = useState({});
     const [userName, setUserName] = useState("");
     // Sidebar
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     }
-    
+
 
     // Setup react-i18next --------------------------------------------------------------
     i18n
@@ -142,6 +142,10 @@ export const AppProvider = ({ children }) => {
     );
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [weeklyOffersProducts, setWeeklyProducts] = useState([]);
+    const [offersProducts, setOffersProducts] = useState([]);
+    const [websiteInfo, setWebsiteInfo] = useState({});
+    const [whatsApp, setWhatsApp] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     // refresh token
@@ -175,9 +179,9 @@ export const AppProvider = ({ children }) => {
             navigate("/home");
 
         } catch (error) {
-            toast.success(
-                i18n.language === "en" ? "Logged Out" : "تم تسجيل الخروج"
-            );
+            // toast.success(
+            //     i18n.language === "en" ? "Logged Out" : "تم تسجيل الخروج"
+            // );
             localStorage.clear();
             navigate("/home");
         }
@@ -214,6 +218,26 @@ export const AppProvider = ({ children }) => {
         } catch (error) {
             setError(error);
             setLoading(false);
+        }
+    };
+    // Weekly Offers
+    const getWeeklyOffers = async () => {
+        try {
+            const response = await axios.post(`${apiUrl}/section/weeklyOffers`);
+            const { data } = response;
+            setWeeklyProducts(data.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    // Offers Products
+    const getOffers = async () => {
+        try {
+            const response = await axios.post(`${apiUrl}/section/offers`);
+            const { data } = response;
+            setOffersProducts(data.data);
+        } catch (error) {
+            console.log(error);
         }
     };
     // add product to cart
@@ -275,22 +299,6 @@ export const AppProvider = ({ children }) => {
             console.log(error);
         }
     }
-    // update product quantity in cart
-    const handelUpdateQuantity = async (id, quantity, setCartItems) => {
-        try {
-            const response = await mainRequest.post(`${apiUrl}/cart/update`, {
-                token: userToken,
-                product_id: id,
-                quantity: quantity + 1
-            })
-            // toast.success(i18n.language === "en" ? "Update Successfully" : "تم تعديل الكمية");
-            getTotalPriceInCart();
-            getCartItems(userToken, setCartItems);
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
     // get user profile info
     const getUserInfo = async (userToken, setUserInfo, setLoading) => {
         setLoading ? setLoading(true) : null;
@@ -306,7 +314,7 @@ export const AppProvider = ({ children }) => {
         }
     };
     // get seller profile info
-    const getSellerInfo = async (SellerToken, setSellerInfo, setName, setEmail, setPhone, setLoading) => {
+    const getSellerInfo = async (SellerToken, setSellerInfo, setLoading) => {
         setLoading ? setLoading(true) : null;
         try {
             const response = await mainRequest(`${apiUrl}/vendor/auth/user-profile?token=${SellerToken}`);
@@ -364,19 +372,84 @@ export const AppProvider = ({ children }) => {
             console.log(error);
         }
     };
+    const getWhatsAppInfo = async () => {
+        try {
+            const response = await axios(`${apiUrl}/whatsapp`);
+            const { data } = response;
+            setWhatsApp(data.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     useEffect(() => {
         getAllProducts();
         getAllCategories();
+        getWeeklyOffers();
+        getOffers();
         getWebsiteInfo();
+        getWhatsAppInfo();
         setNotificationMenu(false);
     }, [userToken, userLogged]);
 
+    const contextValue = useMemo(() => ({
+        isSidebarOpen,
+        setIsSidebarOpen,
+        toggleSidebar,
+        showSubMenu,
+        setShowSubMenu,
+        notificationMenu,
+        setNotificationMenu,
+        messagesMenu,
+        setMessagesMenu,
+        products,
+        getAllCategories,
+        categories,
+        getAllProducts,
+        getProductsForCategory,
+        weeklyOffersProducts,
+        offersProducts,
+        logout,
+        getUserInfo,
+        getSellerInfo,
+        refreshToken,
+        addToCart,
+        getCartItems,
+        getTotalPriceInCart,
+        total,
+        governorates,
+        getGovernorates,
+        getSellerProducts,
+        removeBackground,
+        mainRequest,
+        cartItems,
+        setCartItems,
+        showSearchResult,
+        setShowSearchResult,
+        searchQuery,
+        setSearchQuery,
+        websiteInfo,
+        whatsApp,
+        userName,
+        setUserName
+    }), [
+        isSidebarOpen,
+        setIsSidebarOpen,
+        toggleSidebar,
+        showSubMenu,
+        setShowSubMenu,
+        notificationMenu,
+        setNotificationMenu,
+        messagesMenu,
+        setMessagesMenu,
+    ]);
+
     return (
-        <AppContext.Provider value={{ isSidebarOpen, setIsSidebarOpen, toggleSidebar, showSubMenu, setShowSubMenu, notificationMenu, setNotificationMenu, messagesMenu, setMessagesMenu, products, getAllCategories, categories, getAllProducts, getProductsForCategory, logout, getUserInfo, getSellerInfo, refreshToken, addToCart, handelUpdateQuantity, getCartItems, getTotalPriceInCart, total, governorates, getGovernorates, getSellerProducts, removeBackground, mainRequest, cartItems, setCartItems, showSearchResult, setShowSearchResult, searchQuery, setSearchQuery, websiteInfo, userName, setUserName }}>
+        <AppContext.Provider value={contextValue}>
             {children}
         </AppContext.Provider>
     );
+
 };
 
 AppProvider.propTypes = {

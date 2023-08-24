@@ -14,7 +14,7 @@ const OrderModal = ({ setOrderModal, productOrders, isLoading }) => {
         const getStatusText = (statusValue) => {
             switch (statusValue) {
                 case 0:
-                    return i18n.language === 'en' ? 'Under Revision' : 'قيد المراجعة';
+                    return i18n.language === 'en' ? 'Prepared' : 'قيد التحضير';
                 case 1:
                     return i18n.language === 'en' ? 'Prepared' : 'قيد التحضير';
                 case 2:
@@ -31,7 +31,7 @@ const OrderModal = ({ setOrderModal, productOrders, isLoading }) => {
         const statusText = getStatusText(statusValue);
         const statusColor =
             statusValue === 0
-                ? 'orange' // Under Revision - Orange color
+                ? 'blue' // Under Revision - Orange color
                 : statusValue === 1
                     ? 'blue' // Prepared - Blue color
                     : statusValue === 2
@@ -75,12 +75,12 @@ const OrderModal = ({ setOrderModal, productOrders, isLoading }) => {
                                 <table className="table-auto w-full">
                                     <thead>
                                         <tr>
-                                            <th className="border min-w-[120px] px-4 py-3">Number</th>
-                                            <th className="border min-w-[120px] px-4 py-3">user ID</th>
-                                            <th className="border min-w-[120px] px-4 py-3">Order ID</th>
-                                            <th className="border min-w-[120px] px-4 py-3">Quantity</th>
-                                            <th className="border min-w-[120px] px-4 py-3">Total Price</th>
-                                            <th className="border min-w-[120px] px-4 py-3">Status</th>
+                                            <th className="border min-w-[120px] px-4 py-3">{i18n.language === "en" ? "Number" : "ترتيب"}</th>
+                                            <th className="border min-w-[120px] px-4 py-3">{i18n.language === "en" ? "user ID" : "معرف المستخدم"}</th>
+                                            <th className="border min-w-[120px] px-4 py-3">{i18n.language === "en" ? "Order ID" : "رقم الطلب"}</th>
+                                            <th className="border min-w-[120px] px-4 py-3">{i18n.language === "en" ? "Quantity" : "الكمية"}</th>
+                                            <th className="border min-w-[120px] px-4 py-3">{i18n.language === "en" ? "Total Price" : "السعر الكلي"}</th>
+                                            <th className="border min-w-[120px] px-4 py-3">{i18n.language === "en" ? "Status" : "الحالة"}</th>
                                         </tr>
                                     </thead>
                                     <tbody>

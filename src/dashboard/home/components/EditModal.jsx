@@ -141,7 +141,7 @@ const EditModal = ({
 
                 <div className="modal-app relative bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                     {/* Fixed Header */}
-                    <div className="sticky z-10 top-0 left-0 right-0 bg-white px-4 py-2 shadow-md flex justify-between">
+                    <div className="sticky z-10 top-0 left-0 bg-white px-4 py-2 shadow-md flex justify-between">
                         <h3 className='text-xl font-medium text-secondColor'>
                             {i18n.language === 'en' ? 'Edit Product' : 'تعديل المنتج'}
                         </h3>

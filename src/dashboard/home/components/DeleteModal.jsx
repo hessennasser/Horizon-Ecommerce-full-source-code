@@ -6,11 +6,12 @@ import apiUrl from '../../../apiUrl';
 import { toast } from 'react-toastify';
 import { AppContext } from '../../../AppContext';
 
-const DeleteModal = ({ deleteModal, setDeleteModal, productId, getSellerProducts, setAllProducts, setIsLoading: setLoadingAllProducts }) => {
+const DeleteModal = ({ deleteModal, setDeleteModal, productId, getSellerProducts, setAllProducts, setIsLoading: setLoadingAllProducts, cartItem }) => {
     const { i18n } = useTranslation();
 
     const sellerToken = JSON.parse(localStorage.getItem('sellerToken'));
-    const { mainRequest } = useContext(AppContext);
+    const userToken = JSON.parse(localStorage.getItem('userToken'));
+    const { mainRequest,getTotalPriceInCart } = useContext(AppContext);
 
     const deleteProduct = async () => {
         try {
@@ -26,6 +27,20 @@ const DeleteModal = ({ deleteModal, setDeleteModal, productId, getSellerProducts
             setDeleteModal(false);
             getSellerProducts(setAllProducts, setLoadingAllProducts);
             document.body.style.overflow = 'auto';
+        }
+    }
+    const deleteItemFromCart = async (id) => {
+        try {
+            const response = await mainRequest.post(`${apiUrl}/cart/delete_product/${id}`, {
+                token: userToken
+            });
+            toast.success(i18n.language === "en" ? "the product successfully delete from cart" : "تم حذف المنتج من عربة التسوق");
+            getTotalPriceInCart()
+        } catch (error) {
+            toast.error(i18n.language === "en" ? "theres is an error, please try again" : "يوجد خطأ، برجاء المحاوله مره اخره");
+        }
+        finally {
+            setDeleteModal(false);
         }
     }
 
@@ -46,7 +61,15 @@ const DeleteModal = ({ deleteModal, setDeleteModal, productId, getSellerProducts
                         {i18n.language === "en" ? "Are you sure you want to delete this product?" : "هل انت متاكد انك تريد حذف هذا المنتج؟"}
                     </h3>
                     <div className="flex justify-center gap-4">
-                        <Button color="failure" onClick={deleteProduct}>
+                        <Button color="failure" onClick={() => {
+                            if (sellerToken) {
+                                deleteProduct();
+                                console.log("deleted from dashboard");
+                                return
+                            }
+                                deleteItemFromCart(productId);
+                                console.log("deleted from cart");
+                        }}>
                             {i18n.language === "en" ? "Yes, I'm sure" : "نعم، انا متاكد"}
                         </Button>
                         <Button color="gray" onClick={() => {

@@ -14,7 +14,6 @@ function ImageCard() {
             const response = await axios.post(`${apiUrl}/section/lastProduct`);
             const { data } = response;
             setData(data.data)
-            console.log(data);
         } catch (error) {
             console.log(error);
         }
@@ -28,7 +27,7 @@ function ImageCard() {
             {
                 data.map((item) => {
                     return (
-                        <Link to={`/categories/${item.id}`} className="w-[calc(50%-20px)]">
+                        <Link key={item.id} to={`/categories/${item.id}`} className="w-[calc(50%-20px)]">
                             <img src={`https://admin.horriizon.com/public/${item.image}`} alt={i18n.language === "en" ? item.title.en : item.title.ar} className=" h-full w-full rounded-lg shadow-lg" />
                         </Link>
                     )

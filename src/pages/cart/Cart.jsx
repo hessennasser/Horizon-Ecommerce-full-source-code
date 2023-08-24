@@ -6,6 +6,7 @@ import CartItem from './CartItem';
 import { AppContext } from '../../AppContext';
 import { useTranslation } from 'react-i18next';
 import { Oval } from 'react-loader-spinner';
+import DeleteModal from '../../dashboard/home/components/DeleteModal';
 
 const Cart = () => {
     const { i18n } = useTranslation();
@@ -13,6 +14,7 @@ const Cart = () => {
     const userLogged = localStorage.getItem("userLogged");
     const [totalPrice, settotalPrice] = useState(0);
     const [shipping, setShipping] = useState(0);
+    const [mainLoading, setMainLoading] = useState();
     const [loading, setLoading] = useState();
     const { getCartItems, getTotalPriceInCart, total: itemsTotal, cartItems, setCartItems } = useContext(AppContext);
 
@@ -32,7 +34,11 @@ const Cart = () => {
         calculateSubtotal();
     }, [cartItems, shipping]);
 
-
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [deleteProductId, setDeleteProductId] = useState(null);
+    const openDeleteModal = () => {
+        setDeleteModal(true)
+    }
 
     const handleCoupon = e => {
         e.preventDefault();
@@ -44,23 +50,22 @@ const Cart = () => {
         setShipping(shippingCost);
     };
 
-    if (loading) return (
-        <div className="container py-10 flex flex-col gap-5 items-center justify-center">
-            <h2 className="text-xl font-bold">{i18n.language === "en" ? "Loading..." : "جاري التحميل..."}</h2>
-            <Oval
-                visible={true}
-                height="160"
-                width="160"
-                ariaLabel="Oval-loading"
-                wrapperStyle={{}}
-                wrapperClass="Oval-wrapper"
-                color='#125ed4'
-                secondaryColor='#060047'
-            />
-        </div>
-    )
+    // if (mainLoading) return (
+    //     <div className="container py-10 flex flex-col gap-5 items-center justify-center">
+    //         <Oval
+    //             visible={true}
+    //             height="160"
+    //             width="160"
+    //             ariaLabel="Oval-loading"
+    //             wrapperStyle={{}}
+    //             wrapperClass="Oval-wrapper"
+    //             color='#125ed4'
+    //             secondaryColor='#060047'
+    //         />
+    //     </div>
+    // )
 
-    if (cartItems?.length === 0) {
+    if (!loading && cartItems?.length === 0) {
         return (
             <>
                 <div className="container py-10 flex flex-col gap-5 items-center justify-center">
@@ -85,7 +90,23 @@ const Cart = () => {
 
     return (
         <>
+            {
+                deleteModal && <DeleteModal  setIsLoading={setLoading} deleteModal={deleteModal} setDeleteModal={setDeleteModal} productId={deleteProductId} />
+            }
             <div className="container py-10">
+                {loading && (
+                    <div className="loading-overlay">
+                        <Oval
+                            visible={true}
+                            height="160"
+                            width="160"
+                            ariaLabel="Oval-loading"
+                            color='#125ed4'
+                            secondaryColor='#060047'
+                        />
+                    </div>
+                )}
+
                 <div className="grid grid-cols-3 gap-5">
                     <div className="col-span-3 lg:col-span-2 flex flex-col gap-3">
                         {cartItems?.map(item => {
@@ -101,6 +122,9 @@ const Cart = () => {
                                     total_price={item.total_price}
                                     quantity={item.quantity_of_cart.quantity}
                                     quantityOnStock={item.quantity}
+                                    openDeleteModal={openDeleteModal}
+                                    setDeleteProductId={setDeleteProductId}
+                                    cartItem={true}
                                 />
                             )
                         })}

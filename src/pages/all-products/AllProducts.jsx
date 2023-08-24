@@ -6,47 +6,23 @@ import { useTranslation } from 'react-i18next';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import "./style.css";
-import { useLocation, useParams } from 'react-router-dom';
+import axios from 'axios';
+import apiUrl from '../../apiUrl';
 
 const AllProducts = ({ }) => {
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const initialSearchQuery = queryParams.get('q') || ''; // Get the "q" parameter value
+    const { products, categories } = useContext(AppContext);
+    const [adminProducts, setAdminProducts] = useState([]);
+    const [combinedProducts, setCombinedProducts] = useState([]);
 
-    const { products, categories, searchQuery, setSearchQuery } = useContext(AppContext);
-    const minProductPrice = Math.min(...products.map((product) => product.price)) === Infinity ? 0 : Math.min(...products.map((product) => product.price));
-    const maxProductPrice = Math.max(...products.map((product) => product.price)) === -Infinity ? 10000 : Math.max(...products.map((product) => product.price));
+    const minProductPrice = Math.min(...combinedProducts.map((product) => product.price)) === Infinity ? 0 : Math.min(...combinedProducts.map((product) => product.price));
+    const maxProductPrice = Math.max(...combinedProducts.map((product) => product.price)) === -Infinity ? 10000 : Math.max(...combinedProducts.map((product) => product.price));
+
     const [priceRange, setPriceRange] = useState([minProductPrice, maxProductPrice]);
-    const { i18n } = useTranslation();
+    const [searchQuery, setSearchQuery] = useState("")
     const [sidebarOpen, setSidebarOpen] = useState(true);
+    const { i18n } = useTranslation();
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
-
-    useEffect(() => {
-        // Update the filtered products when filters change
-        const filteredProducts = products.filter((product) => {
-            const titleEn = product.title.en.toLowerCase();
-            const titleAr = product.title.ar.toLowerCase();
-            const searchQueryLower = searchQuery.toLowerCase();
-            const productPrice = product.price;
-            const productCategory = product.category_id; // Access the ID of the category
-
-            const isTitleMatch =
-                titleEn.includes(searchQueryLower) ||
-                titleAr.includes(searchQueryLower);
-
-            const isPriceMatch =
-                productPrice >= priceRange[0] && productPrice <= priceRange[1];
-
-            const isCategoryMatch =
-                selectedCategories.length === 0 ||
-                selectedCategories.includes(productCategory);
-
-            return isTitleMatch && isPriceMatch && isCategoryMatch;
-        });
-
-        setFilteredProducts(filteredProducts);
-    }, [products, searchQuery, priceRange, selectedCategories]);
 
     const handleCategorySelect = (category) => {
         if (selectedCategories.includes(category)) {
@@ -56,6 +32,59 @@ const AllProducts = ({ }) => {
         }
     };
 
+    const getAllProducts = async () => {
+        try {
+            const response = await axios.get(`${apiUrl}/section/all_product`);
+            const { data } = response;
+            setAdminProducts(data.data.data);
+            console.log(data.data.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
+    useEffect(() => {
+        getAllProducts();
+    }, []);
+
+    // Merge adminProducts and products into combinedProducts array
+    useEffect(() => {
+        const combined = [...adminProducts, ...products];
+        setCombinedProducts(combined);
+    }, [adminProducts, products]);
+
+    useEffect(() => {
+        // Update the filtered products when filters change
+        const filteredProducts = combinedProducts
+            .filter((product) => {
+                // Filter out products with the same ID as admin products
+                return !adminProducts.some(adminProduct => adminProduct.id === product.id);
+            })
+            .filter((product) => {
+                const titleEn = product.title.en.toLowerCase();
+                const titleAr = product.title.ar.toLowerCase();
+                const searchQueryLower = searchQuery.toLowerCase();
+                const productPrice = product.price;
+                const productCategory = product.category_id; // Access the ID of the category
+    
+                const isTitleMatch =
+                    titleEn.includes(searchQueryLower) ||
+                    titleAr.includes(searchQueryLower);
+    
+                const isPriceMatch =
+                    productPrice >= priceRange[0] && productPrice <= priceRange[1];
+    
+                const isCategoryMatch =
+                    selectedCategories.length === 0 ||
+                    selectedCategories.includes(productCategory);
+    
+                return isTitleMatch && isPriceMatch && isCategoryMatch;
+            });
+    
+        setFilteredProducts(filteredProducts);
+    }, [combinedProducts, adminProducts, searchQuery, priceRange, selectedCategories]);
+    
     return (
         <div className="flex flex-col container py-5 min-h-screen relative">
             <div className="flex flex-col sm:flex-row">
@@ -109,7 +138,7 @@ const AllProducts = ({ }) => {
                 </div>
 
                 {/* Main content */}
-                <div className={`md:w-3/4 p-4 ${sidebarOpen ? "" : ""}`}>
+                <div className={`md:w-3/4 p-4 ${sidebarOpen ? '' : ''}`}>
                     {/* Product grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
                         {filteredProducts.length > 0 ? (

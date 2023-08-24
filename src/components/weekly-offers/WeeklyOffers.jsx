@@ -51,11 +51,11 @@ const weeklyOffers = ({ imageCard, isMarginTop, titleEn, titleAr }) => {
             {imageCard ?
                 <>
                     <ImageCard />
-                    <WeeklyOffersCards titleEn={"Offers"} titleAr={"أجدد العروض"} getWeeklyOffers={getOffers} loading={offersLoading} error={offersError} products={offersProducts} imageCard={true} />
+                    <WeeklyOffersCards titleEn={"Offers"} titleAr={"أجدد العروض"} getWeeklyOffers={getOffers} loading={offersLoading} error={offersError} products={offersProducts} imageCard={true} link={"/offers"} />
                 </>
                 :
                 <>
-                    <WeeklyOffersCards titleEn={"Weekly Offers"} titleAr={"العروض الأسبوعية"} getWeeklyOffers={getWeeklyOffers} loading={weeklyLoading} error={weeklyError} products={weeklyProducts} />
+                    <WeeklyOffersCards titleEn={"Weekly Offers"} titleAr={"العروض الأسبوعية"} getWeeklyOffers={getWeeklyOffers} loading={weeklyLoading} error={weeklyError} products={weeklyProducts} link={"/weekly-offers"} />
                     {
                         (!userLogged && !sellerLogged) ?
                             (

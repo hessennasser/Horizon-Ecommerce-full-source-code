@@ -37,7 +37,12 @@ const SubMenu = ({ image, name }) => {
                             </Link>
                             :
                             <Link to="/payments" className="flex items-center justify-between font-medium">
-                                <div className="flex items-center gap-2"><BsCreditCardFill /> {i18n.language === "en" ? "Payments" : "المدفوعات"}</div>
+                                {
+                                    sellerLogged ? 
+                                    <div className="flex items-center gap-2"><BsCreditCardFill /> {i18n.language === "en" ? "Payments" : "المدفوعات"}</div>
+                                    :
+                                    <div className="flex items-center gap-2"><BsCreditCardFill /> {i18n.language === "en" ? "purchases" : "المشتريات"}</div>
+                                }
                                 {i18n.language === "en" ? <AiOutlineRight /> : <AiOutlineLeft />}
                             </Link>
                     }

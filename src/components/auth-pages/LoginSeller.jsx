@@ -11,6 +11,7 @@ import apiUrl from "../../apiUrl";
 import { Spinner } from 'flowbite-react';
 import { toast } from "react-toastify";
 import GoogleSignInButton from "./GoogleSignInButton";
+import { AppContext } from "../../AppContext";
 
 const LoginSeller = () => {
     const navigate = useNavigate();
@@ -18,7 +19,7 @@ const LoginSeller = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const sellerLogged = localStorage.getItem("sellerLogged");
-
+    const {whatsApp} = useContext(AppContext)
     if (sellerLogged) {
         navigate("/dashboard");
         return;
@@ -106,9 +107,9 @@ const LoginSeller = () => {
                                     />
                                 )}
                             </div>
-                            <Link to="/forget-password">
-                                <span className="flex justify-end text-red-600">{i18n.language === "en" ? "Forget Password ?" : "هل نسيت كلمة المرور؟"}</span>
-                            </Link>
+                            <a href={`https://api.whatsapp.com/send?phone=20${whatsApp.number}`} target="_blank">
+                                <span className="flex justify-end text-red-600">{i18n.language === "en" ? "Forget Password? contact with support" : "هل نسيت كلمة المرور؟ تواصل مع الدعم"}</span>
+                            </a>
                             <button className="w-full" type="submit" disabled={isLoading}>
                                 {isLoading ? (
                                     <>

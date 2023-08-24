@@ -14,7 +14,6 @@ const HomeBanner = () => {
         try {
             const response = await axios(`${apiUrl}/section/banner`);
             const { data } = response.data;
-            console.log(data);
             setData(data);
         } catch (error) {
             console.log(error);
@@ -24,7 +23,7 @@ const HomeBanner = () => {
         getData();
     }, [])
     return (
-        <div className="py-5 text-white bg-gradient-to-r from-mainColor to-secondColor">
+        <div className="py-5 text-white bg-mainColor bg-gradient-to-r from-indigo-900 to-purple-900">
             <div className="container grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div className="text col-span-2">
                     <div>

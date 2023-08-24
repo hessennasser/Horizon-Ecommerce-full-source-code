@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import { BsWhatsapp } from 'react-icons/bs';
 import { FaTimes } from 'react-icons/fa';
 import apiUrl from '../apiUrl';
 import axios from 'axios';
+import { AppContext } from '../AppContext';
 
 const WhatsAppButtons = () => {
     const { i18n } = useTranslation();
     const [showButton, setShowButton] = useState(false);
-
+    const {whatsApp:info } = useContext(AppContext);
     const handleScroll = () => {
         if (window.scrollY > 200) {
             setShowButton(true);
@@ -29,22 +30,6 @@ const WhatsAppButtons = () => {
     const openModal = () => {
         setShowModal(!showModal);
     };
-
-    const [info, setInfo] = useState({});
-    const getInfo = async () => {
-        try {
-            const response = await axios(`${apiUrl}/whatsapp`);
-            const { data } = response;
-            setInfo(data.data);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    useEffect(() => {
-        getInfo();
-    }, [])
-
 
     return (
         <>

@@ -31,7 +31,7 @@ input#image {
 }
 
 .modal-app {
-    height: 90dvh;
+    height: 95dvh;
     width: 95%;
     position: absolute;
     top: 50%;
@@ -42,10 +42,10 @@ input#image {
     display: flex;
     flex-direction: column;
 }
-
+/* 
 .modal-app::-webkit-scrollbar {
     display: none;
-}
+} */
 
 .modal-app .omMid {
     height: calc(100% - 160px)

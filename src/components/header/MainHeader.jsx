@@ -202,7 +202,7 @@ const MainHeader = () => {
                                     (
                                         <div className="py-5">
                                             <h4 className="no-search-result text-lg text-center text-red-800 capitalize">{i18n.language === "en" ? "there is no search result to your search words" : "لا توجد نتيجه مطابقه لكلمات البحث"}</h4>
-                                            <Link to={`/all-products?q=${searchQuery}`} className="bg-mainColor text-white text-lg px-3 py-2 mx-auto block w-fit mt-2">
+                                            <Link to={`/search?q=${searchQuery}`} className="bg-mainColor text-white text-lg px-3 py-2 mx-auto block w-fit mt-2">
                                                 {i18n.language === "en" ? "Advanced Search" : "بحث متقدم"}
                                             </Link>
                                         </div>
@@ -292,7 +292,7 @@ const MainHeader = () => {
 
                     </div>
                 ) : (
-                    // when logout
+                    // when login
                     <>
                         <Link to="seller-signup">
                             <button

@@ -6,28 +6,45 @@ import apiUrl from '../../apiUrl';
 import { toast } from 'react-toastify';
 import { AppContext } from '../../AppContext';
 
-const CartItem = ({ id, title, image, price, quantity, quantityOnStock, productTotalPrice, setCartItems }) => {
+const CartItem = ({ id, title, image, price, quantity, quantityOnStock, productTotalPrice, setCartItems, openDeleteModal, setDeleteProductId }) => {
+    console.log(quantity);
     const { i18n } = useTranslation();
     const [userQuantity, setQuantity] = useState(quantity);
     const userToken = JSON.parse(localStorage.getItem('userToken'));
-    const { getTotalPriceInCart, handelUpdateQuantity, getCartItems, total: itemsTotal } = useContext(AppContext);
+    const { getTotalPriceInCart, getCartItems, total: itemsTotal, mainRequest } = useContext(AppContext);
+
+    const handelUpdateQuantity = async (id, quantity, setCartItems) => {
+        try {
+            const response = await mainRequest.post(`${apiUrl}/cart/update`, {
+                token: userToken,
+                product_id: id,
+                quantity: quantity
+            })
+            toast.success(i18n.language === "en" ? "Update Successfully" : "تم تعديل الكمية");
+            getTotalPriceInCart();
+            getCartItems(userToken, setCartItems);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const handleIncrement = () => {
         if (userQuantity === quantityOnStock) return;
         setQuantity((prev) => prev + 1);
-        handelUpdateQuantity(id, userQuantity, setCartItems)
+        handelUpdateQuantity(id, (userQuantity + 1), setCartItems)
     };
 
     const handleDecrement = () => {
         if (userQuantity === 1) return;
         setQuantity((prev) => prev - 1);
-        handelUpdateQuantity(id, userQuantity, setCartItems)
+        handelUpdateQuantity(id, (userQuantity - 1), setCartItems)
     };
 
     const handleQuantityChange = (e) => {
         const value = parseInt(e.target.value);
         if (isNaN(value) || value < 1 || value > quantityOnStock) return;
         setQuantity(value);
+        // handelUpdateQuantity(id, userQuantity, setCartItems)
     };
 
     const deleteItemFromCart = async (id) => {
@@ -67,6 +84,9 @@ const CartItem = ({ id, title, image, price, quantity, quantityOnStock, productT
                             className="border-none focus:outline-none bg-transparent w-20 text-center"
                             value={userQuantity}
                             onChange={handleQuantityChange}
+                            onBlur={(e) => {
+                                handelUpdateQuantity(id, parseInt(e.target.value), setCartItems)
+                            }}
                         />
                         <button className="quantity-button py-2 px-3 text-xl font-medium" onClick={handleIncrement}>
                             +
@@ -79,9 +99,15 @@ const CartItem = ({ id, title, image, price, quantity, quantityOnStock, productT
                         {`${i18n.language === 'ar' ? `جنية ${productTotalPrice}` : `${productTotalPrice} EGY`} ` || '0 EGY'}
                     </h4>
                     <div className="actions">
-                        <button className="text-2xl text-secondColor p-1 border border-secondColor hover:bg-mainColor hover:border-mainColor hover:text-white duration-200 hover:scale-125" onClick={() => {
-                            deleteItemFromCart(id)
-                        }}>
+                        <button className="text-2xl text-secondColor p-1 border border-secondColor hover:bg-mainColor hover:border-mainColor hover:text-white duration-200 hover:scale-125" 
+                        onClick={
+                            () => {
+                                openDeleteModal();
+                                setDeleteProductId(id);
+                            }
+                        }
+
+                        >
                             <AiFillDelete />
                         </button>
                     </div>

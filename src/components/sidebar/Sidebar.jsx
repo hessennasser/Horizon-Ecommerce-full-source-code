@@ -68,7 +68,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
             </div>
             <div className="flex flex-col text-start">
                 <h3 className="text-center bg-secondColor text-white py-3 text-lg">
-                    Categories
+                    {i18n.language === "en" ? "Categories" : "الفئات"}
                 </h3>
                 <ul className="links">
                     {categories.map((category) => {

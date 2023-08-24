@@ -117,7 +117,7 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
 
                 <div className="modal-app relative bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                     {/* Fixed Header */}
-                    <div className="sticky z-10 top-0 left-0 right-0 bg-white px-4 py-2 shadow-md flex justify-between">
+                    <div className="sticky z-10 top-0 left-0 bg-white px-4 py-2 shadow-md flex justify-between">
                         <h3 className='text-xl font-medium text-secondColor'>
                             {i18n.language === 'en' ? 'Add Product' : 'اضافة منتج جديد'}
                         </h3>
@@ -160,10 +160,11 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
                                         setSelectedImages(updatedImages);
                                     }}
                                 />
+                                {selectedImages.length < 1 && <span className='text-xs text-red-600 font-bold mt-2 block'>{i18n.language === "en" ? "This Field Is Requeued" : "هذا الحقل مطلوب"}</span>}
                             </div>
 
-                            <div className='col-span-2'>
-                                {selectedImages.length > 0 && (
+                            {selectedImages.length > 0 && (
+                                <div className='col-span-2'>
                                     <div className="flex flex-wrap gap-2 justify-center">
                                         {/* Plus button */}
                                         {selectedImages.length < 4 && (
@@ -192,8 +193,8 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
                                             </div>
                                         ))}
                                     </div>
-                                )}
-                            </div>
+                                </div>
+                            )}
 
                             <div className='col-span-2'>
                                 <div className='mb-2 block'>
@@ -235,6 +236,7 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
                                         setFormData({ ...formData, title_ar: e.target.value })
                                     }
                                 />
+                                {formData.title_ar.length < 1 && <span className='text-xs text-red-600 font-bold mt-2 block'>{i18n.language === "en" ? "This Field Is Requeued" : "هذا الحقل مطلوب"}</span>}
                             </div>
                             <div className='col-span-2'>
                                 <div className='mb-2 block'>
@@ -269,6 +271,7 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
                                         setFormData({ ...formData, category: selectedOption })
                                     }
                                 />
+                                {!formData.category && <span className='text-xs text-red-600 font-bold mt-2 block'>{i18n.language === "en" ? "This Field Is Requeued" : "هذا الحقل مطلوب"}</span>}
                             </div>
                             <div className='col-span-1'>
                                 <div className='mb-2 block'>
@@ -287,6 +290,7 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
                                         setFormData({ ...formData, quantity: e.target.value })
                                     }
                                 />
+                                {formData.quantity < 1 && <span className='text-xs text-red-600 font-bold mt-2 block'>{i18n.language === "en" ? "This Field Is Requeued" : "هذا الحقل مطلوب"}</span>}
                             </div>
                             <div className='col-span-1'>
                                 <div className='mb-2 block'>
@@ -305,6 +309,7 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
                                         setFormData({ ...formData, price: e.target.value })
                                     }
                                 />
+                                {formData.price < 1 && <span className='text-xs text-red-600 font-bold mt-2 block'>{i18n.language === "en" ? "This Field Is Requeued" : "هذا الحقل مطلوب"}</span>}
                             </div>
                             <div className='col-span-2'>
                                 <div className='mb-2 block'>
@@ -324,6 +329,7 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
                                         setFormData({ ...formData, start_date: e.target.value })
                                     }
                                 />
+                                {!formData.start_date && <span className='text-xs text-red-600 font-bold mt-2 block'>{i18n.language === "en" ? "This Field Is Requeued" : "هذا الحقل مطلوب"}</span>}
                             </div>
                         </div>
                     </div>
@@ -349,7 +355,6 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
                         >
                             {i18n.language === 'en' ? 'Cancel' : 'الغاء'}
                         </button>
-                        <span className='text-xs text-red-600 font-bold'>{i18n.language === "en" ? "Please Enter All Data*" : "برجاء ادخال جميع البيانات المطلوبه*"}</span>
                     </div>
                 </div>
             </div>

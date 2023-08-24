@@ -11,7 +11,7 @@ import Loading from "../Loading";
 import Error from "../Error";
 
 
-const WeeklyOffersCards = ({ imageCard, getWeeklyOffers, products, setProducts, loading, error, titleEn, titleAr }) => {
+const WeeklyOffersCards = ({ imageCard, getWeeklyOffers, products, setProducts, loading, error, titleEn, titleAr, link }) => {
     const { i18n, t } = useTranslation();
     // ${i18n.language === "en" || !imageCard ? "md:rounded-l-xl" : "md:rounded-r-xl"}
 
@@ -27,7 +27,7 @@ const WeeklyOffersCards = ({ imageCard, getWeeklyOffers, products, setProducts, 
                         <h2 className="font-bold text-2xl mb-2">{i18n.language === "en" ? titleEn : titleAr}</h2>
                         <p className="w-full md:w-2/3 text-gray-800">{t('weeklyOffers.descraption')}</p>
                     </div>
-                    <Link to="/all-products" className="flex items-center gap-3 text-lg ">
+                    <Link to={link} className="flex items-center gap-3 text-lg ">
                         {t('weeklyOffers.allButton')}
                         {
                             i18n.language === "ar" ? <AiOutlineArrowLeft /> : <AiOutlineArrowRight />
@@ -47,7 +47,7 @@ const WeeklyOffersCards = ({ imageCard, getWeeklyOffers, products, setProducts, 
                     <h2 className="font-bold text-2xl mb-2">{i18n.language === "en" ? titleEn : titleAr}</h2>
                     <p className="w-full md:w-2/3 text-gray-800">{t('weeklyOffers.descraption')}</p>
                 </div>
-                <Link to="/all-products" className="flex items-center gap-3 text-lg ">
+                <Link to={link} className="flex items-center gap-3 text-lg ">
                     {t('weeklyOffers.allButton')}
                     {
                         i18n.language === "ar" ? <AiOutlineArrowLeft /> : <AiOutlineArrowRight />
@@ -65,7 +65,7 @@ const WeeklyOffersCards = ({ imageCard, getWeeklyOffers, products, setProducts, 
                     <h2 className="font-bold text-2xl mb-2">{i18n.language === "en" ? titleEn : titleAr}</h2>
                     <p className="w-full md:w-2/3 text-gray-800">{t('weeklyOffers.descraption')}</p>
                 </div>
-                <Link to="/all-products" className="flex items-center gap-3 text-lg ">
+                <Link to={link} className="flex items-center gap-3 text-lg ">
                     {t('weeklyOffers.allButton')}
                     {
                         i18n.language === "ar" ? <AiOutlineArrowLeft /> : <AiOutlineArrowRight />

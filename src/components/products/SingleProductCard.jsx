@@ -10,8 +10,6 @@ const SingleProductCard = ({ background, id, title, total_price, price, quantity
     const { i18n } = useTranslation();
     const [loading, setLoading] = useState(false)
     const { addToCart } = useContext(AppContext)
-
-
     return (
         <div loading="lazy" className={`product-card flex flex-col items-start justify-between min-h-[400px] relative bg-${background} ${background ? "py-3 px-2" : ""}`}>
             {/* <span className="absolute top-5 right-0 bg-secondColor text-white py-1 px-3">40% OFF</span> */}
@@ -26,13 +24,24 @@ const SingleProductCard = ({ background, id, title, total_price, price, quantity
                     {category ? <Link to={`/categories/${category.id}`}><h4 className="vendor-name text-sm text-gray-400">{i18n.language === "ar" ? category.title?.ar : category.title?.en}</h4></Link> : ""}
                 </div>
                 <div className="details h-full flex flex-col items-start justify-end gap-5 flex-1 w-full mt-1">
-                        <div className="prices">
-                            <span className="text-secondColor font-bold mr-4">{total_price || `${i18n.language === "ar" ? `جنية ${price}` : `${price} EGY`} ` || "0 EGY"}</span>
-                            {/* <span className="line-through text-sm text-gray-400">$2,999.00</span> */}
-                        </div>
-                    <button disabled={loading} onClick={() => { addToCart(id) }} aria-label='add to cart' className="cart-icon hover:bg-mainColor duration-200 flex items-center justify-center gap-2 bg-secondColor text-white text-sm p-2 rounded-md w-full">
-                        {i18n.language === "en" ? "Add to cart" : "اضف الي السله"} <BsFillCartPlusFill />
-                    </button>
+                    <div className="prices">
+                        <span className="text-secondColor font-bold mr-4">{total_price || `${i18n.language === "ar" ? `جنية ${price}` : `${price} EGY`} ` || "0 EGY"}</span>
+                        {/* <span className="line-through text-sm text-gray-400">$2,999.00</span> */}
+                    </div>
+                    {
+                        parseInt(quantity) > 1 ?
+                            (
+                                <button disabled={loading} onClick={() => { addToCart(id) }} aria-label='add to cart' className="duration-200 flex items-center justify-center gap-2 bg-secondColor hover:bg-mainColor text-white text-sm p-2 rounded-md w-full">
+                                    {i18n.language === "en" ? "Add to cart" : "اضف الي السله"} <BsFillCartPlusFill />
+                                </button>
+                            )
+                            :
+                            (
+                                <button disabled aria-label='out of stock' className=" duration-200 flex items-center justify-center gap-2 bg-red-500 text-white text-sm p-2 rounded-md w-full">
+                                    {118n.language === "en" ? "Out Of Stock" : "غير متوفر"}
+                                </button>
+                            )
+                    }
                 </div>
             </div>
         </div>

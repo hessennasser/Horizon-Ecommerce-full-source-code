@@ -21,6 +21,7 @@ const Header = lazy(() => import('./components/header/Header'));
 const Sidebar = lazy(() => import('./components/sidebar/Sidebar'));
 const MyFooter = lazy(() => import('./components/footer/Footer'));
 const AllProducts = lazy(() => import('./pages/all-products/AllProducts'));
+const SearchPage = lazy(() => import('./pages/Search'));
 const ProfilePage = lazy(() => import('./pages/profile-page/ProfilePage'));
 const ProductsInCategory = lazy(() => import('./pages/products-in-category/productsInCategory'));
 const Cart = lazy(() => import('./pages/cart/Cart'));
@@ -31,6 +32,8 @@ const AboutUs = lazy(() => import('./pages/about-us/AboutUs'));
 const ProductDetails = lazy(() => import('./pages/product-details/ProductDetails'));
 const ScrollToTopButton = lazy(() => import('./components/ScrollToTopButton'));
 const WhatsAppButtons = lazy(() => import('./components/WhatsAppButtons'));
+const WeeklyPage = lazy(() => import('./components/weekly-offers/WeeklyPage'));
+const OffersPage = lazy(() => import('./components/weekly-offers/OffersPage'));
 import ModalAd from './components/ModalAd';
 import Privacy from './pages/Privacy';
 
@@ -93,11 +96,12 @@ function AppContent() {
         <Header toggleSidebar={toggleSidebar} />
         <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
         <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
+          position="top-right"
+          autoClose={2000}
+          hideProgressBar={true}
           newestOnTop={false}
           closeOnClick
+          closeButton={false}
           rtl={i18n.language === "ar"}
           pauseOnFocusLoss
           draggable
@@ -117,6 +121,9 @@ function AppContent() {
           <Route path="/customer-login" element={<LoginCustomer />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/all-products" element={<AllProducts />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/weekly-offers" element={<WeeklyPage />} />
+          <Route path="/offers" element={<OffersPage />} />
           <Route path="/categories/:id" element={<ProductsInCategory />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />

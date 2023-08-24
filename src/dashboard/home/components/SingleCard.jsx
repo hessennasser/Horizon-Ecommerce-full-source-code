@@ -39,23 +39,24 @@ const SingleCard = ({ id, openEditModal, openDeleteModal, openOrderModal, catego
             </div>
             <div className="info grid gap-y-3">
                 <div className="grid grid-cols-2 gap-2">
-                    <span>Category :</span>
+                    <span>{i18n.language === "en" ? "Category :" : "التصنيف"}</span>
                     <p className='font-bold'>{i18n.language === "en" ? `${category.title?.en.substr(0, 10)}..` : `${category.title?.ar.substr(0, 10)}..`}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                    <span>Product Name :</span>
+                    <span>{i18n.language === "en" ? "Product Name :" : "الاسم"}</span>
                     <p className='font-bold'>{i18n.language === "en" ? `${title?.en.substr(0, 15)}...` : `${title?.ar.substr(0, 15)}...`}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                    <span>Price :</span>
+                    <span>{i18n.language === "en" ? "Price :" : "السعر"}</span>
+
                     <p className='font-bold'>{price}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                    <span>Quantity :</span>
+                    <span>{i18n.language === "en" ? "Quantity :" : "الكمية"}</span>
                     <p className='font-bold'>{quantity}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                    <span>End Date :</span>
+                    <span>{i18n.language === "en" ? "End Date :" : "تاريخ الانتهاء"}</span>
                     <p className='font-bold'>{start_date}</p>
                 </div>
             </div>
@@ -67,7 +68,9 @@ const SingleCard = ({ id, openEditModal, openDeleteModal, openOrderModal, catego
                         openOrderModal(id);
                     }}
                 >
-                    Show Orders <AiOutlineArrowRight />
+                    <AiOutlineArrowRight />
+                    {i18n.language === "en" ? "Show Orders" : "الإطلاع علي الطلبات"}
+
                 </button>
                 <div className="buttons-holder grid grid-cols-2 gap-2 items-end">
                     <button
@@ -78,7 +81,8 @@ const SingleCard = ({ id, openEditModal, openDeleteModal, openOrderModal, catego
                             setEditProductId(id);
                         }}
                     >
-                        Edit
+                        {i18n.language === "en" ? "Edit" : "تعديل"}
+
                     </button>
                     <button
                         type='button'
@@ -90,7 +94,7 @@ const SingleCard = ({ id, openEditModal, openDeleteModal, openOrderModal, catego
                             }
                         }
                     >
-                        Delete
+                        {i18n.language === "en" ? "Delete" : "حذف"}
                     </button>
                 </div>
                 {/* <Link

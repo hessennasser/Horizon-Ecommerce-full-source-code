@@ -1,5 +1,5 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
-import { HiPhotograph, HiTrash } from 'react-icons/hi';
+import { HiPhotograph } from 'react-icons/hi';
 import '../cart/style.css';
 import { AppContext } from '../../AppContext';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +9,6 @@ import Select from 'react-select';
 import apiUrl from '../../apiUrl';
 import { toast } from 'react-toastify';
 import { Oval } from 'react-loader-spinner';
-import { set } from 'react-hook-form';
 
 const CheckOut = () => {
     const navigate = useNavigate();
@@ -18,9 +17,6 @@ const CheckOut = () => {
     const userToken = JSON.parse(localStorage.getItem('userToken'));
     const userLogged = localStorage.getItem("userLogged");
     const [userInfoState, setUserInfo] = useState({})
-    const [name, setName] = useState(userInfoState?.name);
-    const [email, setEmail] = useState(userInfoState?.email);
-    const [phone, setPhone] = useState(userInfoState?.phone);
 
     if (!userLogged) {
         navigate("/customer-login");
@@ -29,10 +25,10 @@ const CheckOut = () => {
 
     const [selectedGovernorate, setSelectedGovernorate] = useState("");
     const [formData, setFormData] = useState({
-        firstName: name,
-        lastName: name,
-        phoneNumber: phone,
-        email: email,
+        firstName: userInfoState?.name?.split(' ')[0] || '',
+        lastName: userInfoState?.name?.split(' ').slice(1).join(' ') || '',
+        phoneNumber: userInfoState?.phone || "",
+        email: userInfoState?.email || "",
         address: '',
         apartment: '',
         floor: '',
@@ -81,8 +77,6 @@ const CheckOut = () => {
         setLoading(true);
 
         // Check if cash number is provided (required field)
-        console.log(cashNumber);
-        console.log(formData.selectedPaymentMethod);
         if (formData.selectedPaymentMethod === 'vodafone-cash' && !cashNumber) {
             toast.info(i18n.language === "en" ? "Please enter your cash number" : "من فضلك أدخل رقم المحفظة الالكترونية");
             setLoading(false);
@@ -90,7 +84,6 @@ const CheckOut = () => {
         }
 
         const checkoutData = { ...formData, governorate_id: selectedGovernorate.value, city: selectedGovernorate.label, token: userToken };
-        console.log(selectedGovernorate);
 
         const formReqData = new FormData();
         formReqData.append('token', checkoutData.token);
@@ -115,7 +108,7 @@ const CheckOut = () => {
             setLoading(false);
             return;
         }
-        
+
         // Create an array of keys to exclude from the check
         const keysToExclude = ['vodafone_cash_number', 'photo'];
 
@@ -150,36 +143,17 @@ const CheckOut = () => {
     }, [userLogged, userToken, total]);
 
     useEffect(() => {
-        if (userLogged) getUserInfo(userToken, setUserInfo, setName, setEmail, setPhone);
+        if (userLogged) getUserInfo(userToken, setUserInfo);
         setFormData({
             ...formData,
-            firstName: name,
-            lastName: name,
-            phoneNumber: phone,
-            email: email,
+            firstName: userInfoState?.name?.split(' ')[0] || '',
+            lastName: userInfoState?.name?.split(' ').slice(1).join(' ') || '',
+                phoneNumber: userInfoState.phone,
+            email: userInfoState.email,
         })
-        console.log(userInfoState);
-        console.log(formData);
-    }, [userLogged, userToken])
-
-    useEffect(() => {
-        if (userLogged) {
-            getUserInfo(userToken, setUserInfo, setName, setEmail, setPhone);
-        }
-    }, [userLogged, userToken]);
-
-    useEffect(() => {
-        setFormData({
-            ...formData,
-            firstName: name,
-            lastName: name,
-            phoneNumber: phone,
-            email: email,
-        });
-    }, [name, email, phone]);
+    }, [userLogged, userToken, userInfoState.name])
 
     // Remove the previous useEffect that had an empty dependency array
-
 
     const engovernoratesOptions = governorates.map((gov) => ({
         value: gov.id,
@@ -194,7 +168,6 @@ const CheckOut = () => {
     useEffect(() => {
         getGovernorates()
     }, [])
-
     return (
         <div className="container py-10">
             {/* Loader */}
@@ -210,22 +183,22 @@ const CheckOut = () => {
                                 wrapperStyle={{}}
                                 wrapperClass="Oval-wrapper"
                                 color='#125ed4'
-                                secondaryColor='#060047'    
+                                secondaryColor='#060047'
                             />
                         </div>
                     </div>
                 )
             }
             <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-2 gap-6 relative">
-                <div className="grid gap-3 lg:sticky top-0 h-fit">
+                <div className="grid gap-3 lg:sticky top-0 right-0 h-fit">
                     <div>
                         <div className="flex flex-col gap-3">
                             <div>
-                                <h2 className="text-mainColor font-bold text-lg">Payment Method</h2>
-                                <p className="text-gray-500">Select the number for payment of your item</p>
+                                <h2 className="text-mainColor font-bold text-lg">{i18n.language === "en" ? "Payment Method" : "طريقة الدفع"}</h2>
+                                <p className="text-gray-500">{i18n.language === "en" ? "Choose the appropriate payment method for you and complete the information" : "اختر طريقة الدفع المناسبه لك واكمل البيانات"}</p>
                             </div>
                             <div className="flex justify-between items-center rounded-lg border border-gray-500 p-2">
-                                <label className='flex-1 cursor-pointer' htmlFor="vodafone-cash">{i18n.language === "en" ? "vodafone Cash" : "فودافون كاش"}</label>
+                                <label className='flex-1 cursor-pointer' htmlFor="vodafone-cash">{i18n.language === "en" ? "vodafone Cash" : "التحويل الالكتروني"}</label>
                                 <input
                                     className='cursor-pointer'
                                     type="radio"
@@ -250,15 +223,15 @@ const CheckOut = () => {
                             </div>
                         </div>
                         {formData.selectedPaymentMethod !== 'cash-on-delivery' && (
-                            <div className="flex flex-col gap-3">
+                            <div className="flex flex-col gap-3 mt-4">
                                 <div>
-                                    <h2 className="text-mainColor font-bold text-lg">Transfer data</h2>
-                                    <p className="text-gray-500">Select the image for the conversion</p>
+                                    <h2 className="text-mainColor font-bold text-lg">{i18n.language === "en" ? "Transfer data" : "بيانات الدفع"}</h2>
+                                    <p className="text-gray-500">{i18n.language === "en" ? "Enter the required data below and make sure the image is clear" : "ادخل البيانات المطلوبه بالاسفل وتأكد من وضوح الصوره"}</p>
                                 </div>
                                 <div className="flex items-center flex-col gap-2 justify-center">
                                     {/* cash number */}
                                     <div className="w-full flex gap-2 flex-col">
-                                        <label htmlFor="cashNumber">Enter Your Cash Number</label>
+                                        <label htmlFor="cashNumber" className='my-2 text-xl font-bold'>{i18n.language === "en" ? "Enter the wallet number" : "أدخل رقم المحفظة"}</label>
                                         <input
                                             placeholder={i18n.language === 'ar' ? 'رقم المفظة الالكترونية' : "Cash Number"}
                                             className="rounded-lg border-gray-300 shadow-md"
@@ -272,7 +245,8 @@ const CheckOut = () => {
                                             required
                                         />
                                     </div>
-                                    {/* transfare image */}
+                                    {/* transfer image */}
+                                    <label htmlFor="photoInput" className='w-full my-2 text-xl font-bold'>{i18n.language === "en" ? "Transfer receipt" : "إيصال التحويل"}</label>
                                     <div className="w-2/3 bg-[#F8F8FF] text-center border-dashed border-2 rounded-lg border-gray-300 p-4">
                                         {cashPhoto ? (
                                             <div>
@@ -296,7 +270,7 @@ const CheckOut = () => {
                                                 </div>
                                             </div>
                                         ) : (
-                                            <label htmlFor="photoInput" className="flex flex-col items-center justify-center">
+                                            <label htmlFor="photoInput" className="flex flex-col items-center justify-center cursor-pointer">
                                                 <HiPhotograph className="text-[4rem]" />
                                                 <span className="text-secondColor font-bold border-b border-b-secondColor cursor-pointer">Select Photo</span>
                                             </label>
@@ -310,15 +284,15 @@ const CheckOut = () => {
                                             onChange={handlePhotoChange}
                                             required={formData.selectedPaymentMethod !== 'cash-on-delivery'}
                                         />
-                                        <p className="text-gray-500 mt-2">Supported formats: JPEG, PNG</p>
+                                        <p className="text-gray-500 mt-2">{i18n.language === "en" ? "Supported formats" : "الإمتدادات المدعومه"}: JPEG, PNG</p>
                                     </div>
                                 </div>
                             </div>
                         )}
                     </div>
                     <div>
-                        <h2 className="text-mainColor font-bold text-lg">Personal Details</h2>
-                        <p className="text-gray-500">Complete personal details to continue the payment</p>
+                        <h2 className="text-mainColor font-bold text-lg">{i18n.language === "en" ? "Personal Details" : "البيانات الشخصية"}</h2>
+                        <p className="text-gray-500">{i18n.language === "en" ? "Complete personal details to continue the payment" : "أكمل التفاصيل الشخصية لمواصلة الدفع"}</p>
                     </div>
                     <div className="grid grid-cols-2 gap-5">
                         <input
@@ -420,8 +394,8 @@ const CheckOut = () => {
                 </div>
                 <div className="flex flex-col gap-3 sticky top-44 left-0 h-fit">
                     <div>
-                        <h2 className="text-mainColor font-bold text-lg">Current Order</h2>
-                        <p className="text-gray-500">The sum of all total payments for goods there</p>
+                        <h2 className="text-mainColor font-bold text-lg">{i18n.language === "en" ? "Current Order" : "الطلب الحالي"}</h2>
+                        <p className="text-gray-500">{i18n.language === "en" ? "The sum of all total payments for your current order" : "مجموع المدفوعات الإجمالية لطلبك الحالي"}</p>
                     </div>
                     {cartItems.map(item => {
                         const { id, title, images, price, quantity_of_cart } = item;
@@ -430,10 +404,10 @@ const CheckOut = () => {
                         )
                     })}
                     <div className="flex justify-between items-center font-medium py-4 border-dotted border-b-2">
-                        <h6>Subtotal</h6>
+                        <h6>{i18n.language === "en" ? "total summation" : "المجموع الكلي"}</h6>
                         <p>{total} EGY</p>
                     </div>
-                    <button type='submit' className='bg-secondColor text-white text-xl py-2 px-4 rounded-md' onClick={handleSubmit}>Pay {total} EGY</button>
+                    <button type='submit' className='bg-secondColor text-white text-xl py-2 px-4 rounded-md' onClick={handleSubmit}>{i18n.language === "en" ? "Pay" : "إدفع"} {total} EGY</button>
                 </div>
             </form>
         </div>
