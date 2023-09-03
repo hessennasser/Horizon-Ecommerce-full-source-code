@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 import { AppContext } from '../../AppContext';
 
 const CartItem = ({ id, title, image, price, quantity, quantityOnStock, productTotalPrice, setCartItems, openDeleteModal, setDeleteProductId }) => {
-    console.log(quantity);
     const { i18n } = useTranslation();
     const [userQuantity, setQuantity] = useState(quantity);
     const userToken = JSON.parse(localStorage.getItem('userToken'));
@@ -91,7 +90,6 @@ const CartItem = ({ id, title, image, price, quantity, quantityOnStock, productT
                         <button className="quantity-button py-2 px-3 text-xl font-medium" onClick={handleIncrement}>
                             +
                         </button>
-                        {/* <button onClick={() => handelUpdateQuantity(id, userQuantity, setCartItems)} className='text-secondColor border border-secondColor px-4 py-1'>{i18n.language === 'en' ? "Update Quantity" : "تحديث الكميه"}</button> */}
                     </div>
                 </div>
                 <div className="flex justify-between">

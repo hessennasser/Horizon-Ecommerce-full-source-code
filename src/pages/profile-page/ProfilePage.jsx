@@ -17,7 +17,6 @@ import Loading from '../../components/Loading';
 const ProfilePage = () => {
     const userLogged = localStorage.getItem("userLogged");
     const userToken = JSON.parse(localStorage.getItem('userToken'));
-    const providerId = JSON.parse(localStorage.getItem('providerId'));
     const [userInfoState, setUserInfo] = useState({})
     const [loading, setLoading] = useState(false)
 

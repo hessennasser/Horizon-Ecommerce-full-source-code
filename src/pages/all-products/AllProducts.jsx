@@ -14,8 +14,8 @@ const AllProducts = ({ }) => {
     const [adminProducts, setAdminProducts] = useState([]);
     const [combinedProducts, setCombinedProducts] = useState([]);
 
-    const minProductPrice = Math.min(...combinedProducts.map((product) => product.price)) === Infinity ? 0 : Math.min(...combinedProducts.map((product) => product.price));
-    const maxProductPrice = Math.max(...combinedProducts.map((product) => product.price)) === -Infinity ? 10000 : Math.max(...combinedProducts.map((product) => product.price));
+    const minProductPrice = Math.min(...products?.map((product) => product.price)) === Infinity ? 0 : Math.min(...products?.map((product) => product.price));
+    const maxProductPrice = Math.max(...products?.map((product) => product.price)) === -Infinity ? 10000 : Math.max(...products?.map((product) => product.price));
 
     const [priceRange, setPriceRange] = useState([minProductPrice, maxProductPrice]);
     const [searchQuery, setSearchQuery] = useState("")
@@ -34,10 +34,10 @@ const AllProducts = ({ }) => {
 
     const getAllProducts = async () => {
         try {
-            const response = await axios.get(`${apiUrl}/section/all_product`);
+            const response = await axios.get(`${apiUrl}/allProduct`);
             const { data } = response;
-            setAdminProducts(data.data.data);
-            console.log(data.data.data);
+            setAdminProducts(data.data);
+            console.log(data.data);
         } catch (error) {
             console.log(error);
         }

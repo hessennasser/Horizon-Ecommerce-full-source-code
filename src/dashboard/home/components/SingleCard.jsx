@@ -10,9 +10,10 @@ import { Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import { FaEye } from 'react-icons/fa';
 
 
-const SingleCard = ({ id, openEditModal, openDeleteModal, openOrderModal, category, title, images, price, quantity, start_date, setDeleteProductId, setEditProductId, setOrderId }) => {
+const SingleCard = ({ id, openEditModal, openDeleteModal, openOrderModal, category, title, images, price, quantity, start_date, setDeleteProductId, setEditProductId,fake_visitor,visitor, setOrderId }) => {
     const { i18n } = useTranslation();
     return (
         <div className='bg-white p-3 rounded-lg shadow-md'>
@@ -39,25 +40,29 @@ const SingleCard = ({ id, openEditModal, openDeleteModal, openOrderModal, catego
             </div>
             <div className="info grid gap-y-3">
                 <div className="grid grid-cols-2 gap-2">
-                    <span>{i18n.language === "en" ? "Category :" : "التصنيف"}</span>
+                    <span>{i18n.language === "en" ? "Category :" : "التصنيف:"}</span>
                     <p className='font-bold'>{i18n.language === "en" ? `${category.title?.en.substr(0, 10)}..` : `${category.title?.ar.substr(0, 10)}..`}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                    <span>{i18n.language === "en" ? "Product Name :" : "الاسم"}</span>
+                    <span>{i18n.language === "en" ? "Product Name :" : "الاسم:"}</span>
                     <p className='font-bold'>{i18n.language === "en" ? `${title?.en.substr(0, 15)}...` : `${title?.ar.substr(0, 15)}...`}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                    <span>{i18n.language === "en" ? "Price :" : "السعر"}</span>
+                    <span>{i18n.language === "en" ? "Price :" : "السعر:"}</span>
 
                     <p className='font-bold'>{price}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                    <span>{i18n.language === "en" ? "Quantity :" : "الكمية"}</span>
+                    <span>{i18n.language === "en" ? "Quantity :" : "الكمية:"}</span>
                     <p className='font-bold'>{quantity}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                    <span>{i18n.language === "en" ? "End Date :" : "تاريخ الانتهاء"}</span>
+                    <span>{i18n.language === "en" ? "End Date :" : "تاريخ الانتهاء:"}</span>
                     <p className='font-bold'>{start_date}</p>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                    <span>{i18n.language === "en" ? "Visits" : "الزيارات:"}</span>
+                    <p className='font-bold'>{fake_visitor ? fake_visitor : visitor || 0}</p>
                 </div>
             </div>
             <div className='grid gap-2 mt-2'>
@@ -97,12 +102,12 @@ const SingleCard = ({ id, openEditModal, openDeleteModal, openOrderModal, catego
                         {i18n.language === "en" ? "Delete" : "حذف"}
                     </button>
                 </div>
-                {/* <Link
-                    to={`/product/${id}`}
+                <Link
+                    to={`/packages`}
                     className='flex items-center justify-center gap-2 bg-secondColor hover:bg-blue-800 duration-200 py-1 px-4 rounded-md hover:brightness-110 text-white'
                 >
-                    See Details
-                </Link> */}
+                    {i18n.language === "en" ? "Sell Faster 🚀" : "بيع اسرع 🚀"}
+                </Link>
             </div>
         </div>
     )

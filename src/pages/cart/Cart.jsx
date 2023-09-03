@@ -118,7 +118,7 @@ const Cart = () => {
                                     title={i18n.language === "en" ? item.title.en : item.title.ar}
                                     image={item.images[0].path}
                                     price={item.price}
-                                    productTotalPrice={item.quantity_of_cart.total}
+                                    productTotalPrice={item?.quantity_of_cart?.total}
                                     total_price={item.total_price}
                                     quantity={item.quantity_of_cart.quantity}
                                     quantityOnStock={item.quantity}

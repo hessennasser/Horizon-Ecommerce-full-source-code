@@ -136,9 +136,9 @@ const Dashboard = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl::grid-cols-5 gap-5">
                         {
                             allProducts.map(item => {
-                                const { id, category, title, images, price, quantity, start_date } = item;
+                                const { id, category, title, images, price, quantity, start_date,fake_visitor,visitor } = item;
                                 return (
-                                    <SingleCard key={id}  openEditModal={openEditModal} openDeleteModal={openDeleteModal} openOrderModal={openOrderModal} setOrderId={setOrderId} id={id} title={title} images={images} category={category} price={price} quantity={quantity} start_date={start_date} setDeleteProductId={setDeleteProductId} setEditProductId={setEditProductId} />
+                                    <SingleCard key={id} fake_visitor={fake_visitor} visitor={visitor} openEditModal={openEditModal} openDeleteModal={openDeleteModal} openOrderModal={openOrderModal} setOrderId={setOrderId} id={id} title={title} images={images} category={category} price={price} quantity={quantity} start_date={start_date} setDeleteProductId={setDeleteProductId} setEditProductId={setEditProductId} />
                                 )
                             })
                         }

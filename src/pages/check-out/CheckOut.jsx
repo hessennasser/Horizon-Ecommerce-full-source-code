@@ -198,7 +198,7 @@ const CheckOut = () => {
                                 <p className="text-gray-500">{i18n.language === "en" ? "Choose the appropriate payment method for you and complete the information" : "اختر طريقة الدفع المناسبه لك واكمل البيانات"}</p>
                             </div>
                             <div className="flex justify-between items-center rounded-lg border border-gray-500 p-2">
-                                <label className='flex-1 cursor-pointer' htmlFor="vodafone-cash">{i18n.language === "en" ? "vodafone Cash" : "التحويل الالكتروني"}</label>
+                                <label className='flex-1 cursor-pointer' htmlFor="vodafone-cash">{i18n.language === "en" ? "المحافظ الالكترونية" : "المحافظ الالكترونية"}</label>
                                 <input
                                     className='cursor-pointer'
                                     type="radio"
@@ -210,7 +210,7 @@ const CheckOut = () => {
                                 />
                             </div>
                             <div className="flex justify-between items-center rounded-lg border border-gray-500 p-2">
-                                <label className='flex-1 cursor-pointer' htmlFor="cash-on-delivery">{i18n.language === "en" ? "Cash on Delivery" : "الدفع عند الاستلام"}</label>
+                                <label className='flex-1 cursor-pointer' htmlFor="cash-on-delivery">{i18n.language === "en" ? "الدفع عند الاستلام" : "الدفع عند الاستلام"}</label>
                                 <input
                                     className='cursor-pointer'
                                     type="radio"

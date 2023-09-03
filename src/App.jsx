@@ -36,6 +36,8 @@ const WeeklyPage = lazy(() => import('./components/weekly-offers/WeeklyPage'));
 const OffersPage = lazy(() => import('./components/weekly-offers/OffersPage'));
 import ModalAd from './components/ModalAd';
 import Privacy from './pages/Privacy';
+import CompleteProfile from './components/auth-pages/CompleteProfile';
+import Packages from './pages/packages';
 
 function AppContent() {
   const { i18n } = useTranslation();
@@ -75,6 +77,22 @@ function AppContent() {
     }
   }, []);
 
+  const [completeInfoModal, setCompleteInfoModal] = useState(false);
+  const userToken = JSON.parse(localStorage.getItem('userToken'));
+  const sellerToken = JSON.parse(localStorage.getItem('sellerToken'));
+  const userLogged = localStorage.getItem("userLogged");
+  const sellerLogged = localStorage.getItem("sellerLogged");
+  const complete = localStorage.getItem("complete");
+
+  useEffect(() => {
+    if (JSON.parse(complete) == true) {
+        setCompleteInfoModal(false);
+        console.log(JSON.parse(complete));
+    } else if (JSON.parse(complete) == false) {
+        setCompleteInfoModal(true);
+        console.log(JSON.parse(complete));
+    }
+}, [complete, userLogged, userToken, sellerToken,sellerLogged ])
 
   return (
     <div className="App bg-[#F4F4F4]">
@@ -109,7 +127,9 @@ function AppContent() {
           theme="light"
           className={"z-[1000000000]"}
         />
-
+        {
+        <CompleteProfile completeInfoModal={completeInfoModal} setCompleteInfoModal={setCompleteInfoModal} />
+        }
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
@@ -132,6 +152,7 @@ function AppContent() {
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="/packages" element={<Packages />} />
         </Routes>
 
         <MyFooter />

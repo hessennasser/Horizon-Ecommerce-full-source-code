@@ -22,13 +22,13 @@ const Order = () => {
     const [allOrders, setAllOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
-
+    console.log(allOrders);
     const getAllOrders = async () => {
         setIsLoading(true);
         try {
             const res = await mainRequest.post(`${apiUrl}/vendor/order`, { token: sellerToken });
-            setAllOrders(res.data);
-            setFilteredData(res.data); // Initially, set filtered data to all orders
+            setAllOrders(res.data.data);
+            setFilteredData(res.data.data); // Initially, set filtered data to all orders
             console.log(res.data);
         } catch (error) {
             console.log(error);
@@ -78,6 +78,11 @@ const Order = () => {
 
         return <span style={{ backgroundColor: statusColor }} className='text-white p-2 rounded-xl shadow-lg'>{statusText}</span>;
     };
+    const calculateDueDate = (currentDate) => {
+        const dueDate = new Date(currentDate);
+        dueDate.setDate(dueDate.getDate() + 20); // Add 20 days
+        return dueDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+    };
 
     // Table columns for English and Arabic
     const tableColumnsEN = [
@@ -112,20 +117,21 @@ const Order = () => {
             sortable: true,
         },
         {
-            name: 'User ID',
-            selector: 'user_id',
-            sortable: true,
-        },
-        {
             name: 'Date',
-            selector: 'date',
+            selector: 'order.date',
             sortable: true,
         },
         {
-            name: i18n.language === 'en' ? 'Status' : 'الحالة', // Conditionally select column name based on language
-            selector: 'status',
+            name: 'Due Date',
+            selector: 'order.date',
             sortable: true,
-            cell: (row) => getStatusDescription(row.status)
+            cell: (row) => calculateDueDate(row.order.date),
+        },
+        {
+            name: 'Status',
+            selector: 'order?.status',
+            sortable: true,
+            cell: (row) => getStatusDescription(row.order?.status)
         },
     ];
     const tableColumnsAR = [
@@ -160,20 +166,21 @@ const Order = () => {
             sortable: true,
         },
         {
-            name: 'رقم المستخدم',
-            selector: 'user_id',
-            sortable: true,
-        },
-        {
             name: 'التاريخ',
-            selector: 'date',
+            selector: 'order.date',
             sortable: true,
         },
         {
-            name: i18n.language === 'en' ? 'Status' : 'الحالة', // Conditionally select column name based on language
-            selector: 'status',
+            name: 'تاريخ الأستحقاق',
+            selector: 'order.date',
             sortable: true,
-            cell: (row) => getStatusDescription(row.status),
+            cell: (row) => calculateDueDate(row.order.date),
+        },
+        {
+            name: 'الحالة',
+            selector: 'order?.status',
+            sortable: true,
+            cell: (row) => getStatusDescription(row.order?.status),
         },
     ];
     // Use the appropriate set of columns based on the current language

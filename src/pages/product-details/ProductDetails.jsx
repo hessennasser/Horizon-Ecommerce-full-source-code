@@ -1,9 +1,9 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import apiUrl from '../../apiUrl';
 import { useTranslation } from 'react-i18next';
-import { BsCart4 } from "react-icons/bs"
+import { BsCart4, BsFillCartCheckFill } from "react-icons/bs"
 import "../cart/style.css"
 import { AppContext } from '../../AppContext';
 import { Oval } from 'react-loader-spinner';
@@ -21,8 +21,11 @@ import { FaEye } from 'react-icons/fa';
 
 const ProductDetails = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
+
     const { i18n } = useTranslation();
     const { addToCart, mainRequest } = useContext(AppContext);
+    const [userQuantity, setUserQuantity] = useState(1);
     const [product, setProduct] = useState({});
     const [loading, setLoading] = useState(false);
 
@@ -63,7 +66,6 @@ const ProductDetails = () => {
         getProductsInCategory();
     }, [category_id, id]);
 
-
     return (
         <>
             {
@@ -101,14 +103,14 @@ const ProductDetails = () => {
                                     >
                                         {images.map((image) => (
                                             <SwiperSlide key={image.id}>
-                                                <img className='h-96 w-full object-contain' src={`https://admin.horriizon.com/public/${image.path}`} alt={i18n.language === "en" ? title?.en : title?.ar} />
+                                                <img className='w-full object-contain' src={`https://admin.horriizon.com/public/${image.path}`} alt={i18n.language === "en" ? title?.en : title?.ar} />
                                             </SwiperSlide>
                                         ))}
                                     </Swiper>
 
                                 </div>
                             )}
-                            <div className="product-details grid grid-cols-1 gap-5 p-5 mt-5 md:col-span-2 ">
+                            <div className="product-details grid grid-cols-1 gap-5 p-5 md:col-span-2 bg-gray-200 rounded-lg shadow-lg">
 
                                 <h2 className='text-2xl font-bold'>{i18n.language === "en" ? title?.en : title?.ar}</h2>
 
@@ -120,13 +122,13 @@ const ProductDetails = () => {
                                 </div>
 
                                 <h3 className='text-3xl font-bold text-secondColor'>
-                                        {total_price || `${i18n.language === "ar" ? `جنية ${price}` : `${price} EGY`} ` || "0 EGY"}
+                                    {total_price || `${i18n.language === "ar" ? `جنية ${price}` : `${price} EGY`} ` || "0 EGY"}
                                 </h3>
 
                                 {
-                                    quantity > 1 && <p className='text-2xl font-bold text-secondColor flex items-center justify-between'>
+                                    quantity > 1 && <p className='text-2xl font-bold text-secondColor flex items-center'>
                                         {i18n.language === 'en' ? `in stock :` : `الكميه المتاحه :`}
-                                        <span className='text-black'>{quantity}</span>
+                                        <span className='text-black mx-2'>{quantity}</span>
                                     </p>
                                 }
 
@@ -138,13 +140,59 @@ const ProductDetails = () => {
                                     {
                                         parseInt(quantity) > 1 ?
                                             (
-                                                <button
-                                                    onClick={() => { addToCart(id) }}
-                                                    className="m-0 text-sm text-center flex items-center justify-center gap-2 px-5 py-2 rounded-md border border-black text-black duration-200 hover:bg-secondColor hover:text-white"
-                                                    type="button"
-                                                >
-                                                    <BsCart4 /> {i18n.language === "en" ? "Add to Cart" : "أضف الي عربة التسوق"}
-                                                </button>
+                                                <div className="quantity-control flex items-center">
+                                                    <button
+                                                        onClick={() => { addToCart(id, userQuantity) }}
+                                                        className="m-0 text-sm text-center flex items-center justify-center gap-2 px-5 py-2 rounded-md border border-black text-black duration-200 hover:bg-secondColor hover:text-white"
+                                                        type="button"
+                                                    >
+                                                        <BsCart4 /> {i18n.language === "en" ? "Add to Cart" : "أضف الي عربة التسوق"}
+                                                    </button>
+                                                    <button className="quantity-button py-2 px-3 text-xl font-medium" onClick={() => {
+                                                        if (userQuantity === 1) {
+                                                            return;
+                                                        }
+                                                        setUserQuantity((prev) => prev - 1);
+                                                    }}>
+                                                        -
+                                                    </button>
+                                                    <input
+                                                        type="number"
+                                                        name="quantity"
+                                                        min={1}
+                                                        max={quantity}
+                                                        id="quantity"
+                                                        className="border-none focus:outline-none bg-transparent w-20 text-center"
+                                                        value={userQuantity}
+                                                        onChange={(e) => {
+                                                            if (e.target.value > quantity) {
+                                                                return;
+                                                            }
+                                                            setUserQuantity(parseInt(e.target.value));
+                                                        }}
+                                                    />
+                                                    <button className="quantity-button py-2 px-3 text-xl font-medium" onClick={() => {
+                                                        if (userQuantity === quantity) {
+                                                            return;
+                                                        }
+                                                        setUserQuantity((prev) => prev + 1);
+                                                    }}>
+                                                        +
+                                                    </button>
+                                                    <button
+                                                        onClick={() => {
+                                                            addToCart(id, userQuantity);
+                                                            setTimeout(() => {
+                                                                navigate("/checkout")
+                                                            }, 3000);
+                                                        }}
+                                                        className="m-0 text-sm text-center flex items-center justify-center gap-2 px-5 py-2 rounded-md border bg-secondColor text-white hover:brightness-125"
+                                                        type="button"
+                                                    >
+                                                        <BsFillCartCheckFill /> {i18n.language === "en" ? "Buy Now" : "إشتري الان"}
+                                                    </button>
+
+                                                </div>
                                             )
                                             :
                                             (
@@ -157,7 +205,7 @@ const ProductDetails = () => {
 
                             </div>
                         </div>
-                        {categoryProducts.length > 0 && (
+                        {categoryProducts.length > 1 && (
                             <div className="swiper-container">
                                 <h2 className='text-2xl mb-5 text-secondColor font-bold'>{i18n.language === "en" ? "Related Products" : "منتجات مشابهه"}</h2>
                                 <Swiper

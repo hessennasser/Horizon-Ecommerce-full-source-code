@@ -104,22 +104,6 @@ const EditModal = ({
     };
 
     const handleEdit = () => {
-        if (selectedImage) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const blob = new Blob([reader.result], { type: selectedImage.type });
-                const updatedFormData = new FormData();
-                updatedFormData.append('images', blob);
-                updatedFormData.append('title_en', formData.title_en);
-                updatedFormData.append('title_ar', formData.title_ar);
-                updatedFormData.append('category_id', formData.category.value || productData.category.id);
-                updatedFormData.append('quantity', formData.quantity);
-                updatedFormData.append('price', formData.price);
-                updatedFormData.append('start_date', formData.start_date);
-                editProduct(updatedFormData, blob, setIsLoading, setEditModal, productId, getSellerProducts, setAllProducts);
-            };
-            reader.readAsArrayBuffer(selectedImage);
-        } else {
             const updatedFormData = new FormData();
             updatedFormData.append('title_en', formData.title_en);
             updatedFormData.append('title_ar', formData.title_ar);
@@ -129,7 +113,7 @@ const EditModal = ({
             updatedFormData.append('start_date', formData.start_date);
             updatedFormData.append('images', formData.image);
             editProduct(updatedFormData, setIsLoading, setEditModal, productId, getSellerProducts, setAllProducts);
-        }
+        
     };
 
     return (
@@ -161,7 +145,7 @@ const EditModal = ({
                         {updateImagesModal ? (
                             <UpdateImagesModal productId={productId} productData={productData} getProductData={getProductData} setIsLoading={setIsLoading} getSellerProducts={getSellerProducts} setAllProducts={setAllProducts} setLoadingAllProducts={setLoadingAllProducts} />
                         ) : (
-                            <div className='space-y-6 grid grid-cols-2 gap-3 w-full'>
+                            <div className='space-y-6 grid grid-cols-2 gap-3 w-full flex-1'>
                                 <div className='col-span-2'>
                                     {productData && productData.images.length > 0 && (
                                         <div className='flex flex-wrap gap-2 justify-center'>
@@ -317,7 +301,7 @@ const EditModal = ({
 
                     </div>
                     {/* Modal actions */}
-                    <div className=" sticky z-10 bottom-0 left-0 right-0 bg-gray-50 px-4 py-3 shadow-md flex items-center gap-2">
+                    <div className=" bg-gray-50 px-4 py-3 shadow-md flex items-center gap-2">
                         <button
                             className='bg-secondColor py-1 px-4 rounded-md hover:brightness-110 text-white mx-2'
                             onClick={handleEdit}

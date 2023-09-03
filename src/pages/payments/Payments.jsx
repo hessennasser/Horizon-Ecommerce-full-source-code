@@ -1,19 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react';
 import apiUrl from '../../apiUrl';
 import { AppContext } from '../../AppContext';
 import { useNavigate } from 'react-router-dom';
 import Loading from '../../components/Loading';
 import { useTranslation } from 'react-i18next';
 import Breadcrumbs from '../../components/Breadcrumbs';
-import DataTable from 'react-data-table-component';
 
 const Payments = () => {
     const { mainRequest } = useContext(AppContext);
     const { i18n } = useTranslation();
 
-    const [payments, setAllPayments] = useState([]);
+    const [payments, setPayments] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [filteredData, setFilteredData] = useState([]);
 
     const userLogged = localStorage.getItem('userLogged');
     const userToken = JSON.parse(localStorage.getItem('userToken'));
@@ -23,28 +21,6 @@ const Payments = () => {
         navigate('/customer-login');
         return null;
     }
-
-    const getAllPayments = async () => {
-        setLoading(true);
-        try {
-            const res = await mainRequest.post(`${apiUrl}/userOrder`, { token: userToken });
-            setAllPayments(res.data.data);
-            setFilteredData(res.data.data);
-            console.log(res);
-        } catch (error) {
-            console.log(error);
-
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        getAllPayments();
-        console.log(payments);
-    }, [userLogged, userToken])
-
-    // Function to get the status description based on status value
     const getStatusDescription = (status) => {
         const statusValue = parseInt(status);
 
@@ -79,155 +55,85 @@ const Payments = () => {
                                 ? 'teal' // Delivered - Teal color
                                 : 'black'; // Default - Black color
 
-        return <span style={{ backgroundColor: statusColor }} className='text-white p-2 rounded-xl shadow-lg'>{statusText}</span>;
+        return <span style={{ backgroundColor: statusColor }} className='text-white text-sm px-2 shadow-lg'>{statusText}</span>;
     };
 
-    // Table columns for English and Arabic
-    const tableColumnsEN = [
-        {
-            name: 'Order ID',
-            selector: 'id',
-            sortable: true,
-        },
-        {
-            name: 'Product ID',
-            selector: 'product_id',
-            sortable: true,
-        },
-        {
-            name: 'Product Name',
-            selector: 'product.title.en',
-            sortable: true,
-        },
-        {
-            name: 'Product Price',
-            selector: 'product.price',
-            sortable: true,
-        },
-        {
-            name: 'Quantity',
-            selector: 'quantity',
-            sortable: true,
-        },
-        {
-            name: 'Total Price',
-            selector: 'total_price',
-            sortable: true,
-        },
-        
-        {
-            name: 'Date',
-            selector: 'date',
-            sortable: true,
-        },
-        {
-            name: i18n.language === 'en' ? 'Status' : 'الحالة', // Conditionally select column name based on language
-            selector: 'status',
-            sortable: true,
-            cell: (row) => getStatusDescription(row.status)
-        },
-    ];
-    const tableColumnsAR = [
-        {
-            name: 'رقم الطلب',
-            selector: 'id',
-            sortable: true,
-        },
-        {
-            name: 'رقم المنتج',
-            selector: 'product_id',
-            sortable: true,
-        },
-        {
-            name: 'اسم المنتج',
-            selector: 'product.title.ar', // Use appropriate selector for Arabic
-            sortable: true,
-        },
-        {
-            name: 'سعر المنتج',
-            selector: 'product.price',
-            sortable: true,
-        },
-        {
-            name: 'الكمية',
-            selector: 'quantity',
-            sortable: true,
-        },
-        {
-            name: 'السعر الكلي',
-            selector: 'total_price',
-            sortable: true,
-        },
-        {
-            name: 'التاريخ',
-            selector: 'date',
-            sortable: true,
-        },
-        {
-            name: i18n.language === 'en' ? 'Status' : 'الحالة', // Conditionally select column name based on language
-            selector: 'status',
-            sortable: true,
-            cell: (row) => getStatusDescription(row.status),
-        },
-    ];
-    // Use the appropriate set of columns based on the current language
-    const columns = i18n.language === 'en' ? tableColumnsEN : tableColumnsAR;
-
-    // Function to handle the search filter
-    const handleFilter = (e) => {
-        const keyword = e.target.value;
-        if (keyword.trim() === '') {
-            setFilteredData(allOrders);
-        } else {
-            const filteredResults = payments.filter((order) => {
-                // Here, it will search in the 'id', 'product_id', and 'user_id' fields
-                return (
-                    order.id.toString().includes(keyword) ||
-                    order.product_id.toString().includes(keyword) ||
-                    order.product.title.en.toString().includes(keyword) ||
-                    order.product.title.ar.toString().includes(keyword)
-                );
+    const getAllPayments = async () => {
+        setLoading(true);
+        try {
+            const res = await mainRequest.post(`${apiUrl}/userOrder`, {
+                token: userToken
             });
-            setFilteredData(filteredResults);
+            setPayments(res.data.data);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
         }
     };
 
+    useEffect(() => {
+        getAllPayments();
+    }, [userToken, userLogged]);
+
     if (loading) {
-        return (
-            <Loading />
-        )
+        return <Loading />;
     }
+
+    console.log(payments);
 
     return (
         <div className="container py-10 min-h-[40dvh]">
+            <div className="mb-10">
+                <Breadcrumbs />
+            </div>
             {payments?.length > 0 ? (
-                <div>
-                    <div className="mb-10 flex flex-col items-start gap-2 sm:flex-row sm:items-center justify-between">
-                        <Breadcrumbs />
-                    </div>
-                    {/* Add the search bar */}
-                    <input
-                        type="text"
-                        placeholder="Search by Order ID, Product ID Or Product Title ..."
-                        onChange={handleFilter}
-                        className="px-4 py-2 w-full mb-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
-                    />
-                    <DataTable columns={columns} data={filteredData} className='order-table' />
+                <div className="grid grid-cols-1 gap-4">
+                    {payments.map(payment => (
+                        <div key={payment.id} className="border rounded-lg p-4 bg-white shadow-md flex flex-col gap-2">
+                            <h2 className="text-lg font-semibold">{i18n.language === 'en' ? 'Order' : 'طلب'} #{payment.id}</h2>
+                            <p className='flex items-center gap-5'><span className='font-bold w-24'>{i18n.language === 'en' ? 'Total Price:' : 'السعر الكلي:'}</span> ${payment.total_price}</p>
+                            <p className='flex items-center gap-5'><span className='font-bold w-24'>{i18n.language === 'en' ? 'Date:' : 'التاريخ:'}</span> {payment.date}</p>
+                            <p className='flex items-center gap-5'><span className='font-bold w-24'>{i18n.language === 'en' ? 'Status:' : 'الحالة:'}</span> {getStatusDescription(payment.status)}</p>
+                            {/* Order Data */}
+                            <div className="mt-4">
+                                <h3 className="text-md font-semibold text-center">{i18n.language === 'en' ? 'Order Content' : 'محتوى الطلب'}</h3>
+                                <div className="overflow-x-auto mt-2">
+                                    <table className="table-auto border w-full">
+                                        <thead>
+                                            <tr className="bg-gray-200">
+                                                <th className="p-2 border border-gray-600 text-start">{i18n.language === 'en' ? 'Product' : 'المنتج'}</th>
+                                                <th className="p-2 border border-gray-600 text-start">{i18n.language === 'en' ? 'Price' : 'السعر'}</th>
+                                                <th className="p-2 border border-gray-600 text-start">{i18n.language === 'en' ? 'Quantity' : 'الكمية'}</th>
+                                                <th className="p-2 border border-gray-600 text-start">{i18n.language === 'en' ? 'Total Price' : 'السعر الكلي'}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {payment.order_items.map(orderItem => (
+                                                <tr key={orderItem.id} className="odd:bg-gray-100">
+                                                    <td className="p-2 border border-gray-600">{orderItem.product.title[i18n.language]}</td>
+                                                    <td className="p-2 border border-gray-600">{orderItem.product.total_price || orderItem.product.price}</td>
+                                                    <td className="p-2 border border-gray-600">{orderItem.quantity}</td>
+                                                    <td className="p-2 border border-gray-600">${orderItem.total_price}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    ))}
                 </div>
             ) : (
-                <>
-                    <Breadcrumbs />
-                    <div className="flex flex-col items-center justify-center">
-                        <h1 className="text-2xl font-bold text-red-600">
-                            {i18n.language === 'en'
-                                ? "You Don't Have Any Orders Yet!"
-                                : 'ليس لديك اي طلبات بعد'}
-                        </h1>
-                    </div>
-                </>
+                <div className="flex flex-col items-center justify-center">
+                    <h1 className="text-2xl font-bold text-red-600">
+                        {i18n.language === 'en' ? "You Don't Have Any Orders Yet!" : 'ليس لديك اي طلبات بعد'}
+                    </h1>
+                </div>
             )}
         </div>
-    )
-}
+    );
+};
 
-export default Payments
+export default Payments;

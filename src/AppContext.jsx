@@ -20,14 +20,17 @@ export const AppProvider = ({ children }) => {
     const userToken = JSON.parse(localStorage.getItem('userToken'));
     const sellerToken = JSON.parse(localStorage.getItem('sellerToken'));
     const userLogged = localStorage.getItem("userLogged");
+    const sellerLogged = localStorage.getItem("sellerLogged");
 
     const [showSubMenu, setShowSubMenu] = useState(false);
     const [notificationMenu, setNotificationMenu] = useState(false);
     const [messagesMenu, setMessagesMenu] = useState(false);
     const [total, setTotal] = useState(0);
+    const [sellerTotal, setSellerTotal] = useState(0);
     const [governorates, setGovernorates] = useState([]);
     const [cartItems, setCartItems] = useState([]);
     const [userName, setUserName] = useState("");
+
     // Sidebar
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const toggleSidebar = () => {
@@ -241,7 +244,7 @@ export const AppProvider = ({ children }) => {
         }
     };
     // add product to cart
-    const addToCart = async (id) => {
+    const addToCart = async (id, quantity) => {
         if (!userLogged && !userToken) {
             toast.info("Please Sign In");
             navigate("/customer-login");
@@ -251,6 +254,7 @@ export const AppProvider = ({ children }) => {
         const payload = {
             product_id: id,
             token: userToken,
+            quantity: quantity || 1
         };
 
         try {
@@ -327,6 +331,18 @@ export const AppProvider = ({ children }) => {
             setLoading ? setLoading(false) : null;
         }
     };
+    // get Seller Total Money
+    const getSellerTotal = async () => {
+        try {
+            const response = await mainRequest.post(`${apiUrl}/total_egy`, {
+                token: sellerToken
+            });
+            const { data } = response;
+            setSellerTotal(data.data)
+        } catch (error) {
+            console.log(error);
+        }
+    };
     // get seller products
     const getSellerProducts = async (setAllProducts, setIsLoading) => {
         setIsLoading(true);
@@ -390,7 +406,8 @@ export const AppProvider = ({ children }) => {
         getWebsiteInfo();
         getWhatsAppInfo();
         setNotificationMenu(false);
-    }, [userToken, userLogged]);
+        sellerLogged ? getSellerTotal() : null;
+    }, [userToken, userLogged, sellerLogged, sellerToken]);
 
     const contextValue = useMemo(() => ({
         isSidebarOpen,
@@ -417,6 +434,7 @@ export const AppProvider = ({ children }) => {
         getCartItems,
         getTotalPriceInCart,
         total,
+        sellerTotal,
         governorates,
         getGovernorates,
         getSellerProducts,
@@ -431,7 +449,7 @@ export const AppProvider = ({ children }) => {
         websiteInfo,
         whatsApp,
         userName,
-        setUserName
+        setUserName,
     }), [
         isSidebarOpen,
         setIsSidebarOpen,

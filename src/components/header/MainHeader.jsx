@@ -20,8 +20,8 @@ const MainHeader = () => {
     const userLogged = localStorage.getItem("userLogged");
     const sellerToken = JSON.parse(localStorage.getItem("sellerToken"));
     const sellerLogged = localStorage.getItem("sellerLogged");
-    const { categories, getCartItems, getTotalPriceInCart, total, mainRequest } = useContext(AppContext);
-    const { showSubMenu, setShowSubMenu, notificationMenu, setNotificationMenu, messagesMenu, setMessagesMenu, showSearchResult, setShowSearchResult, searchQuery, setSearchQuery,setUserName } = useContext(AppContext);
+    const { categories, getCartItems, getTotalPriceInCart, total, sellerTotal, mainRequest } = useContext(AppContext);
+    const { showSubMenu, setShowSubMenu, notificationMenu, setNotificationMenu, messagesMenu, setMessagesMenu, showSearchResult, setShowSearchResult, searchQuery, setSearchQuery, setUserName } = useContext(AppContext);
     const [searchHeaderQuery, setSearchHeaderQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const searchResultsRef = useRef(null);
@@ -78,11 +78,11 @@ const MainHeader = () => {
     const [messages, setMessages] = useState([]);
     const [messagesLoading, setMessagesLoading] = useState(false);
     const [messagesError, setMessagesError] = useState(false);
-    const getMessages = async () => {
+    const getMessages = async (user) => {
         setMessagesLoading(true);
         try {
-            const response = await mainRequest.post(`${apiUrl}/vendorMessages`, {
-                token: sellerToken
+            const response = await mainRequest.post(`${apiUrl}/${user === "seller" ? "vendorMessages" : "userMessages"}`, {
+                token: user === "seller" ? sellerToken : userToken
             });
             const { data } = response;
             setMessages(data.data);
@@ -96,8 +96,13 @@ const MainHeader = () => {
         }
     };
     useEffect(() => {
-        if (sellerLogged) getMessages()
-    }, [sellerToken, messagesMenu]);
+        if (sellerLogged) {
+            getMessages("seller");
+        }
+        if (userLogged) {
+            getMessages("user");
+        }
+    }, [sellerToken, userToken, messagesMenu]);
 
     useEffect(() => {
         if (userLogged && userToken) {
@@ -201,7 +206,6 @@ const MainHeader = () => {
                                     :
                                     (
                                         <div className="py-5">
-                                            <h4 className="no-search-result text-lg text-center text-red-800 capitalize">{i18n.language === "en" ? "there is no search result to your search words" : "لا توجد نتيجه مطابقه لكلمات البحث"}</h4>
                                             <Link to={`/search?q=${searchQuery}`} className="bg-mainColor text-white text-lg px-3 py-2 mx-auto block w-fit mt-2">
                                                 {i18n.language === "en" ? "Advanced Search" : "بحث متقدم"}
                                             </Link>
@@ -263,6 +267,23 @@ const MainHeader = () => {
                                 </>
                             )
                         }
+                        {
+                            userLogged && (
+                                <button button
+                                    className="relative p-2"
+                                    onClick={handelMessagesClick}
+                                >
+                                    <AiOutlineMessage className="text-2xl" />
+                                    {
+                                        messagesNumber > 0 && (
+                                            <span className="text-lg absolute -top-4 -right-2 grid place-content-center w-7 h-7 rounded-full bg-white text-secondColor">
+                                                {messagesNumber || 0}
+                                            </span>
+                                        )
+                                    }
+                                </button>
+                            )
+                        }
                         {/* Messages Button And Menu */}
                         {messagesMenu && <MessagesMenuComponent messages={messages} messageLoading={messagesLoading} messageError={messagesError} />}
                         {/* Notification Button And Menu */}
@@ -282,7 +303,7 @@ const MainHeader = () => {
                                 />
                                 <div className="flex flex-col items-center justify-center">
                                     <p>{userLogged ? userInfoState.name : sellerInfoState.name}</p>
-                                    {sellerLogged && <p>{"total"} EGY</p>}
+                                    {sellerLogged && <p>{sellerTotal} EGY</p>}
                                 </div>
                             </div>
                             <IoIosArrowDown className="text-xl" />

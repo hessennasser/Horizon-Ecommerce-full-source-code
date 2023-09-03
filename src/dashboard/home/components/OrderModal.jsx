@@ -76,7 +76,6 @@ const OrderModal = ({ setOrderModal, productOrders, isLoading }) => {
                                     <thead>
                                         <tr>
                                             <th className="border min-w-[120px] px-4 py-3">{i18n.language === "en" ? "Number" : "ترتيب"}</th>
-                                            <th className="border min-w-[120px] px-4 py-3">{i18n.language === "en" ? "user ID" : "معرف المستخدم"}</th>
                                             <th className="border min-w-[120px] px-4 py-3">{i18n.language === "en" ? "Order ID" : "رقم الطلب"}</th>
                                             <th className="border min-w-[120px] px-4 py-3">{i18n.language === "en" ? "Quantity" : "الكمية"}</th>
                                             <th className="border min-w-[120px] px-4 py-3">{i18n.language === "en" ? "Total Price" : "السعر الكلي"}</th>
@@ -87,11 +86,10 @@ const OrderModal = ({ setOrderModal, productOrders, isLoading }) => {
                                         {productOrders?.map((order, index) => (
                                             <tr key={order.id}>
                                                 <td className="border min-w-[120px] px-4 py-3">{index + 1}</td>
-                                                <td className="border min-w-[120px] px-4 py-3">{order.user_id}</td>
                                                 <td className="border min-w-[120px] px-4 py-3">{order.id}</td>
                                                 <td className="border min-w-[120px] px-4 py-3">{order.quantity}</td>
                                                 <td className="border min-w-[120px] px-4 py-3">{order.total_price}</td>
-                                                <td className="border min-w-[220px] px-4 py-3 flex justify-center items-center">{ getStatusDescription(order.status) }</td>
+                                                <td className="border min-w-[220px] px-4 py-3 flex justify-center items-center">{ getStatusDescription(order.product.status) }</td>
                                             </tr>
                                         ))}
                                     </tbody>

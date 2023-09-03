@@ -1,13 +1,14 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import apiUrl from '../apiUrl';
 import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai';
+import { AppContext } from '../AppContext';
 
 const ModalAd = ({ onOpen, onClose, modalVisible, showModal }) => {
     const [ad, setAd] = useState();
     const [loading, setLoading] = useState(false);
-
+    const {completeInfoModal} = useContext(AppContext);
     const getAds = async () => {
         setLoading(true);
         try {
@@ -25,7 +26,7 @@ const ModalAd = ({ onOpen, onClose, modalVisible, showModal }) => {
         getAds();
     }, [])
 
-    if (!ad) {
+    if (!ad || completeInfoModal) {
         return null;
     }
 

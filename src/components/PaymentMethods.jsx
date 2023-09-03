@@ -1,10 +1,7 @@
-import gpay from "../assets/images/payment-methods/gpay.png";
-import masterCard from "../assets/images/payment-methods/masterCard.png";
-import payPal from "../assets/images/payment-methods/payPal.png";
-import hsbc from "../assets/images/payment-methods/hsbc.png";
-import epay from "../assets/images/payment-methods/epay.png";
-import dki from "../assets/images/payment-methods/dki.png";
-
+import voda from "../assets/images/payment-methods/voda.png";
+import orange from "../assets/images/payment-methods/orange.png";
+import we from "../assets/images/payment-methods/we.png";
+import etisalat from "../assets/images/payment-methods/etisalat.png";
 const PaymentMethods = () => {
     return (
         <div className="payment-methods py-10">
@@ -13,13 +10,11 @@ const PaymentMethods = () => {
                 <h3 className='text-2xl font-semibold'>Payment Method</h3>
             </div>
 
-            <div className="bg-[#F4DBE8] container max-w-full grid grid-cols-3 md:grid-cols-6 gap-10 py-10 items-center justify-items-center">
-                <img src={gpay} alt="horizon" />
-                <img src={masterCard} alt="horizon" />
-                <img src={payPal} alt="horizon" />
-                <img src={hsbc} alt="horizon" />
-                <img src={epay} alt="horizon" />
-                <img src={dki} alt="horizon" />
+            <div className="bg-[#F4DBE8] container max-w-full flex flex-wrap gap-10 py-10 items-center justify-center">
+                <img className="w-28 h-28 object-contain" src={voda} alt="horizon" />
+                <img className="w-28 h-28 object-contain" src={orange} alt="horizon" />
+                <img className="w-28 h-28 object-contain" src={we} alt="horizon" />
+                <img className="w-28 h-28 object-contain" src={etisalat} alt="horizon" />
             </div>
 
             <div className='container mt-5'>

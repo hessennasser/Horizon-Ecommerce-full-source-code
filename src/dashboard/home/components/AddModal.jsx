@@ -11,7 +11,7 @@ import FormData from 'form-data';
 
 const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesOptions, arcategoriesOptions, getSellerProducts, setAllProducts, setIsLoading: setLoadingAllProducts }) => {
     const { i18n } = useTranslation();
-    const { mainRequest, removeBackground } = useContext(AppContext);
+    const { mainRequest } = useContext(AppContext);
     const sellerToken = JSON.parse(localStorage.getItem('sellerToken'));
 
     // add new product in dashboard
@@ -133,7 +133,7 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
                     </div>
 
                     {/* Modal content goes here */}
-                    <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 flex items-center justify-center">
+                    <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 flex items-center justify-center flex-1">
                         <div className='space-y-6 w-full grid grid-cols-2 gap-3'>
                             <div className='col-span-2'>
                                 <div className='mb-2 block'>
@@ -335,7 +335,7 @@ const AddModal = ({ addModal, setAddModal, setSelectedGovernorate, encategoriesO
                     </div>
 
                     {/* Modal actions */}
-                    <div className=" sticky z-10 bottom-0 left-0 right-0 bg-gray-50 px-4 py-3 shadow-md flex items-center gap-2">
+                    <div className="bg-gray-50 px-4 py-3 shadow-md flex items-center gap-2">
                         <button
                             className='bg-secondColor py-1 px-4 rounded-md hover:brightness-110 text-white mx-2'
                             onClick={handleAddNew}
