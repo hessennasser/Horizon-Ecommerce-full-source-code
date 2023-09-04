@@ -104,17 +104,44 @@ const EditModal = ({
     };
 
     const handleEdit = () => {
-            const updatedFormData = new FormData();
-            updatedFormData.append('title_en', formData.title_en);
-            updatedFormData.append('title_ar', formData.title_ar);
-            updatedFormData.append('category_id', formData.category.value || productData.category.id);
-            updatedFormData.append('quantity', formData.quantity);
-            updatedFormData.append('price', formData.price);
-            updatedFormData.append('start_date', formData.start_date);
-            updatedFormData.append('images', formData.image);
-            editProduct(updatedFormData, setIsLoading, setEditModal, productId, getSellerProducts, setAllProducts);
-        
+        const updatedFormData = new FormData();
+        updatedFormData.append('title_en', formData.title_en);
+        updatedFormData.append('title_ar', formData.title_ar);
+        updatedFormData.append('category_id', formData.category.value || productData.category.id);
+        updatedFormData.append('quantity', formData.quantity);
+        updatedFormData.append('price', formData.price);
+        updatedFormData.append('start_date', formData.start_date);
+        updatedFormData.append('images', formData.image);
+        editProduct(updatedFormData, setEditModal, productId);
+
     };
+    const [updatePrice, setUpdatePrice] = useState(true);
+
+    const checkUpdateTime = () => {
+        if (!productData?.update_time) {
+            setUpdatePrice(true); // Set to true if update_time is not available
+        } else {
+            const updateTime = new Date(productData.update_time);
+            const currentTime = new Date();
+
+            // Calculate the time difference in milliseconds
+            const timeDifference = currentTime - updateTime;
+
+            // Calculate 48 hours in milliseconds
+            const fortyEightHoursInMilliseconds = 48 * 60 * 60 * 1000;
+
+            // Check if the time difference is greater than 48 hours
+            if (timeDifference > fortyEightHoursInMilliseconds) {
+                setUpdatePrice(true);
+            } else {
+                setUpdatePrice(false);
+            }
+        }
+    };
+
+    useEffect(() => {
+        checkUpdateTime();
+    })
 
     return (
         <div className="fixed z-[10000] inset-0 overflow-y-auto">
@@ -272,12 +299,21 @@ const EditModal = ({
                                         type='number'
                                         min={1}
                                         value={formData.price}
+                                        disabled={!updatePrice}
                                         onChange={(e) =>
                                             setFormData({ ...formData, price: e.target.value })
                                         }
                                     />
                                 </div>
                                 <div className='col-span-2'>
+                                    {!updatePrice &&
+                                        <p className='mb-4 text-red-400'>
+                                            {i18n.language === "en" ?
+                                                "You cannot modify the price until 48 hours have passed since the last modification you made"
+                                                :
+                                                "لا يمكنك تعديل السعر الا بعد مرور 48 ساعه علي اخر تعديل قمت به"}
+                                        </p>
+                                    }
                                     <div className='mb-2 block'>
                                         <Label
                                             htmlFor='expiry-date'

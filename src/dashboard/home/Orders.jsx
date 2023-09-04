@@ -29,7 +29,6 @@ const Order = () => {
             const res = await mainRequest.post(`${apiUrl}/vendor/order`, { token: sellerToken });
             setAllOrders(res.data.data);
             setFilteredData(res.data.data); // Initially, set filtered data to all orders
-            console.log(res.data);
         } catch (error) {
             console.log(error);
         } finally {
