@@ -46,12 +46,13 @@ export const AppProvider = ({ children }) => {
                 en: {
                     translation: {
                         mainHeader: {
-                            placeholder: "Search by category name",
+                            placeholder: "Search by Product name",
                             signUpSellerBtn: "Sign up as a seller",
                             signUpCustomerBtn: "Sign up as a Customer",
                             pages: [
                                 { id: 1, name: "Home", link: "home" },
                                 { id: 2, name: "All Products", link: "all-products" },
+                                { id: 2, name: "Dally Offers", link: "dally-offers" },
                                 { id: 3, name: "contact us", link: "contact-us" },
                                 { id: 4, name: "about us", link: "about-us" },
                                 { id: 5, name: "Privacy Policy", link: "privacy" },
@@ -76,12 +77,13 @@ export const AppProvider = ({ children }) => {
                 ar: {
                     translation: {
                         mainHeader: {
-                            placeholder: "ابحث باستخدام التصنيفات",
+                            placeholder: "ابحث باستخدام أسم المنتج",
                             signUpSellerBtn: "سجل معنا كبائع",
                             signUpCustomerBtn: "سجل معنا كمستخدم",
                             pages: [
                                 { id: 1, name: "الصفحه الرئيسية", link: "home" },
                                 { id: 2, name: "جميع المنتجات", link: "all-products" },
+                                { id: 2, name: "عروض اليوم", link: "dally-offers" },
                                 { id: 3, name: "تواصل معنا", link: "contact-us" },
                                 { id: 4, name: "من نحن", link: "about-us" },
                                 { id: 5, name: "سياسة الخصوصية", link: "privacy" },
@@ -304,12 +306,13 @@ export const AppProvider = ({ children }) => {
         }
     }
     // get user profile info
-    const getUserInfo = async (userToken, setUserInfo, setLoading) => {
+    const getUserInfo = async (userToken, setUserInfo, setLoading, setName) => {
         setLoading ? setLoading(true) : null;
         try {
             const response = await mainRequest(`${apiUrl}/auth/user-profile?token=${userToken}`);
             const { data } = response;
             setUserInfo(data);
+            setName(data.name);
         } catch (error) {
             console.log(error);
         }
@@ -318,12 +321,13 @@ export const AppProvider = ({ children }) => {
         }
     };
     // get seller profile info
-    const getSellerInfo = async (SellerToken, setSellerInfo, setLoading) => {
+    const getSellerInfo = async (SellerToken, setSellerInfo, setLoading, setName) => {
         setLoading ? setLoading(true) : null;
         try {
             const response = await mainRequest(`${apiUrl}/vendor/auth/user-profile?token=${SellerToken}`);
             const { data } = response;
             setSellerInfo(data);
+            setName(data.name);
         } catch (error) {
             console.log(error);
         }

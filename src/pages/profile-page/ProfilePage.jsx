@@ -50,11 +50,11 @@ const ProfilePage = () => {
     };
     const toggleEditProfile = () => {
         setEditingProfile(!editingProfile);
-        setEditingPassword(false); // Close the password edit form when opening profile edit
+        setEditingPassword(false);
     };
     const toggleEditPassword = () => {
         setEditingPassword(!editingPassword);
-        setEditingProfile(false); // Close the profile edit form when opening password edit
+        setEditingProfile(false);
     };
     const handleNameChange = (e) => {
         setName(e.target.value);
@@ -75,10 +75,20 @@ const ProfilePage = () => {
         setConfirmPassword(e.target.value);
     };
     const handleEditProfile = async (event) => {
-
         event.preventDefault();
         setIsProfileSubmitting(true);
-
+        // Validate if the phone number is an Egyptian number
+        const egyptianPhoneNumberPattern = /^(010|011|012|015)[0-9]{8}$/;
+        if (!egyptianPhoneNumberPattern.test(userLogged ? phone || userInfoState.phone : phone || sellerInfoState.phone)) {
+            toast.info(i18n.language === "en" ? "Phone number should be 11 digits and start with 010, 011, 012, or 015." : "يجب أن يتكون رقم الهاتف من 11 رقمًا ويبدأ بـ 010 أو 011 أو 012 أو 015.");
+            setIsProfileSubmitting(false);
+            return;
+        }
+        if (sellerLogged && !egyptianPhoneNumberPattern.test(sellerInfoState.cashNumber)) {
+            toast.info(i18n.language === "en" ? "Wallet number should be 11 digits and start with 010, 011, 012, or 015." : "يجب أن يتكون رقم المحفظة من 11 رقمًا ويبدأ بـ 010 أو 011 أو 012 أو 015.");
+            setIsProfileSubmitting(false);
+            return;
+        }
         try {
             const updatedProfile = {
                 token: userLogged ? userToken : sellerToken,
@@ -95,7 +105,7 @@ const ProfilePage = () => {
         } finally {
             setIsProfileSubmitting(false);
             setEditingProfile(false);
-            userLogged ? getUserInfo(userToken, setUserInfo, setName, setEmail, setPhone) : getSellerInfo(sellerToken, setSellerInfo, setName, setEmail, setPhone);
+            userLogged ? getUserInfo(userToken, setUserInfo, setLoading, setName) : getSellerInfo(sellerToken, setSellerInfo, setLoading, setName);
         }
     };
     const handleEditPassword = async (event) => {
@@ -182,11 +192,11 @@ const ProfilePage = () => {
     };
 
     useEffect(() => {
-        if (userLogged) getUserInfo(userToken, setUserInfo, setName, setEmail, setPhone, setLoading);
+        if (userLogged) getUserInfo(userToken, setUserInfo, setLoading, setName);
     }, [userLogged, userToken])
 
     useEffect(() => {
-        if (sellerLogged) getSellerInfo(sellerToken, setSellerInfo, setName, setEmail, setPhone, setLoading);
+        if (sellerLogged) getSellerInfo(sellerToken, setSellerInfo, setLoading, setName);
     }, [sellerLogged, sellerToken])
 
     const engovernoratesOptions = governorates.map((gov) => ({

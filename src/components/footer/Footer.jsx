@@ -17,9 +17,9 @@ const MyFooter = () => {
 
             <div className="container">
                 <div className="py-10 grid gap-5 grid-cols-1 sm:grid-cols-3 border-y border-y-gray-700">
-                    <div className="flex items-center justify-start">
+                    <Link to="/" className="flex items-center justify-start">
                         <img className='mx-auto w-52' src={logo} alt="horizon" />
-                    </div>
+                    </Link>
 
                     <div className='col-span-2 grid '>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

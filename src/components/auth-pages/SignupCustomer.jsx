@@ -90,9 +90,7 @@ const SignupCustomer = () => {
                             </h2>
                             {/* <img className={`absolute w-2/3 hidden md:block ${i18n.language === "en" ? "-top-16 -right-11" : "-top-12 -left-9"}`} src={circle} alt="horizon" /> */}
                         </div>
-                        <p className="mb-2 text-secondColor">
-                            {i18n.language === "ar" ? "لتجربة أفضل" : "For Your better experience"}
-                        </p>
+                        <p className="mb-2 text-secondColor">{i18n.language === "en" ? "For better purchasing experience" : "لتجربة شراء افضل"}</p>
                         <form
                             id="customer-signup-form"
                             className="flex flex-col gap-4 w-full"

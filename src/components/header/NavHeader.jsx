@@ -35,14 +35,14 @@ const NavHeader = ({ toggleSidebar }) => {
                     <FaBars /> {i18n.language === "en" ? "categories" : "الفئات"}
                 </button>
             </div>
-            <ul className={`flex items-center gap-5 absolute duration-300 -top-full md:relative md:top-0 transition-all ${isMenuOpen ? "openMenuHeader" : ""}`}>
-                <button type="button" className="md:hidden absolute top-5 right-1/2 translate-x-1/2 text-xl bg-secondColor p-2" onClick={toggleMenuHeader} aria-label={i18n.language === "en" ? "language" : "اللغة"}>
+            <ul className={`flex items-center gap-5 absolute duration-300 -top-full lg:relative lg:top-0 transition-all ${isMenuOpen ? "openMenuHeader" : ""}`}>
+                <button type="button" className="lg:hidden absolute top-5 right-1/2 translate-x-1/2 text-xl bg-secondColor p-2" onClick={toggleMenuHeader} aria-label={i18n.language === "en" ? "language" : "اللغة"}>
                     <FaTimes />
                 </button>
                 {
                     pages.map(page => {
                         if (!sellerLogged) {
-                            if (page.id === 6) {
+                            if (page.id === pages.length) {
                                 return null;
                             }
                         }
@@ -55,7 +55,7 @@ const NavHeader = ({ toggleSidebar }) => {
                     })
                 }
             </ul>
-            <button type="button" className="md:hidden" aria-label={i18n.language === "en" ? "menu" : "القائمة"} onClick={toggleMenuHeader}>
+            <button type="button" className="lg:hidden" aria-label={i18n.language === "en" ? "menu" : "القائمة"} onClick={toggleMenuHeader}>
                 <FaBars />
             </button>
             <div className="lang-toggler">

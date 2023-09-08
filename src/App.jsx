@@ -142,7 +142,7 @@ function AppContent() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/all-products" element={<AllProducts />} />
           <Route path="/search" element={<SearchPage />} />
-          <Route path="/weekly-offers" element={<WeeklyPage />} />
+          <Route path="/dally-offers" element={<WeeklyPage />} />
           <Route path="/offers" element={<OffersPage />} />
           <Route path="/categories/:id" element={<ProductsInCategory />} />
           <Route path="/product/:id" element={<ProductDetails />} />

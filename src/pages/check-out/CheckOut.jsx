@@ -77,9 +77,20 @@ const CheckOut = () => {
         setLoading(true);
 
         // Check if cash number is provided (required field)
+        const egyptianPhoneNumberPattern = /^(010|011|012|015)[0-9]{8}$/;
         if (formData.selectedPaymentMethod === 'vodafone-cash' && !cashNumber) {
             toast.info(i18n.language === "en" ? "Please enter your cash number" : "من فضلك أدخل رقم المحفظة الالكترونية");
             setLoading(false);
+            return;
+        }
+        if (!egyptianPhoneNumberPattern.test(checkoutData.phoneNumber)) {
+            toast.info(i18n.language === "en" ? "Phone number should be 11 digits and start with 010, 011, 012, or 015." : "يجب أن يتكون رقم الهاتف من 11 رقمًا ويبدأ بـ 010 أو 011 أو 012 أو 015.");
+            setIsProfileSubmitting(false);
+            return;
+        }
+        if (formData.selectedPaymentMethod === 'vodafone-cash' && !egyptianPhoneNumberPattern.test(cashNumber)) {
+            toast.info(i18n.language === "en" ? "Wallet number should be 11 digits and start with 010, 011, 012, or 015." : "يجب أن يتكون رقم المحفظة من 11 رقمًا ويبدأ بـ 010 أو 011 أو 012 أو 015.");
+            setIsProfileSubmitting(false);
             return;
         }
 
@@ -148,7 +159,7 @@ const CheckOut = () => {
             ...formData,
             firstName: userInfoState?.name?.split(' ')[0] || '',
             lastName: userInfoState?.name?.split(' ').slice(1).join(' ') || '',
-                phoneNumber: userInfoState.phone,
+            phoneNumber: userInfoState.phone,
             email: userInfoState.email,
         })
     }, [userLogged, userToken, userInfoState.name])

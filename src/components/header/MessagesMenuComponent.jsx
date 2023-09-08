@@ -20,8 +20,8 @@ const MessagesMenuComponent = ({ setMessagesNumber, messages, messageLoading, me
 
                 {
                     messageLoading && <div className="flex justify-center items-center h-32">
-                        <Oval  height={50} width={50} color='#125ed4'
-                secondaryColor='#060047' />
+                        <Oval height={50} width={50} color='#125ed4'
+                            secondaryColor='#060047' />
                     </div>
                 }
                 {
@@ -34,7 +34,7 @@ const MessagesMenuComponent = ({ setMessagesNumber, messages, messageLoading, me
                         messages?.map((item, index) => {
                             return (
                                 <div key={item.id} className="mb-2 flex  justify-between border-b pb-2" dir='ltr'>
-                                    <p className="text-sm font-medium text-gray-900 mx-2 w-fit">{`${index + 1} - `}{item.title}</p>
+                                    <p className="text-sm font-medium text-gray-900 mx-2 w-fit">{item.title}</p>
                                 </div>
                             )
                         })

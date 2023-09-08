@@ -55,7 +55,7 @@ const weeklyOffers = ({ imageCard, isMarginTop, titleEn, titleAr }) => {
                 </>
                 :
                 <>
-                    <WeeklyOffersCards titleEn={"Weekly Offers"} titleAr={"العروض الأسبوعية"} getWeeklyOffers={getWeeklyOffers} loading={weeklyLoading} error={weeklyError} products={weeklyProducts} link={"/weekly-offers"} />
+                    <WeeklyOffersCards titleEn={"Weekly Offers"} titleAr={"العروض الأسبوعية"} getWeeklyOffers={getWeeklyOffers} loading={weeklyLoading} error={weeklyError} products={weeklyProducts} link={"/dally-offers"} />
                     {
                         (!userLogged && !sellerLogged) ?
                             (

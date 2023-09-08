@@ -66,7 +66,6 @@ const SignupSeller = () => {
             return;
         }
 
-
         setIsLoading(true);
         if (password !== confirmPassword) {
             toast.error(i18n.language === "en" ? "passwords do not match" : "كلمات المرور غير متطابقه");
@@ -112,7 +111,7 @@ const SignupSeller = () => {
                             <h2 className="font-bold text-2xl text-center sm:text-3xl">{i18n.language === "ar" ? "قم بالتسجيل كبائع" : "Sign Up as a Seller"}</h2>
                             {/* <img className={`absolute w-2/3 hidden md:block ${i18n.language === "en" ? "-top-16 -right-11" : "-top-8 -left-20"}`} src={circle} alt="horizon" /> */}
                         </div>
-                        <p className="mb-2 text-secondColor">{i18n.language === "ar" ? "لجعل تجربتك افضل" : "For Your better experience"}</p>
+                        <p className="mb-2 text-secondColor">{i18n.language === "en" ? "For a unique selling experience" : "لتجربة بيع مميزه"}</p>
                         <form
                             id="seller-signup-form"
                             className="flex flex-col gap-4 w-full"

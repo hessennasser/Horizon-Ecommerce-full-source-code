@@ -29,7 +29,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
     return (
         <aside className={`sidebar ${isSidebarOpen ? "show-sidebar" : false}`}>
             <div className="sidebar-header bg-mainColor text-white">
-                <Link>
+                <Link to="/">
                     <img src={horizonLogo} alt="" className="w-16 md:w-24 mx-auto mb-4" />
                 </Link>
                 <div className="flex items-center justify-between gap-2">
@@ -68,7 +68,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
             </div>
             <div className="flex flex-col text-start">
                 <h3 className="text-center bg-secondColor text-white py-3 text-lg">
-                    {i18n.language === "en" ? "Categories" : "الفئات"}
+                    {i18n.language === "en" ? "Shop from different categories" : "تسوق من الفئات المختلفه"}
                 </h3>
                 <ul className="links">
                     {categories.map((category) => {
@@ -77,7 +77,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                             return (
                                 <li key={category.id} className="link font-bold">
                                     <button
-                                        className="flex items-center justify-between w-full text-md capitalize py-4 px-8 text-secondColor"
+                                        className="flex items-center justify-between w-full text-md capitalize py-4 px-8 text-mainColor"
                                         onClick={() => toggleCategory(category.id)}
                                     >
                                         {i18n.language === "en"
