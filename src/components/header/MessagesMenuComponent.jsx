@@ -1,17 +1,25 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next';
+import { SiGooglemessages } from 'react-icons/si';
 import { Oval } from 'react-loader-spinner';
+import { Link } from 'react-router-dom';
+import { AppContext } from '../../AppContext';
 
-const MessagesMenuComponent = ({ setMessagesNumber, messages, messageLoading, messageError }) => {
+const MessagesMenuComponent = ({ }) => {
+    const { messages, messageLoading, messageError, readAllMessages } = useContext(AppContext)
     const { i18n } = useTranslation();
 
     return (
-        <div className={`submenu z-[10000] absolute rounded-lg shadow-lg bg-white w-[340px] max-w-[90%] sm:max-w-[340px] p-8 ${i18n.language === "en" ? "right-2" : "left-2"} top-12 text-black`}>
-            <div className="mb-2 pb-2 border-b">
+        <div className={`submenu z-[10000] absolute rounded-lg overflow-hidden shadow-lg bg-white w-[340px] max-w-[90%] sm:max-w-[340px] ${i18n.language === "en" ? "right-2" : "left-2"} top-12 text-black`}>
+            <div className="px-8 py-2 border-b">
                 <div className="flex items-center">
-                    <h6 className="mt-1 mb-0 text-sm font-semibold">messages</h6>
+                    <h6 className="font-semibold">messages</h6>
                     <div className="ms-auto">
-                        <button type='button' className="text-sm text-gray-600">Mark all as read</button>
+                        <button type='button' onClick={() => {
+                            readAllMessages()
+                        }} className="text-sm text-gray-600">
+                            Mark all as read
+                        </button>
                     </div>
                 </div>
             </div>
@@ -33,8 +41,22 @@ const MessagesMenuComponent = ({ setMessagesNumber, messages, messageLoading, me
                     !messageError && !messageLoading && messages.length > 0 ?
                         messages?.map((item, index) => {
                             return (
-                                <div key={item.id} className="mb-2 flex  justify-between border-b pb-2" dir='ltr'>
-                                    <p className="text-sm font-medium text-gray-900 mx-2 w-fit">{item.title}</p>
+                                <div key={item.id} class="relative flex items-center bg-white hover:bg-blue-400/10 px-8 py-2">
+                                    <div class="me-3 h-10 w-10 grid items-center justify-center bg-primary brround box-shadow-primary">
+                                        <SiGooglemessages className='text-2xl' />
+                                    </div>
+                                    <div class="w-full">
+                                        <h5 class="notification-label mb-1">
+                                            {item.title}
+                                        </h5>
+                                        <div class="flex items-center justify-end w-full">
+                                            {
+                                                item.read_at === null && (
+                                                    <span class=" absolute bottom-2 end-2 bg-secondColor text-white text-xs p-1 rounded-lg">New</span>
+                                                )
+                                            }
+                                        </div>
+                                    </div>
                                 </div>
                             )
                         })
@@ -44,7 +66,7 @@ const MessagesMenuComponent = ({ setMessagesNumber, messages, messageLoading, me
                         </div>
                 }
             </div>
-            {/* <button type='button' className="mt-2 pt-2 border-t dropdown-item text-center text-gray-600">View all messages</button> */}
+            <Link to="/all-messages" className="block w-full py-2 border-t dropdown-item text-center text-gray-600 bg-secondColor/20 hover:bg-secondColor/40 duration-150">View all Notification</Link>
         </div>
     );
 };

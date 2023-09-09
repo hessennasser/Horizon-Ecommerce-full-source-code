@@ -9,8 +9,7 @@ import { BsCart3 } from "react-icons/bs";
 import { IoIosArrowDown, IoMdNotificationsOutline } from "react-icons/io";
 import SubMenu from "./SubMenu";
 import userImagePlaceholder from '../../assets/images/user-image-placeholder.png';
-import NotificationMenuComponent from "./notificationMenuComponent";
-import apiUrl from "../../apiUrl";
+import NotificationMenuComponent from "./NotificationMenuComponent";
 import MessagesMenuComponent from "./MessagesMenuComponent";
 
 const MainHeader = () => {
@@ -21,7 +20,22 @@ const MainHeader = () => {
     const sellerToken = JSON.parse(localStorage.getItem("sellerToken"));
     const sellerLogged = localStorage.getItem("sellerLogged");
     const { categories, getCartItems, getTotalPriceInCart, total, sellerTotal, mainRequest } = useContext(AppContext);
-    const { showSubMenu, setShowSubMenu, notificationMenu, setNotificationMenu, messagesMenu, setMessagesMenu, showSearchResult, setShowSearchResult, searchQuery, setSearchQuery, setUserName } = useContext(AppContext);
+    const {
+        showSubMenu,
+        setShowSubMenu,
+        notificationMenu,
+        setNotificationMenu,
+        messagesMenu,
+        setMessagesMenu,
+        showSearchResult,
+        setShowSearchResult,
+        searchQuery,
+        setSearchQuery,
+        setUserName,
+        messagesNumber,
+        notificationsNumber,
+    }
+        = useContext(AppContext);
     const [searchHeaderQuery, setSearchHeaderQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const searchResultsRef = useRef(null);
@@ -46,63 +60,6 @@ const MainHeader = () => {
         setNotificationMenu(false);
         setShowSubMenu(false);
     };
-
-    // Handle Notification Menu 
-    const [notificationsNumber, setNotificationsNumber] = useState(0);
-    const [notifications, setNotifications] = useState([]);
-    const [notificationLoading, setNotificationLoading] = useState(false);
-    const [notificationError, setNotificationError] = useState(false);
-    const getNotifications = async () => {
-        setNotificationLoading(true);
-        try {
-            const response = await mainRequest.post(`${apiUrl}/vendorNotifications`, {
-                token: sellerToken
-            });
-            const { data } = response;
-            setNotifications(data.data);
-            setNotificationsNumber(data.data.length);
-        } catch (error) {
-            console.log(error);
-            setNotificationError(true);
-        }
-        finally {
-            setNotificationLoading(false);
-        }
-    };
-    useEffect(() => {
-        if (sellerLogged) getNotifications()
-    }, [sellerToken, notificationMenu]);
-
-    // Handle Messages Menu
-    const [messagesNumber, setMessagesNumber] = useState(0);
-    const [messages, setMessages] = useState([]);
-    const [messagesLoading, setMessagesLoading] = useState(false);
-    const [messagesError, setMessagesError] = useState(false);
-    const getMessages = async (user) => {
-        setMessagesLoading(true);
-        try {
-            const response = await mainRequest.post(`${apiUrl}/${user === "seller" ? "vendorMessages" : "userMessages"}`, {
-                token: user === "seller" ? sellerToken : userToken
-            });
-            const { data } = response;
-            setMessages(data.data);
-            setMessagesNumber(data.data.length);
-        } catch (error) {
-            console.log(error);
-            setMessagesError(true);
-        }
-        finally {
-            setMessagesLoading(false);
-        }
-    };
-    useEffect(() => {
-        if (sellerLogged) {
-            getMessages("seller");
-        }
-        if (userLogged) {
-            getMessages("user");
-        }
-    }, [sellerToken, userToken, messagesMenu]);
 
     useEffect(() => {
         if (userLogged && userToken) {
@@ -129,7 +86,6 @@ const MainHeader = () => {
             setShowSearchResult(false);
         }
     }, [searchHeaderQuery, categories]);
-
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -285,9 +241,9 @@ const MainHeader = () => {
                             )
                         }
                         {/* Messages Button And Menu */}
-                        {messagesMenu && <MessagesMenuComponent messages={messages} messageLoading={messagesLoading} messageError={messagesError} />}
+                        {messagesMenu && <MessagesMenuComponent />}
                         {/* Notification Button And Menu */}
-                        {notificationMenu && <NotificationMenuComponent notifications={notifications} notificationLoading={notificationLoading} notificationError={notificationError} />}
+                        {notificationMenu && <NotificationMenuComponent  />}
                         {/* User info & menu */}
                         <button
                             className="flex items-center gap-2"

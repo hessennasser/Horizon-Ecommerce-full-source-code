@@ -52,11 +52,11 @@ export const AppProvider = ({ children }) => {
                             pages: [
                                 { id: 1, name: "Home", link: "home" },
                                 { id: 2, name: "All Products", link: "all-products" },
-                                { id: 2, name: "Dally Offers", link: "dally-offers" },
-                                { id: 3, name: "contact us", link: "contact-us" },
-                                { id: 4, name: "about us", link: "about-us" },
-                                { id: 5, name: "Privacy Policy", link: "privacy" },
-                                { id: 6, name: "Dashboard", link: "dashboard" },
+                                { id: 3, name: "Dally Offers", link: "dally-offers" },
+                                { id: 4, name: "contact us", link: "contact-us" },
+                                { id: 5, name: "about us", link: "about-us" },
+                                { id: 6, name: "Privacy Policy", link: "privacy" },
+                                { id: 7, name: "Dashboard", link: "dashboard" },
                             ]
                         },
                         weeklyOffers: {
@@ -83,11 +83,11 @@ export const AppProvider = ({ children }) => {
                             pages: [
                                 { id: 1, name: "الصفحه الرئيسية", link: "home" },
                                 { id: 2, name: "جميع المنتجات", link: "all-products" },
-                                { id: 2, name: "عروض اليوم", link: "dally-offers" },
-                                { id: 3, name: "تواصل معنا", link: "contact-us" },
-                                { id: 4, name: "من نحن", link: "about-us" },
-                                { id: 5, name: "سياسة الخصوصية", link: "privacy" },
-                                { id: 6, name: "لوحة التحكم", link: "dashboard" },
+                                { id: 3, name: "عروض اليوم", link: "dally-offers" },
+                                { id: 4, name: "تواصل معنا", link: "contact-us" },
+                                { id: 5, name: "من نحن", link: "about-us" },
+                                { id: 6, name: "سياسة الخصوصية", link: "privacy" },
+                                { id: 7, name: "لوحة التحكم", link: "dashboard" },
                             ]
                         },
                         weeklyOffers: {
@@ -401,7 +401,76 @@ export const AppProvider = ({ children }) => {
             console.log(error);
         }
     };
-
+    // Messages
+    const [messagesNumber, setMessagesNumber] = useState(0);
+    const [messages, setMessages] = useState([]);
+    const [messagesLoading, setMessagesLoading] = useState(false);
+    const [messagesError, setMessagesError] = useState(false);
+    const getMessages = async () => {
+        setMessagesLoading(true);
+        try {
+            const response = await mainRequest.post(`${apiUrl}/${sellerLogged ? "vendorMessages" : "userMessages"}`, {
+                token: sellerLogged ? sellerToken : userToken
+            });
+            const { data } = response;
+            setMessages(data.data);
+            const unReaddData = data?.data?.filter(item => item.read_at === null);
+            setMessagesNumber(unReaddData.length);
+        } catch (error) {
+            console.log(error);
+            setMessagesError(true);
+        }
+        finally {
+            setMessagesLoading(false);
+        }
+    };
+    const readAllMessages = async () => {
+        try {
+            const req = await axios.post(`${apiUrl}/${userLogged ? "user" : "vendor"}/messages/read`, {
+                token: sellerLogged ? sellerToken : userToken
+            });
+            const { data } = req;
+            getMessages()
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+    // Notifications
+    const [notificationsNumber, setNotificationsNumber] = useState(0);
+    const [notifications, setNotifications] = useState([]);
+    const [notificationLoading, setNotificationLoading] = useState(false);
+    const [notificationError, setNotificationError] = useState(false);
+    const getNotifications = async () => {
+        setNotificationLoading(true);
+        try {
+            const response = await mainRequest.post(`${apiUrl}/vendorNotifications`, {
+                token: sellerToken
+            });
+            const { data } = response;
+            setNotifications(data.data);
+            const unReaddData = data?.data?.filter(item => item.read_at === null);
+            setNotificationsNumber(unReaddData.length);
+        } catch (error) {
+            console.log(error);
+            setNotificationError(true)
+        }
+        finally {
+            setNotificationLoading(false);
+        }
+    };
+    const readAllNotifications = async () => {
+        try {
+            const req = await axios.post(`${apiUrl}/vendor/notification/read`, {
+                token: sellerToken
+            });
+            const { data } = req;
+            getNotifications()
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
     useEffect(() => {
         getAllProducts();
         getAllCategories();
@@ -411,6 +480,8 @@ export const AppProvider = ({ children }) => {
         getWhatsAppInfo();
         setNotificationMenu(false);
         sellerLogged ? getSellerTotal() : null;
+        sellerLogged ? getNotifications() : null;
+        sellerLogged || userLogged ? getMessages() : null;
     }, [userToken, userLogged, sellerLogged, sellerToken]);
 
     const contextValue = useMemo(() => ({
@@ -454,6 +525,16 @@ export const AppProvider = ({ children }) => {
         whatsApp,
         userName,
         setUserName,
+        messagesNumber,
+        messages,
+        messagesLoading,
+        messagesError,
+        readAllMessages,
+        notificationsNumber,
+        notifications,
+        notificationLoading,
+        notificationError,
+        readAllNotifications
     }), [
         isSidebarOpen,
         setIsSidebarOpen,

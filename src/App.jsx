@@ -38,6 +38,8 @@ import ModalAd from './components/ModalAd';
 import Privacy from './pages/Privacy';
 import CompleteProfile from './components/auth-pages/CompleteProfile';
 import Packages from './pages/packages';
+import AllNotifications from './pages/AllNotifications';
+import AllMessages from './pages/AllMessages';
 
 function AppContent() {
   const { i18n } = useTranslation();
@@ -153,6 +155,8 @@ function AppContent() {
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/packages" element={<Packages />} />
+          <Route path="/all-notifications" element={<AllNotifications />} />
+          <Route path="/all-messages" element={<AllMessages />} />
         </Routes>
 
         <MyFooter />
