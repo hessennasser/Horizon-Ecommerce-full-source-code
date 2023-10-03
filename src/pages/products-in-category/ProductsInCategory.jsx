@@ -90,7 +90,7 @@ const ProductsInCategory = () => {
                                     {cat?.products?.map(product => {
                                         // image={product?.images[0].path}
                                         return <SwiperSlide key={product.id}>
-                                            <SingleProductCard id={product?.id} title={product?.title}  quantity={product?.quantity} price={product?.price} category={product?.category} total_price={product?.total_price} background={"white"} />
+                                            <SingleProductCard id={product?.id} image={product.images[0].path} title={product?.title}  quantity={product?.quantity} price={product?.price} category={product?.category} total_price={product?.total_price} background={"white"} />
                                         </SwiperSlide>
                                     })}
                                 </Swiper>

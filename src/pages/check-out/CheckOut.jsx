@@ -40,7 +40,7 @@ const CheckOut = () => {
     const [cashPhoto, setCashPhoto] = useState(null);
     const [cashNumber, setCashNumber] = useState(null);
 
-    const { getCartItems, getTotalPriceInCart, total, governorates, getGovernorates, mainRequest, setCartItems: globalCartItems, getUserInfo } = useContext(AppContext);
+    const { getCartItems, getTotalPriceInCart, total, governorates, getGovernorates, mainRequest, setCartItems: globalCartItems, getUserInfo, chosenDelivery } = useContext(AppContext);
     const photoInputRef = useRef(null);
 
     const handleInputChange = (e) => {
@@ -74,7 +74,8 @@ const CheckOut = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
+
+        const checkoutData = { ...formData, governorate_id: selectedGovernorate.value, city: selectedGovernorate.label, token: userToken };
 
         // Check if cash number is provided (required field)
         const egyptianPhoneNumberPattern = /^(010|011|012|015)[0-9]{8}$/;
@@ -83,18 +84,15 @@ const CheckOut = () => {
             setLoading(false);
             return;
         }
-        if (!egyptianPhoneNumberPattern.test(checkoutData.phoneNumber)) {
-            toast.info(i18n.language === "en" ? "Phone number should be 11 digits and start with 010, 011, 012, or 015." : "يجب أن يتكون رقم الهاتف من 11 رقمًا ويبدأ بـ 010 أو 011 أو 012 أو 015.");
-            setIsProfileSubmitting(false);
-            return;
-        }
         if (formData.selectedPaymentMethod === 'vodafone-cash' && !egyptianPhoneNumberPattern.test(cashNumber)) {
             toast.info(i18n.language === "en" ? "Wallet number should be 11 digits and start with 010, 011, 012, or 015." : "يجب أن يتكون رقم المحفظة من 11 رقمًا ويبدأ بـ 010 أو 011 أو 012 أو 015.");
-            setIsProfileSubmitting(false);
             return;
         }
-
-        const checkoutData = { ...formData, governorate_id: selectedGovernorate.value, city: selectedGovernorate.label, token: userToken };
+        if (!egyptianPhoneNumberPattern.test(checkoutData.phoneNumber)) {
+            toast.info(i18n.language === "en" ? "Phone number should be 11 digits and start with 010, 011, 012, or 015." : "يجب أن يتكون رقم الهاتف من 11 رقمًا ويبدأ بـ 010 أو 011 أو 012 أو 015.");
+            return;
+        }
+        setLoading(true);
 
         const formReqData = new FormData();
         formReqData.append('token', checkoutData.token);
@@ -112,6 +110,7 @@ const CheckOut = () => {
         formReqData.append('notes', checkoutData.notes);
         formReqData.append('payment_method', checkoutData.selectedPaymentMethod === "cash-on-delivery" ? 0 : 1);
         formReqData.append('vodafone_cash_number', cashNumber);
+        formReqData.append('charging', chosenDelivery === "Fast delivery" ? "fast" : "normal");
         formReqData.append('photo', cashPhoto);
 
         if (!Object.values(checkoutData).every(value => value) && checkoutData.selectedPaymentMethod !== 'cash-on-delivery') {
@@ -136,9 +135,11 @@ const CheckOut = () => {
             const response = await mainRequest.post(`${apiUrl}/payment`, formReqData);
             toast.success(i18n.language === "en" ? "Your Oreder Succsesfly Done" : "تم ارسال طلبك بنجاح");
             navigate("/");
+            setLoading(false);
         } catch (error) {
             console.log(error);
             toast.error(i18n.language === "en" ? "Something went wrong" : "حدث خطأ ما, من فضلك حاول مرة اخري");
+            setLoading(false);
         } finally {
             setLoading(false);
             getTotalPriceInCart();
@@ -163,8 +164,6 @@ const CheckOut = () => {
             email: userInfoState.email,
         })
     }, [userLogged, userToken, userInfoState.name])
-
-    // Remove the previous useEffect that had an empty dependency array
 
     const engovernoratesOptions = governorates.map((gov) => ({
         value: gov.id,
@@ -209,7 +208,7 @@ const CheckOut = () => {
                                 <p className="text-gray-500">{i18n.language === "en" ? "Choose the appropriate payment method for you and complete the information" : "اختر طريقة الدفع المناسبه لك واكمل البيانات"}</p>
                             </div>
                             <div className="flex justify-between items-center rounded-lg border border-gray-500 p-2">
-                                <label className='flex-1 cursor-pointer' htmlFor="vodafone-cash">{i18n.language === "en" ? "المحافظ الالكترونية" : "المحافظ الالكترونية"}</label>
+                                <label className='flex-1 cursor-pointer' htmlFor="vodafone-cash">{i18n.language === "en" ? "Electronic wallets" : "المحافظ الالكترونية"}</label>
                                 <input
                                     className='cursor-pointer'
                                     type="radio"

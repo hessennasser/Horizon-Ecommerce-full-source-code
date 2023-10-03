@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import apiUrl from '../../apiUrl';
 import { useTranslation } from 'react-i18next';
 import { BsCart4, BsFillCartCheckFill } from "react-icons/bs"
@@ -15,7 +15,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import SingleProductCard from '../../components/products/SingleProductCard';
-import { FaEye } from 'react-icons/fa';
+import { FaEye, FaStar } from 'react-icons/fa';
 
 
 
@@ -24,12 +24,14 @@ const ProductDetails = () => {
     const navigate = useNavigate();
 
     const { i18n } = useTranslation();
-    const { addToCart, mainRequest } = useContext(AppContext);
+    const { addToCart, mainRequest, chosenDelivery, handleDeliveryChange, websiteInfo } = useContext(AppContext);
     const [userQuantity, setUserQuantity] = useState(1);
     const [product, setProduct] = useState({});
     const [loading, setLoading] = useState(false);
 
-    const { images, title, price, quantity, start_date, total_price, fake_visitor, visitor, category_id } = product;
+    console.log(product);
+    const { images, title, price, quantity, start_date, total_price, fake_visitor, visitor, category, category_id, stars = 5, small_description
+    } = product;
 
     const fetchData = async () => {
         setLoading(true);
@@ -85,9 +87,9 @@ const ProductDetails = () => {
                     </div>
                 ) : (
                     <div className='container py-10'>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mb-10">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 mb-10">
                             {images && images.length > 0 && (
-                                <div className="img-holder p-5 col-span-1 md:col-span-2 lg:col-span-1 flex items-center justify-center rounded-lg">
+                                <div className="img-holder p-5 col-span-1 md:col-span-2 lg:col-span-1 flex justify-center rounded-lg">
                                     <Swiper
                                         slidesPerView={1}
                                         spaceBetween={30}
@@ -103,22 +105,41 @@ const ProductDetails = () => {
                                     >
                                         {images.map((image) => (
                                             <SwiperSlide key={image.id}>
-                                                <img className='w-full object-contain' src={`https://admin.horriizon.com/public/${image.path}`} alt={i18n.language === "en" ? title?.en : title?.ar} />
+                                                <img className='w-full h-full max-h-[300px] object-contain' src={`https://admin.horriizon.com/public/${image.path}`} alt={i18n.language === "en" ? title?.en : title?.ar} />
                                             </SwiperSlide>
                                         ))}
                                     </Swiper>
 
                                 </div>
                             )}
-                            <div className="product-details grid grid-cols-1 gap-5 p-5 md:col-span-2 bg-gray-200 rounded-lg shadow-lg">
+                            <div className="product-details grid grid-cols-1 gap-5 p-5 rounded-lg">
+                                <h2 className='text-2xl font-bold text-secondColor'>{i18n.language === "en" ? title?.en : title?.ar}</h2>
+                                {
+                                    small_description && (
+                                        <h3 className='text-sm'>{i18n.language === "en" ? small_description?.en : small_description?.ar}</h3>
+                                    )
+                                }
+                                <Link to={`/categories/${category_id}`}>
+                                    <h3 className='text-lg font-bold underline'>{i18n.language === "en" ? category?.title?.en : category?.title?.ar}</h3>
+                                </Link>
 
-                                <h2 className='text-2xl font-bold'>{i18n.language === "en" ? title?.en : title?.ar}</h2>
-
-                                <div className="flex flex-col gap-5 font-bold">
-
+                                <div className="flex gap-5 items-center font-bold">
                                     <p className="flex items-center gap-2">
                                         <FaEye /> {fake_visitor ? fake_visitor : visitor} {i18n.language === "en" ? "Visitor" : "زائر"}
                                     </p>
+                                    {
+                                        stars && (
+                                            <p className="flex items-center gap-2">
+                                                {
+                                                    Array.from({ length: parseInt(stars) }).map((_, index) => (
+                                                        <FaStar key={index} className='text-yellow-400' />
+                                                    ))
+                                                }
+                                                {stars}
+                                            </p>
+                                        )
+                                    }
+
                                 </div>
 
                                 <h3 className='text-3xl font-bold text-secondColor'>
@@ -136,63 +157,70 @@ const ProductDetails = () => {
                                     <p>{i18n.language === 'en' ? "Expiration date" : "تاريخ الانتهاء"}</p>
                                     <p className='border w-3/5 text-center px-6 py-1'>{start_date}</p>
                                 </div>
-                                <div className="actoins grid grid-cols-1 justify-items-center items-center gap-3">
+                                <div className="actions grid grid-cols-1 justify-items-center items-center gap-3">
                                     {
                                         parseInt(quantity) > 1 ?
                                             (
-                                                <div className="quantity-control flex items-center">
-                                                    <button
-                                                        onClick={() => { addToCart(id, userQuantity) }}
-                                                        className="m-0 text-sm text-center flex items-center justify-center gap-2 px-5 py-2 rounded-md border border-black text-black duration-200 hover:bg-secondColor hover:text-white"
-                                                        type="button"
-                                                    >
-                                                        <BsCart4 /> {i18n.language === "en" ? "Add to Cart" : "أضف الي عربة التسوق"}
-                                                    </button>
-                                                    <button className="quantity-button py-2 px-3 text-xl font-medium" onClick={() => {
-                                                        if (userQuantity === 1) {
-                                                            return;
-                                                        }
-                                                        setUserQuantity((prev) => prev - 1);
-                                                    }}>
-                                                        -
-                                                    </button>
-                                                    <input
-                                                        type="number"
-                                                        name="quantity"
-                                                        min={1}
-                                                        max={quantity}
-                                                        id="quantity"
-                                                        className="border-none focus:outline-none bg-transparent w-20 text-center"
-                                                        value={userQuantity}
-                                                        onChange={(e) => {
-                                                            if (e.target.value > quantity) {
-                                                                return;
-                                                            }
-                                                            setUserQuantity(parseInt(e.target.value));
-                                                        }}
-                                                    />
-                                                    <button className="quantity-button py-2 px-3 text-xl font-medium" onClick={() => {
-                                                        if (userQuantity === quantity) {
-                                                            return;
-                                                        }
-                                                        setUserQuantity((prev) => prev + 1);
-                                                    }}>
-                                                        +
-                                                    </button>
-                                                    <button
-                                                        onClick={() => {
-                                                            addToCart(id, userQuantity);
-                                                            setTimeout(() => {
-                                                                navigate("/checkout")
-                                                            }, 3000);
-                                                        }}
-                                                        className="m-0 text-sm text-center flex items-center justify-center gap-2 px-5 py-2 rounded-md border bg-secondColor text-white hover:brightness-125"
-                                                        type="button"
-                                                    >
-                                                        <BsFillCartCheckFill /> {i18n.language === "en" ? "Buy Now" : "إشتري الان"}
-                                                    </button>
+                                                <>
+                                                    <div className="w-full flex justify-between text-gray-400  border-b">
+                                                        <p>{i18n.language === 'en' ? "Quntaty" : "الكمية"}</p>
+                                                        <div>
+                                                            <button className="quantity-button py-2 px-3 text-xl font-medium" onClick={() => {
+                                                                if (userQuantity === 1) {
+                                                                    return;
+                                                                }
+                                                                setUserQuantity((prev) => prev - 1);
+                                                            }}>
+                                                                -
+                                                            </button>
+                                                            <input
+                                                                type="number"
+                                                                name="quantity"
+                                                                min={1}
+                                                                max={quantity}
+                                                                id="quantity"
+                                                                className="border-none focus:outline-none bg-transparent w-20 text-center"
+                                                                value={userQuantity}
+                                                                onChange={(e) => {
+                                                                    if (e.target.value > quantity) {
+                                                                        return;
+                                                                    }
+                                                                    setUserQuantity(parseInt(e.target.value));
+                                                                }}
+                                                            />
+                                                            <button className="quantity-button py-2 px-3 text-xl font-medium" onClick={() => {
+                                                                if (userQuantity === quantity) {
+                                                                    return;
+                                                                }
+                                                                setUserQuantity((prev) => prev + 1);
+                                                            }}>
+                                                                +
+                                                            </button>
 
-                                                </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="quantity-control flex items-center gap-5">
+                                                        <button
+                                                            onClick={() => { addToCart(id, userQuantity) }}
+                                                            className="m-0 text-sm text-center flex items-center justify-center gap-2 px-5 py-2 rounded-md border border-black text-black duration-200 hover:bg-secondColor hover:text-white"
+                                                            type="button"
+                                                        >
+                                                            <BsCart4 /> {i18n.language === "en" ? "Add to Cart" : "أضف الي عربة التسوق"}
+                                                        </button>
+                                                        <button
+                                                            onClick={() => {
+                                                                addToCart(id, userQuantity);
+                                                                setTimeout(() => {
+                                                                    navigate("/checkout")
+                                                                }, 3000);
+                                                            }}
+                                                            className="m-0 text-sm text-center flex items-center justify-center gap-2 px-5 py-2 rounded-md border bg-secondColor text-white hover:brightness-125"
+                                                            type="button"
+                                                        >
+                                                            <BsFillCartCheckFill /> {i18n.language === "en" ? "Buy Now" : "إشتري الان"}
+                                                        </button>
+                                                    </div>
+                                                </>
                                             )
                                             :
                                             (
@@ -202,8 +230,65 @@ const ProductDetails = () => {
                                             )
                                     }
                                 </div>
-
                             </div>
+                            <div className="col-span-1 md:col-span-1 h-fit">
+                                <div className='bg-white p-5 rounded-md'>
+                                    <h2 className='text-lg font-medium mb-5 text-center'>{i18n.language === "en" ? "Choose Delivery package" : "اختر طريقة التسليم"}</h2>
+                                    <div className="flex flex-col gap-3">
+                                        <div className="flex items-center justify-between border-2 border-secondColor p-1 px-3 rounded-lg">
+                                            <div className="flex flex-col gap-2">
+                                                <label htmlFor="package-1" className='flex items-center gap-3'>
+                                                    <input
+                                                        type="radio"
+                                                        name="delivery"
+                                                        id="package-1"
+                                                        value="Fast delivery"
+                                                        checked={chosenDelivery === "Fast delivery"}
+                                                        onChange={handleDeliveryChange}
+                                                        className='bg-mainColor'
+                                                    />
+                                                    {i18n.language === "en" ? "Fast delivery" : "توصيل سريع"}
+                                                </label>
+                                                {/* <span>{i18n.language === "en" ? "4 day" : "4 أيام"}</span> */}
+                                            </div>
+                                            <span className='text-secondColor'>{websiteInfo?.fast_charging} EGY</span>
+                                        </div>
+                                        <div className="flex items-center justify-between border-2 border-secondColor p-1 px-3 rounded-lg">
+                                            <div className="flex flex-col gap-2">
+                                                <label htmlFor="package-2" className='flex items-center gap-3'>
+                                                    <input
+                                                        type="radio"
+                                                        name="delivery"
+                                                        id="package-2"
+                                                        value="Standard delivery"
+                                                        checked={chosenDelivery === "Standard delivery"}
+                                                        onChange={handleDeliveryChange}
+                                                        className='bg-mainColor'
+                                                    />
+                                                    {i18n.language === "en" ? "Standard delivery" : "توصيل عادي"}
+                                                </label>
+                                                {/* <span>{i18n.language === "en" ? "7 day" : "7 أيام"}</span> */}
+                                            </div>
+                                            <span className='text-secondColor'>{websiteInfo?.normal_charging} EGY</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href={""}>
+                                    <img className='p-5 min-h-[400px] h-[400px] mx-auto' src={`https://admin.horriizon.com/public/images/ads/1696177825250.jpg`} alt="Horizon" />
+                                </a>
+                            </div>
+                            {
+                                product?.description && (
+                                    <div className='col-span-3'>
+                                    <h2>{i18n.language === "en" ? "About Product" : "عن المنتج"}</h2>
+                                        <p className='text-lg text-gray-800 py-5 border-y '>
+                                            {
+                                                i18n.language === "en" ? product?.description?.en : product?.description?.ar
+                                            }
+                                        </p>
+                                    </div>
+                                )
+                            }
                         </div>
                         {categoryProducts.length > 1 && (
                             <div className="swiper-container">

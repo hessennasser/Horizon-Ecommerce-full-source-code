@@ -7,16 +7,19 @@ import { AppContext } from '../../AppContext';
 import { useTranslation } from 'react-i18next';
 import { Oval } from 'react-loader-spinner';
 import DeleteModal from '../../dashboard/home/components/DeleteModal';
+import { toast } from 'react-toastify';
+import apiUrl from '../../apiUrl';
 
 const Cart = () => {
     const { i18n } = useTranslation();
     const userToken = JSON.parse(localStorage.getItem('userToken'));
     const userLogged = localStorage.getItem("userLogged");
-    const [totalPrice, settotalPrice] = useState(0);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [coupon, setCoupon] = useState("");
     const [shipping, setShipping] = useState(0);
     const [mainLoading, setMainLoading] = useState();
     const [loading, setLoading] = useState();
-    const { getCartItems, getTotalPriceInCart, total: itemsTotal, cartItems, setCartItems } = useContext(AppContext);
+    const { getCartItems, getTotalPriceInCart, total: itemsTotal, cartItems, setCartItems, mainRequest } = useContext(AppContext);
 
     useEffect(() => {
         if (userLogged && userToken) {
@@ -28,7 +31,7 @@ const Cart = () => {
     useEffect(() => {
         // Calculate subtotal when cart items or shipping change
         const calculateSubtotal = () => {
-            settotalPrice(itemsTotal + shipping);
+            setTotalPrice(itemsTotal + shipping);
         };
 
         calculateSubtotal();
@@ -40,9 +43,24 @@ const Cart = () => {
         setDeleteModal(true)
     }
 
-    const handleCoupon = e => {
+    const handleCoupon = async (e) => {
         e.preventDefault();
-        // TODO: Apply the coupon logic here
+        if (!coupon) {
+            toast.info(i18n.language === "en" ? "Enter the coupon" : "قم بإدخال القسيمه");
+            return;
+        }
+        try {
+            const request = await mainRequest.post(`${apiUrl}/coupon/${coupon}`, {
+                token: userToken
+            });
+            console.log(request);
+            if (request.data === "Coupon Not Found") {
+                toast.info(i18n.language === "en" ? "Coupon Not Found" : "لم يتم العثور على القسيمة");
+            }
+        } catch (error) {
+            toast.error(i18n.language === "en" ? "theres is an error, please try again" : "يوجد خطأ، برجاء المحاوله مره اخره");
+            console.log(error);
+        }
     };
 
     const handleShippingChange = e => {
@@ -91,7 +109,7 @@ const Cart = () => {
     return (
         <>
             {
-                deleteModal && <DeleteModal  setIsLoading={setLoading} deleteModal={deleteModal} setDeleteModal={setDeleteModal} productId={deleteProductId} />
+                deleteModal && <DeleteModal setIsLoading={setLoading} deleteModal={deleteModal} setDeleteModal={setDeleteModal} productId={deleteProductId} />
             }
             <div className="container py-10">
                 {loading && (
@@ -115,7 +133,7 @@ const Cart = () => {
                                     key={item.id}
                                     id={item.id}
                                     setCartItems={setCartItems}
-                                    title={i18n.language === "en" ? item.title.en : item.title.ar}
+                                    title={i18n.language === "en" ? item?.title?.en : item?.title?.ar}
                                     image={item.images[0].path}
                                     price={item.price}
                                     productTotalPrice={item?.quantity_of_cart?.total}
@@ -130,23 +148,25 @@ const Cart = () => {
                         })}
                     </div>
                     <div className="col-span-3 lg:col-span-1 lg:sticky top-0 h-fit">
-                        <form className="coupon-form flex flex-col items-start gap-6 bg-[#F4DBE8] py-4 px-6 rounded-lg shadow-md">
+                        <form className="coupon-form flex flex-col items-start gap-6 bg-[#F4DBE8] py-4 px-6 rounded-lg shadow-md" onSubmit={e => handleCoupon(e)}>
                             <label htmlFor="coupon" className="font-bold">
-                                Have a Coupon?
+                                {i18n.language === "en" ? "Have a Coupon?" : "هل لديك قسيمة؟"}
                             </label>
                             <input
                                 className="w-full rounded-lg"
-                                placeholder="add your coupon"
+                                placeholder={i18n.language === "en" ? "add your coupon" : "أضف قسيمتك"}
                                 type="text"
                                 name="coupon"
                                 id="coupon"
+                                value={coupon}
+                                onChange={(e) => setCoupon(e.target.value)}
                             />
                             <button
-                                onClick={handleCoupon}
+                                onClick={e => handleCoupon(e)}
                                 className="m-0 px-5 bg-secondColor py-2 rounded-md text-white hover:brightness-110"
                                 type="submit"
                             >
-                                Apply Coupon
+                                {i18n.language === "en" ? "Apply Coupon" : "تطبيق القسيمة"}
                             </button>
                         </form>
                         <div className="cart-total flex flex-col gap-6 py-4 px-6 mt-5">
@@ -181,7 +201,7 @@ const Cart = () => {
                             </div> */}
                             </>
                             <div className="flex justify-between items-center gap-6">
-                                <h3 className="w-1/5">Total</h3>
+                                <h3 className="w-1/5">{i18n.language === "en" ? "Total" : "المجموع الكلي"}</h3>
                                 <p className="flex-1 text-end">{totalPrice} EGY</p>
                             </div>
                             <Link
@@ -189,7 +209,7 @@ const Cart = () => {
                                 className="text-center m-0 px-5 bg-secondColor py-2 rounded-md text-white hover:bg-mainColor duration-200 hover:-translate-y-1"
                                 type="button"
                             >
-                                Checkout
+                                {i18n.language === "en" ? "Checkout" : "الدفع"}
                             </Link>
                         </div>
                     </div>

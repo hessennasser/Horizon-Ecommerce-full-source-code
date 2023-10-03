@@ -2,14 +2,14 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
 import "swiper/css";
-import {Autoplay} from "swiper/modules"
+import { Autoplay, Navigation } from "swiper/modules"
 import { useEffect, useState } from "react";
 import axios from "axios";
 import apiUrl from "../../apiUrl";
 import { useTranslation } from "react-i18next";
 
 const HeroSlider = () => {
-    const {i18n} = useTranslation()
+    const { i18n } = useTranslation()
     const [slider, setSlider] = useState([]);
 
     // get all Slider
@@ -30,8 +30,9 @@ const HeroSlider = () => {
     return (
         <div className="w-full select-none">
             <Swiper
-                modules={[Autoplay]}
+                modules={[Autoplay, Navigation]}
                 autoplay={{ delay: 3000 }}
+                navigation={true}
                 loop={true}
                 className="heroSlider w-full"
                 style={{ direction: "ltr" }}
@@ -40,7 +41,7 @@ const HeroSlider = () => {
                     slider.map(slide => {
                         return (
                             <SwiperSlide key={slide.id}>
-                                <img className="w-full h-[350px] object-cover" src={`https://admin.horriizon.com/public/${slide.image}`} alt={`${i18n.language === "en" ? slide.title.en : slide.title.ar }`} />
+                                <img className="w-full h-[350px] object-cover" src={`https://admin.horriizon.com/public/${slide.image}`} alt={`${i18n.language === "en" ? slide.title.en : slide.title.ar}`} />
                             </SwiperSlide>
                         )
                     })

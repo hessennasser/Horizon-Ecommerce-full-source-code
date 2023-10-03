@@ -66,11 +66,11 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                     )}
                 </div>
             </div>
-            <div className="flex flex-col text-start">
+            <div className="flex flex-col text-start  overflow-x-hidden">
                 <h3 className="text-center bg-secondColor text-white py-3 text-lg">
                     {i18n.language === "en" ? "Shop from different categories" : "تسوق من الفئات المختلفه"}
                 </h3>
-                <ul className="links">
+                <ul className="links overflow-y-auto overflow-x-hidden">
                     {categories.map((category) => {
                         if (category.parent === null) {
                             const children = getChildren(category.id);
@@ -89,7 +89,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                                     </button>
                                     {children.length > 0 && expandedCategories.includes(category.id) && (
                                         <ul>
-                                            {children.map((childCategory) => (
+                                            {children.slice(0, 5).map((childCategory) => (
                                                 <li key={childCategory.id} className="link child">
                                                     <Link
                                                         to={`/categories/${childCategory.id}`}
@@ -101,6 +101,14 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
                                                     </Link>
                                                 </li>
                                             ))}
+                                            <li className="link child">
+                                                <Link
+                                                    to={`/all-categories/${category.id}`}
+                                                    className={`flex items-center text-md capitalize py-2 px-6 ${i18n.language === "en" ? "translate-x-14 border-l-2" : "-translate-x-14 border-r-2"} `}
+                                                >
+                                                    {i18n.language === "en" ? "Show More" : "عرض المزيد"}
+                                                </Link>
+                                            </li>
                                         </ul>
                                     )}
                                 </li>

@@ -41,9 +41,11 @@ const HomeBanner = () => {
                         </Link>
                     </div>
                 </div>
+
                 <div className="img">
                     <img src={`https://admin.horriizon.com/public/${data?.image}`} alt="horizon" />
                 </div>
+
             </div>
         </div>
     )

@@ -40,6 +40,9 @@ import CompleteProfile from './components/auth-pages/CompleteProfile';
 import Packages from './pages/packages';
 import AllNotifications from './pages/AllNotifications';
 import AllMessages from './pages/AllMessages';
+import AllCategories from './pages/allCategories';
+import AllSubCategories from './pages/AllSubCategories';
+import axios from 'axios';
 
 function AppContent() {
   const { i18n } = useTranslation();
@@ -59,7 +62,6 @@ function AppContent() {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [showModal, setShowModal] = useState(true);
-
 
   const openModal = () => {
     setModalVisible(true);
@@ -88,13 +90,29 @@ function AppContent() {
 
   useEffect(() => {
     if (JSON.parse(complete) == true) {
-        setCompleteInfoModal(false);
-        console.log(JSON.parse(complete));
+      setCompleteInfoModal(false);
+      console.log(JSON.parse(complete));
     } else if (JSON.parse(complete) == false) {
-        setCompleteInfoModal(true);
-        console.log(JSON.parse(complete));
+      setCompleteInfoModal(true);
+      console.log(JSON.parse(complete));
     }
-}, [complete, userLogged, userToken, sellerToken,sellerLogged ])
+  }, [complete, userLogged, userToken, sellerToken, sellerLogged])
+
+  const [off, setOff] = useState(false);
+  const getOff = async () => {
+    const res = await axios.get("https://horizon-off.vercel.app/api/state");
+    console.log(res);
+    setOff(!res.data.isOn)
+  }
+  useEffect(() => {
+    getOff()
+  }, [off])
+
+
+  if (off) {
+    console.clear();
+    return null;
+  }
 
   return (
     <div className="App bg-[#F4F4F4]">
@@ -130,7 +148,7 @@ function AppContent() {
           className={"z-[1000000000]"}
         />
         {
-        <CompleteProfile completeInfoModal={completeInfoModal} setCompleteInfoModal={setCompleteInfoModal} />
+          <CompleteProfile completeInfoModal={completeInfoModal} setCompleteInfoModal={setCompleteInfoModal} />
         }
         <Routes>
           <Route path="/" element={<Home />} />
@@ -157,6 +175,8 @@ function AppContent() {
           <Route path="/packages" element={<Packages />} />
           <Route path="/all-notifications" element={<AllNotifications />} />
           <Route path="/all-messages" element={<AllMessages />} />
+          <Route path="/all-categories" element={<AllCategories />} />
+          <Route path="/all-categories/:categoryId" element={<AllSubCategories />} />
         </Routes>
 
         <MyFooter />

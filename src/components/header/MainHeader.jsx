@@ -69,7 +69,7 @@ const MainHeader = () => {
     }, [userLogged, userToken, sellerLogged, sellerToken, total]);
 
     useEffect(() => {
-        if (searchHeaderQuery.length > 0) {
+        if (searchHeaderQuery?.length > 0) {
             setShowSearchResult(true);
         }
         else {
@@ -130,7 +130,12 @@ const MainHeader = () => {
                     <img className="w-16 md:w-24" src={horizonLogo} alt="horizon" />
                 </Link>
                 {/* Search */}
-                <div className="flex-1 w-full text-xs search-holder relative">
+                <form onSubmit={(e) => {
+                    e.preventDefault();
+                    setSearchHeaderQuery(e.target.value);
+                    setSearchQuery(e.target.value);
+                    window.location.href = `search?q=${searchQuery}`;
+                }} className="flex-1 w-full text-xs search-holder relative">
                     <TextInput
                         id="search"
                         type="text"
@@ -151,7 +156,7 @@ const MainHeader = () => {
                             className="search-results px-4 absolute top-12 left-0 w-full max-h-[300px] overflow-y-auto bg-white z-[10000] rounded-lg shadow-md text-secondColor"
                         >
                             {
-                                searchResults.length > 0 ? (
+                                searchResults.length > 0 && (
                                     searchResults.map((result) => (
                                         <Link key={result.id} to={`/categories/${result.id}`} className="h-10 flex items-center border-b">
                                             <div className="search-result-item flex items-center justify-between gap-5 py-1">
@@ -159,18 +164,18 @@ const MainHeader = () => {
                                             </div>
                                         </Link>
                                     )))
-                                    :
-                                    (
-                                        <div className="py-5">
-                                            <Link to={`/search?q=${searchQuery}`} className="bg-mainColor text-white text-lg px-3 py-2 mx-auto block w-fit mt-2">
-                                                {i18n.language === "en" ? "Advanced Search" : "بحث متقدم"}
-                                            </Link>
-                                        </div>
-                                    )
+                                // :
+                                // (
+                                //     <div className="py-5">
+                                //         <Link to={`/search?q=${searchQuery}`} className="bg-mainColor text-white text-lg px-3 py-2 mx-auto block w-fit mt-2">
+                                //             {i18n.language === "en" ? "Advanced Search" : "بحث متقدم"}
+                                //         </Link>
+                                //     </div>
+                                // )
                             }
                         </div>
                     )}
-                </div>
+                </form>
             </div>
             <div className="buttons-holder md:w-fit flex justify-evenly gap-3">
                 {/* when login */}
@@ -243,7 +248,7 @@ const MainHeader = () => {
                         {/* Messages Button And Menu */}
                         {messagesMenu && <MessagesMenuComponent />}
                         {/* Notification Button And Menu */}
-                        {notificationMenu && <NotificationMenuComponent  />}
+                        {notificationMenu && <NotificationMenuComponent />}
                         {/* User info & menu */}
                         <button
                             className="flex items-center gap-2"

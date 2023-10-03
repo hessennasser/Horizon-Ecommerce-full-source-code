@@ -73,13 +73,13 @@ const Home = () => {
     return (
         <>
             <HeroSlider />
-            <WeeklyOffers isMarginTop={true} />
-            {productsOnSectionOne.length > 1 && <ProductsSwiper products={productsOnSectionOne} loading={productsOnSectionOneLoading} error={productsOnSectionOneError} /> }
+            <WeeklyOffers isMarginTop={false} />
+            {productsOnSectionOne.length > 1 && <ProductsSwiper products={productsOnSectionOne} loading={productsOnSectionOneLoading} error={productsOnSectionOneError} />}
             <WeeklyOffers imageCard={true} />
             {productsOnSectionTwo.length > 1 && <ProductsSwiper products={productsOnSectionTwo} loading={productsOnSectionTwoLoading} error={productsOnSectionTwoError} />}
             <HomeBanner />
             {productsOnSectionThree.length > 1 && <ProductsSwiper products={productsOnSectionThree} loading={productsOnSectionThreeLoading} error={productsOnSectionThreeError} />}
-            
+
             <HomeCategories categories={categories} />
             {
                 (!userLogged && !sellerLogged) && <StartedCard />

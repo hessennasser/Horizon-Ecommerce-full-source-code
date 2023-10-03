@@ -1,7 +1,6 @@
 import { GoLocation } from 'react-icons/go';
 import { BiPhone } from 'react-icons/bi';
-import { AiFillFacebook, AiOutlineTwitter, AiFillYoutube, AiOutlineInstagram } from 'react-icons/ai';
-import { GrLinkedinOption } from "react-icons/gr";
+import { AiFillFacebook, AiOutlineInstagram } from 'react-icons/ai';
 import logo from "../../assets/images/horizon-logo.png";
 import { Link } from "react-router-dom";
 import BottomFooter from './BottomFooter';

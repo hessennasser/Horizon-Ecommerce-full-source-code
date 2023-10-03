@@ -37,6 +37,13 @@ export const AppProvider = ({ children }) => {
         setIsSidebarOpen(!isSidebarOpen);
     }
 
+    // delivery
+    const [chosenDelivery, setChosenDelivery] = useState("Fast delivery");
+    const handleDeliveryChange = (event) => {
+        setChosenDelivery(event.target.value);
+    };
+
+
 
     // Setup react-i18next --------------------------------------------------------------
     i18n
@@ -286,7 +293,8 @@ export const AppProvider = ({ children }) => {
                 token: userToken
             });
             const { data } = response;
-            setCartItems(data.data);
+            setCartItems(data?.data[1]);
+            console.log(data.data);
         } catch (error) {
             console.log(error);
         }
@@ -534,7 +542,9 @@ export const AppProvider = ({ children }) => {
         notifications,
         notificationLoading,
         notificationError,
-        readAllNotifications
+        readAllNotifications,
+        handleDeliveryChange,
+        chosenDelivery
     }), [
         isSidebarOpen,
         setIsSidebarOpen,

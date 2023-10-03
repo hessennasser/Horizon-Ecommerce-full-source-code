@@ -47,7 +47,7 @@ const weeklyOffers = ({ imageCard, isMarginTop, titleEn, titleAr }) => {
     };
 
     return (
-        <div className={`px-5 md:-translate-y-20 relative z-10 grid grid-cols-1 md:grid-cols-3 mt-24 ${isMarginTop ? "md:-translate-y-36" : ""} min-h-[400px]`}>
+        <div className={`px-5 relative z-10 grid grid-cols-1 md:grid-cols-3 mt-10 ${isMarginTop ? "md:-translate-y-36" : ""} min-h-[400px]`}>
             {imageCard ?
                 <>
                     <ImageCard />
