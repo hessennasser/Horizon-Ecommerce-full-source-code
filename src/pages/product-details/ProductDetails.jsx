@@ -126,7 +126,7 @@ const ProductDetails = () => {
                                     <h3 className='text-lg font-bold underline'>{i18n.language === "en" ? category?.title?.en : category?.title?.ar}</h3>
                                 </Link>
 
-                                <div className="flex gap-5 items-center font-bold">
+                                <div className="flex gap-5 items-center font-bold flex-wrap">
                                     <p className="flex items-center gap-2">
                                         <FaEye /> {fake_visitor ? fake_visitor : visitor} {i18n.language === "en" ? "Visitor" : "زائر"}
                                     </p>
@@ -158,9 +158,9 @@ const ProductDetails = () => {
                                     </p>
                                 }
 
-                                <div className='flex justify-between  py-5 border-y'>
+                                <div className='w-full flex justify-between flex-wrap py-5 border-y'>
                                     <p>{i18n.language === 'en' ? "Expiration date" : "تاريخ الانتهاء"}</p>
-                                    <p className='border w-3/5 text-center px-6 py-1'>{start_date}</p>
+                                    <p className='border text-center px-6 py-1'>{start_date}</p>
                                 </div>
                                 <div className="actions grid grid-cols-1 justify-items-center items-center gap-3">
                                     {
@@ -205,7 +205,7 @@ const ProductDetails = () => {
                                                         </div>
                                                     </div>
 
-                                                    <div className="quantity-control flex items-center gap-5">
+                                                    <div className="quantity-control flex items-center gap-5 flex-wrap justify-center">
                                                         <button
                                                             onClick={() => { addToCart(id, userQuantity) }}
                                                             className="m-0 text-sm text-center flex items-center justify-center gap-2 px-5 py-2 rounded-md border border-black text-black duration-200 hover:bg-secondColor hover:text-white"
@@ -284,20 +284,20 @@ const ProductDetails = () => {
                                     <img className='p-5 min-h-[400px] h-[400px] mx-auto' src={`https://admin.horriizon.com/public/images/ads/1696177825250.jpg`} alt="Horizon" />
                                 </a>
                             </div>
-                            <div className="col-span-3 w-full flex flex-wrap items-center justify-between my-5">
-                                <div className="item flex flex-col gap-2 text-center text-lg justify-center items-center">
+                            <div className="col-span-3 w-full flex flex-wrap items-center justify-between gap-5 my-5">
+                                <div className="item flex flex-col gap-2 text-center text-lg justify-center items-center w-48 mx-auto">
                                     <MdSystemSecurityUpdateGood  className='text-3xl text-secondColor'/>
                                     <p className='font-bold'>{i18n.language === "en" ? "Receipt and delivery" : "الدفع عند الاستلام"}</p>
                                 </div>
-                                <div className="item flex flex-col gap-2 text-center text-lg justify-center items-center">
+                                <div className="item flex flex-col gap-2 text-center text-lg justify-center items-center w-48 mx-auto">
                                     <MdSystemSecurityUpdateGood  className='text-3xl text-secondColor'/>
                                     <p className='font-bold'>{i18n.language === "en" ? "Secure payment" : "دفع امن"}</p>
                                 </div>
-                                <div className="item flex flex-col gap-2 text-center text-lg justify-center items-center">
+                                <div className="item flex flex-col gap-2 text-center text-lg justify-center items-center w-48 mx-auto">
                                     <TbTruckDelivery  className='text-3xl text-secondColor'/>
                                     <p className='font-bold'>{i18n.language === "en" ? "Safe delivery" : "توصيل امن"}</p>
                                 </div>
-                                <div className="item flex flex-col gap-2 text-center text-lg justify-center items-center">
+                                <div className="item flex flex-col gap-2 text-center text-lg justify-center items-center w-48 mx-auto">
                                     <FaShippingFast  className='text-3xl text-secondColor'/>
                                     <p className='font-bold'>{i18n.language === "en" ? "Fast delivery" : "سرعة التوصيل"}</p>
                                 </div>
