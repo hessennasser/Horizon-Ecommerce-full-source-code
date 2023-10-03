@@ -27,9 +27,9 @@ const SearchPage = ({ }) => {
         const filteredProducts = products.filter((product) => {
             const titleEn = product.title.en.toLowerCase();
             const titleAr = product.title.ar.toLowerCase();
-            const searchQueryLower = searchQuery.toLowerCase();
+            const searchQueryLower = initialSearchQuery.toLocaleLowerCase() || searchQuery?.toLowerCase();
             const productPrice = product.price;
-            const productCategory = product.category_id; // Access the ID of the category
+            const productCategory = product.category_id;
 
             const isTitleMatch =
                 titleEn.includes(searchQueryLower) ||

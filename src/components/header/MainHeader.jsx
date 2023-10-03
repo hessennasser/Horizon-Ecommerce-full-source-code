@@ -1,7 +1,7 @@
 import { TextInput } from "flowbite-react";
 import { AiOutlineMessage, AiOutlineSearch } from "react-icons/ai";
 import horizonLogo from "../../assets/images/horizon-logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useContext, useEffect, useState, useRef } from "react";
 import { AppContext } from "../../AppContext";
@@ -13,6 +13,7 @@ import NotificationMenuComponent from "./NotificationMenuComponent";
 import MessagesMenuComponent from "./MessagesMenuComponent";
 
 const MainHeader = () => {
+    const navigation = useNavigate();
     const { t, i18n } = useTranslation();
     const [cartItems, setCartItems] = useState([]);
     const userToken = JSON.parse(localStorage.getItem("userToken"));
@@ -134,7 +135,7 @@ const MainHeader = () => {
                     e.preventDefault();
                     setSearchHeaderQuery(e.target.value);
                     setSearchQuery(e.target.value);
-                    window.location.href = `search?q=${searchQuery}`;
+                    navigation(`/search?q=${searchQuery}`);
                 }} className="flex-1 w-full text-xs search-holder relative">
                     <TextInput
                         id="search"

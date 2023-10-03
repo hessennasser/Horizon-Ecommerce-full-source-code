@@ -15,7 +15,9 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import SingleProductCard from '../../components/products/SingleProductCard';
-import { FaEye, FaStar } from 'react-icons/fa';
+import { FaEye, FaStar, FaShippingFast } from 'react-icons/fa';
+import { MdSystemSecurityUpdateGood } from 'react-icons/md';
+import { TbTruckDelivery } from 'react-icons/tb';
 
 
 
@@ -30,7 +32,8 @@ const ProductDetails = () => {
     const [loading, setLoading] = useState(false);
 
     console.log(product);
-    const { images, title, price, quantity, start_date, total_price, fake_visitor, visitor, category, category_id, stars = 5, small_description
+    const { images, title, price, quantity, start_date, total_price, fake_visitor, visitor, category, category_id, stars = 5, small_description, discount
+
     } = product;
 
     const fetchData = async () => {
@@ -87,9 +90,9 @@ const ProductDetails = () => {
                     </div>
                 ) : (
                     <div className='container py-10'>
-                        <div className="grid grid-cols-1 lg:grid-cols-3 mb-10">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-10 relative">
                             {images && images.length > 0 && (
-                                <div className="img-holder p-5 col-span-1 md:col-span-2 lg:col-span-1 flex justify-center rounded-lg">
+                                <div className="img-holder lg:sticky top-0 h-fit p-5 col-span-1 md:col-span-2 lg:col-span-1 flex justify-center rounded-lg max-h-[400px]">
                                     <Swiper
                                         slidesPerView={1}
                                         spaceBetween={30}
@@ -105,14 +108,14 @@ const ProductDetails = () => {
                                     >
                                         {images.map((image) => (
                                             <SwiperSlide key={image.id}>
-                                                <img className='w-full h-full max-h-[300px] object-contain' src={`https://admin.horriizon.com/public/${image.path}`} alt={i18n.language === "en" ? title?.en : title?.ar} />
+                                                <img className='w-full h-full max-h-[400px] object-contain' src={`https://admin.horriizon.com/public/${image.path}`} alt={i18n.language === "en" ? title?.en : title?.ar} />
                                             </SwiperSlide>
                                         ))}
                                     </Swiper>
 
                                 </div>
                             )}
-                            <div className="product-details grid grid-cols-1 gap-5 p-5 rounded-lg">
+                            <div className="product-details bg-[#e5e5e5] grid grid-cols-1 gap-5 p-5 rounded-lg">
                                 <h2 className='text-2xl font-bold text-secondColor'>{i18n.language === "en" ? title?.en : title?.ar}</h2>
                                 {
                                     small_description && (
@@ -142,10 +145,12 @@ const ProductDetails = () => {
 
                                 </div>
 
-                                <h3 className='text-3xl font-bold text-secondColor'>
-                                    {total_price || `${i18n.language === "ar" ? `جنية ${price}` : `${price} EGY`} ` || "0 EGY"}
-                                </h3>
-
+                                <div className="flex items-center gap-3">
+                                    <h3 className='text-3xl font-bold text-secondColor'>
+                                        {total_price || `${i18n.language === "ar" ? `جنية ${price}` : `${price} EGY`} ` || "0 EGY"}
+                                    </h3>
+                                    <span className='text-md text-red-400 line-through opacity-70'>{`${i18n.language === "ar" ? `جنية ${discount}` : `${discount} EGY`} `}</span>
+                                </div>
                                 {
                                     quantity > 1 && <p className='text-2xl font-bold text-secondColor flex items-center'>
                                         {i18n.language === 'en' ? `in stock :` : `الكميه المتاحه :`}
@@ -153,7 +158,7 @@ const ProductDetails = () => {
                                     </p>
                                 }
 
-                                <div className='flex justify-between text-gray-400 py-5 border-y'>
+                                <div className='flex justify-between  py-5 border-y'>
                                     <p>{i18n.language === 'en' ? "Expiration date" : "تاريخ الانتهاء"}</p>
                                     <p className='border w-3/5 text-center px-6 py-1'>{start_date}</p>
                                 </div>
@@ -162,7 +167,7 @@ const ProductDetails = () => {
                                         parseInt(quantity) > 1 ?
                                             (
                                                 <>
-                                                    <div className="w-full flex justify-between text-gray-400  border-b">
+                                                    <div className="w-full flex justify-between  border-b">
                                                         <p>{i18n.language === 'en' ? "Quntaty" : "الكمية"}</p>
                                                         <div>
                                                             <button className="quantity-button py-2 px-3 text-xl font-medium" onClick={() => {
@@ -199,6 +204,7 @@ const ProductDetails = () => {
 
                                                         </div>
                                                     </div>
+
                                                     <div className="quantity-control flex items-center gap-5">
                                                         <button
                                                             onClick={() => { addToCart(id, userQuantity) }}
@@ -220,6 +226,7 @@ const ProductDetails = () => {
                                                             <BsFillCartCheckFill /> {i18n.language === "en" ? "Buy Now" : "إشتري الان"}
                                                         </button>
                                                     </div>
+
                                                 </>
                                             )
                                             :
@@ -231,7 +238,7 @@ const ProductDetails = () => {
                                     }
                                 </div>
                             </div>
-                            <div className="col-span-1 md:col-span-1 h-fit">
+                            <div className="col-span-3 lg:col-span-1 h-fit">
                                 <div className='bg-white p-5 rounded-md'>
                                     <h2 className='text-lg font-medium mb-5 text-center'>{i18n.language === "en" ? "Choose Delivery package" : "اختر طريقة التسليم"}</h2>
                                     <div className="flex flex-col gap-3">
@@ -277,11 +284,29 @@ const ProductDetails = () => {
                                     <img className='p-5 min-h-[400px] h-[400px] mx-auto' src={`https://admin.horriizon.com/public/images/ads/1696177825250.jpg`} alt="Horizon" />
                                 </a>
                             </div>
+                            <div className="col-span-3 w-full flex flex-wrap items-center justify-between my-5">
+                                <div className="item flex flex-col gap-2 text-center text-lg justify-center items-center">
+                                    <MdSystemSecurityUpdateGood  className='text-3xl text-secondColor'/>
+                                    <p className='font-bold'>{i18n.language === "en" ? "Receipt and delivery" : "الدفع عند الاستلام"}</p>
+                                </div>
+                                <div className="item flex flex-col gap-2 text-center text-lg justify-center items-center">
+                                    <MdSystemSecurityUpdateGood  className='text-3xl text-secondColor'/>
+                                    <p className='font-bold'>{i18n.language === "en" ? "Secure payment" : "دفع امن"}</p>
+                                </div>
+                                <div className="item flex flex-col gap-2 text-center text-lg justify-center items-center">
+                                    <TbTruckDelivery  className='text-3xl text-secondColor'/>
+                                    <p className='font-bold'>{i18n.language === "en" ? "Safe delivery" : "توصيل امن"}</p>
+                                </div>
+                                <div className="item flex flex-col gap-2 text-center text-lg justify-center items-center">
+                                    <FaShippingFast  className='text-3xl text-secondColor'/>
+                                    <p className='font-bold'>{i18n.language === "en" ? "Fast delivery" : "سرعة التوصيل"}</p>
+                                </div>
+                            </div>
                             {
                                 product?.description && (
-                                    <div className='col-span-3'>
-                                    <h2>{i18n.language === "en" ? "About Product" : "عن المنتج"}</h2>
-                                        <p className='text-lg text-gray-800 py-5 border-y '>
+                                    <div className='col-span-3 bg-[#e5e5e5] p-4'>
+                                        <h2>{i18n.language === "en" ? "About Product" : "عن المنتج"}</h2>
+                                        <p className='text-lg py-5 border-y '>
                                             {
                                                 i18n.language === "en" ? product?.description?.en : product?.description?.ar
                                             }
