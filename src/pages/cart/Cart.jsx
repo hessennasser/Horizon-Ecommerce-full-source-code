@@ -53,7 +53,6 @@ const Cart = () => {
             const request = await mainRequest.post(`${apiUrl}/coupon/${coupon}`, {
                 token: userToken
             });
-            console.log(request);
             if (request.data === "Coupon Not Found") {
                 toast.info(i18n.language === "en" ? "Coupon Not Found" : "لم يتم العثور على القسيمة");
             }
@@ -61,6 +60,8 @@ const Cart = () => {
             toast.error(i18n.language === "en" ? "theres is an error, please try again" : "يوجد خطأ، برجاء المحاوله مره اخره");
             console.log(error);
         }
+        getTotalPriceInCart();
+        getCartItems(userToken, setCartItems, setLoading);
     };
 
     const handleShippingChange = e => {
@@ -83,7 +84,7 @@ const Cart = () => {
     //     </div>
     // )
 
-    if (!loading && cartItems?.length === 0) {
+    if (!loading && cartItems[1]?.length === 0) {
         return (
             <>
                 <div className="container py-10 flex flex-col gap-5 items-center justify-center">
@@ -127,7 +128,7 @@ const Cart = () => {
 
                 <div className="grid grid-cols-3 gap-5">
                     <div className="col-span-3 lg:col-span-2 flex flex-col gap-3">
-                        {cartItems?.map(item => {
+                        {cartItems[1]?.map(item => {
                             return (
                                 <CartItem
                                     key={item.id}
@@ -148,11 +149,12 @@ const Cart = () => {
                         })}
                     </div>
                     <div className="col-span-3 lg:col-span-1 lg:sticky top-0 h-fit">
-                        <form className="coupon-form flex flex-col items-start gap-6 bg-[#F4DBE8] py-4 px-6 rounded-lg shadow-md" onSubmit={e => handleCoupon(e)}>
+                        <form className={`coupon-form relative overflow-hidden flex flex-col items-start gap-6 bg-[#F4DBE8] py-4 px-6 rounded-lg shadow-md ${totalPrice < cartItems[0] ? "before:absolute before:inset-0 before:bg-gray-400 before:bg-opacity-50" : ""}`} onSubmit={e => handleCoupon(e)}>
                             <label htmlFor="coupon" className="font-bold">
                                 {i18n.language === "en" ? "Have a Coupon?" : "هل لديك قسيمة؟"}
                             </label>
                             <input
+                                disabled={totalPrice < cartItems[0]}
                                 className="w-full rounded-lg"
                                 placeholder={i18n.language === "en" ? "add your coupon" : "أضف قسيمتك"}
                                 type="text"
@@ -162,6 +164,7 @@ const Cart = () => {
                                 onChange={(e) => setCoupon(e.target.value)}
                             />
                             <button
+                                disabled={totalPrice < cartItems[0]}
                                 onClick={e => handleCoupon(e)}
                                 className="m-0 px-5 bg-secondColor py-2 rounded-md text-white hover:brightness-110"
                                 type="submit"
@@ -200,8 +203,22 @@ const Cart = () => {
                                 </div>
                             </div> */}
                             </>
+                            {
+                                totalPrice < cartItems[0] && <div className="flex justify-between items-center gap-6 text-red-500 line-through">
+                                    <h3 className="">{i18n.language === "en" ? "Total products Price" : "مجموع المنتجات"}</h3>
+                                    <p className="flex-1 text-end">{cartItems[0]} EGY</p>
+                                </div>
+                            }
+                            {
+                                totalPrice < cartItems[0] && (
+                                    <div className="flex justify-between items-center gap-6">
+                                        <h3 className="">{i18n.language === "en" ? "Discount" : "خصم"}</h3>
+                                        <p className="flex-1 text-end">-{cartItems[0] - totalPrice} EGY</p>
+                                    </div>
+                                )
+                            }
                             <div className="flex justify-between items-center gap-6">
-                                <h3 className="w-1/5">{i18n.language === "en" ? "Total" : "المجموع الكلي"}</h3>
+                                <h3 className="">{i18n.language === "en" ? "Total" : "المجموع الكلي"}</h3>
                                 <p className="flex-1 text-end">{totalPrice} EGY</p>
                             </div>
                             <Link

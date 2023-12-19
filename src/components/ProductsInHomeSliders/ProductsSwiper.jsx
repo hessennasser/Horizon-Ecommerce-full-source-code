@@ -29,12 +29,7 @@ const ProductsSwiper = ({ products, loading, error }) => {
     return (
         <div className="max-w-[98%] mx-auto py-10 select-none">
             <Swiper
-                pagination={{
-                    dynamicBullets: true,
-                    clickable: true,
-                    reverseDirection: true,
-                }}
-                modules={[Pagination, Autoplay]}
+                modules={[Autoplay]}
                 className="productsSwiper w-full"
                 loop={true}
                 // centeredSlides={true}

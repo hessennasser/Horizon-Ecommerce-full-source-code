@@ -18,6 +18,7 @@ const SignupCustomer = () => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const userLogged = localStorage.getItem("userLogged");
+    const [agreedToPolicy, setAgreedToPolicy] = useState(false);
 
     if (userLogged) {
         navigate("/profile");
@@ -26,6 +27,7 @@ const SignupCustomer = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setIsLoading(true);
 
         const fullName = e.target.fullName.value;
         const email = e.target.email.value;
@@ -49,12 +51,18 @@ const SignupCustomer = () => {
             return;
         }
 
-        setIsLoading(true);
         if (password !== confirmPassword) {
             toast.error(i18n.language === "en" ? "passwords do not match" : "كلمات المرور غير متطابقه");
             setIsLoading(false);
             return;
         }
+
+        if (!agreedToPolicy) {
+            toast.error(i18n.language === "en" ? "Please agree to our policies" : "برجاء الموافقة على سياساتنا");
+            setIsLoading(false);
+            return;
+        }
+
 
         axios.post(`${apiUrl}/auth/register`, data)
             .then((response) => {
@@ -157,13 +165,36 @@ const SignupCustomer = () => {
                                     />
                                 )}
                             </div>
+                            <div className="w-full flex items-center gap-3">
+                                <input
+                                    type="checkbox"
+                                    id="policyCheckbox"
+                                    name="policyCheckbox"
+                                    style={{ border: "1px solid gray" }}
+                                    checked={agreedToPolicy}
+                                    onChange={() => setAgreedToPolicy(!agreedToPolicy)}
+                                />
+                                <label htmlFor="policyCheckbox">
+                                    {
+                                        i18n.language === "en" ? (
+                                            <>
+                                                I have read and agree to <Link to="/privacy" className="text-secondColor underline">the Privacy Policy</Link>
+                                            </>
+                                        )
+                                            :
+                                            (
+                                                <>
+                                                    لقد قرأت ووافقت على <Link to="/privacy" className="text-secondColor underline">سياسة الخصوصية</Link>
+                                                </>
+                                            )
+                                    }
+                                </label>
+                            </div>
+
                             <button className="w-full" type="submit" disabled={isLoading}>
                                 {isLoading ? (
                                     <>
                                         <Spinner aria-label="loading..." color="purple" />
-                                        <span className="pl-3">
-                                            {i18n.language === "ar" ? "جارٍ التحميل..." : "Loading..."}
-                                        </span>
                                     </>
                                 ) : (
                                     i18n.language === "ar" ? "اشترك" : "Sign up"

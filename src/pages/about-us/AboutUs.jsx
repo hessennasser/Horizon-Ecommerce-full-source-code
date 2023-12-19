@@ -28,7 +28,6 @@ const AboutUs = () => {
     if (loading) {
         return <Loading />
     }
-    console.log(info);
     return (
         <div className='container py-10'>
             <div className="grid grid-cols-2 gap-5">

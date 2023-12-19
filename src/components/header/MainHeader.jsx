@@ -40,6 +40,7 @@ const MainHeader = () => {
     const [searchHeaderQuery, setSearchHeaderQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const searchResultsRef = useRef(null);
+    const notificationMenuRef = useRef(null);
 
     const handleSubMenuClick = (e) => {
         e.stopPropagation();
@@ -95,6 +96,12 @@ const MainHeader = () => {
                     setShowSubMenu(false);
                 }
 
+                if (!event.target.closest(".submenu")) {
+                    setNotificationMenu(false);
+                    setMessagesMenu(false);
+
+                }
+
                 if (searchResultsRef.current && !event.target.closest(".search-results")) {
                     setShowSearchResult(false);
                 }
@@ -133,8 +140,8 @@ const MainHeader = () => {
                 {/* Search */}
                 <form onSubmit={(e) => {
                     e.preventDefault();
-                    setSearchHeaderQuery(e.target.value);
-                    setSearchQuery(e.target.value);
+                    setSearchHeaderQuery(e.target.value || "");
+                    setSearchQuery(e.target.value || "");
                     navigation(`/search?q=${searchQuery}`);
                 }} className="flex-1 w-full text-xs search-holder relative">
                     <TextInput
@@ -145,8 +152,8 @@ const MainHeader = () => {
                         required={false}
                         value={searchQuery}
                         onChange={(e) => {
-                            setSearchHeaderQuery(e.target.value);
-                            setSearchQuery(e.target.value);
+                            setSearchHeaderQuery(e.target.value || "");
+                            setSearchQuery(e.target.value || "");
                         }}
                         autoComplete="off"
                     />
@@ -189,7 +196,7 @@ const MainHeader = () => {
                                     <div className="relative p-2">
                                         <BsCart3 className="text-xl" />
                                         <span className="text-lg absolute -top-4 -right-2 grid place-content-center w-7 h-7 rounded-full bg-white text-secondColor">
-                                            {userLogged ? cartItems?.length || 0 : null}
+                                            {userLogged ? cartItems[1]?.length || 0 : null}
                                         </span>
                                     </div>
                                 </Link>
@@ -249,7 +256,7 @@ const MainHeader = () => {
                         {/* Messages Button And Menu */}
                         {messagesMenu && <MessagesMenuComponent />}
                         {/* Notification Button And Menu */}
-                        {notificationMenu && <NotificationMenuComponent />}
+                        {notificationMenu && <NotificationMenuComponent ref={notificationMenuRef} />}
                         {/* User info & menu */}
                         <button
                             className="flex items-center gap-2"

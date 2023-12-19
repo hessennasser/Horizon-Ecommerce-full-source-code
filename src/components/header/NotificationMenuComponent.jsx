@@ -4,12 +4,12 @@ import { Oval } from 'react-loader-spinner';
 import { SiGooglemessages } from "react-icons/si"
 import { Link } from 'react-router-dom';
 import { AppContext } from '../../AppContext';
-const NotificationMenuComponent = () => {
+const NotificationMenuComponent = ({ ref }) => {
     const { notifications, notificationLoading, notificationError, readAllNotifications } = useContext(AppContext)
     const { i18n } = useTranslation();
 
     return (
-        <div className={`submenu z-[10000] absolute rounded-lg overflow-hidden shadow-lg bg-white w-[340px] max-w-[90%] sm:max-w-[340px] ${i18n.language === "en" ? "right-2" : "left-2"} top-12 text-black`}>
+        <div ref={ref} className={`notifications submenu z-[10000] absolute rounded-lg overflow-hidden shadow-lg bg-white w-[340px] max-w-[90%] sm:max-w-[340px] ${i18n.language === "en" ? "right-2" : "left-2"} top-12 text-black`}>
             <div className="px-8 py-2 border-b">
                 <div className="flex items-center">
                     <h6 className="font-semibold">Notifications</h6>
@@ -38,7 +38,7 @@ const NotificationMenuComponent = () => {
                 }
                 {
                     (!notificationError && !notificationLoading) && notifications.length > 0 ?
-                        notifications?.map((item, index) => {
+                        notifications?.slice().reverse().slice(0, 3).map((item, index) => {
                             return (
                                 <div key={item.id} class="relative flex items-center bg-white hover:bg-blue-400/10 px-8 py-2">
                                     <div class="me-3 h-10 w-10 grid items-center justify-center bg-primary brround box-shadow-primary">

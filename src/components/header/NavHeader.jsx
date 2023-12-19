@@ -49,7 +49,7 @@ const NavHeader = ({ toggleSidebar }) => {
                         const isActive = location.pathname === page.link;
                         return (
                             <li key={page.id}>
-                                <NavLink to={page.link} className={({ isActive }) => isActive ? "border-b border-[#0096ff] text-[#0096ff]" : ""}>{page.name}</NavLink>
+                                <NavLink onClick={() => setIsMenuOpen(false)} to={page.link} className={({ isActive }) => isActive ? "border-b border-[#0096ff] text-[#0096ff]" : ""}>{page.name}</NavLink>
                             </li>
                         );
                     })

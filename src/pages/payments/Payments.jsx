@@ -81,7 +81,6 @@ const Payments = () => {
     }
 
     console.log(payments);
-
     return (
         <div className="container py-10 min-h-[40dvh]">
             <div className="mb-10">

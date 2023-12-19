@@ -49,7 +49,6 @@ const LoginCustomer = () => {
         }
         axios.post(`${apiUrl}/auth/login`, data)
             .then((response) => {
-                // console.log(response.data.user);
                 toast.success(i18n.language === "en" ? "You are logged in successfully" : "تم تسجيل الدخول بنجاح");
                 const user = response.data.user;
                 user.token = response.data.access_token; // Add the token to the user object

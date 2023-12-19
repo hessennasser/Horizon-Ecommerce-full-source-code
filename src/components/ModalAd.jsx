@@ -6,26 +6,7 @@ import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai';
 import { AppContext } from '../AppContext';
 
 const ModalAd = ({ onOpen, onClose, modalVisible, showModal }) => {
-    const [ad, setAd] = useState();
-    const [loading, setLoading] = useState(false);
-    const {completeInfoModal} = useContext(AppContext);
-    const getAds = async () => {
-        setLoading(true);
-        try {
-            const response = await axios(`${apiUrl}/add/modal`);
-            const { data } = response;
-            setAd(data.data);
-            setLoading(false);
-        } catch (error) {
-            setLoading(false);
-            console.log(error);
-        }
-    };
-
-    useEffect(() => {
-        getAds();
-    }, [])
-
+    const {completeInfoModal, ad} = useContext(AppContext);
     if (!ad || completeInfoModal) {
         return null;
     }
@@ -45,7 +26,7 @@ const ModalAd = ({ onOpen, onClose, modalVisible, showModal }) => {
                     }
                 </div>
                 <a href={ad[0]?.link}>
-                    <img className='p-5 min-h-[400px] h-[400px] mx-auto' src={`https://admin.horriizon.com/public/${ad[0]?.image}`} alt="Horizon" />
+                    <img className='p-5 min-h-[400px] h-[400px] mx-auto object-cover' src={`https://admin.horriizon.com/public/${ad[0]?.image}`} alt="Horizon" />
                 </a>
             </div>
         </div>

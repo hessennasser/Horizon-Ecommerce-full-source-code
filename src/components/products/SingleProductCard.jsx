@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import { AiFillStar } from "react-icons/ai"
 import { BsFillCartPlusFill } from "react-icons/bs"
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -29,7 +28,7 @@ const SingleProductCard = ({ background, id, title, total_price, price, quantity
                         {/* <span className="line-through text-sm text-gray-400">$2,999.00</span> */}
                     </div>
                     {
-                        parseInt(quantity) > 1 ?
+                        parseInt(quantity) > 0 ?
                             (
                                 <button disabled={loading} onClick={() => { addToCart(id) }} aria-label='add to cart' className="duration-200 flex items-center justify-center gap-2 bg-secondColor hover:bg-mainColor text-white text-sm p-2 rounded-md w-full">
                                     {i18n.language === "en" ? "Add to cart" : "اضف الي السله"} <BsFillCartPlusFill />

@@ -25,7 +25,7 @@ const WeeklyOffersCards = ({ imageCard, getWeeklyOffers, products, setProducts, 
                 <div className="flex flex-col md:flex-row gap-5 justify-between items-start mb-5">
                     <div className="flex-1">
                         <h2 className="font-bold text-2xl mb-2">{i18n.language === "en" ? titleEn : titleAr}</h2>
-                        <p className="w-full md:w-2/3 text-gray-800">{t('weeklyOffers.descraption')}</p>
+                        {/* <p className="w-full md:w-2/3 text-gray-800">{t('weeklyOffers.descraption')}</p> */}
                     </div>
                     <Link to={link} className="flex items-center gap-3 text-lg ">
                         {t('weeklyOffers.allButton')}
@@ -45,7 +45,7 @@ const WeeklyOffersCards = ({ imageCard, getWeeklyOffers, products, setProducts, 
             <div className="flex flex-col md:flex-row gap-5 justify-between items-start mb-5">
                 <div className="flex-1">
                     <h2 className="font-bold text-2xl mb-2">{i18n.language === "en" ? titleEn : titleAr}</h2>
-                    <p className="w-full md:w-2/3 text-gray-800">{t('weeklyOffers.descraption')}</p>
+                    {/* <p className="w-full md:w-2/3 text-gray-800">{t('weeklyOffers.descraption')}</p> */}
                 </div>
                 <Link to={link} className="flex items-center gap-3 text-lg ">
                     {t('weeklyOffers.allButton')}
@@ -63,7 +63,7 @@ const WeeklyOffersCards = ({ imageCard, getWeeklyOffers, products, setProducts, 
             <div className="flex flex-col md:flex-row gap-5 justify-between items-start mb-5">
                 <div className="flex-1">
                     <h2 className="font-bold text-2xl mb-2">{i18n.language === "en" ? titleEn : titleAr}</h2>
-                    <p className="w-full md:w-2/3 text-gray-800">{t('weeklyOffers.descraption')}</p>
+                    {/* <p className="w-full md:w-2/3 text-gray-800">{t('weeklyOffers.descraption')}</p> */}
                 </div>
                 <Link to={link} className="flex items-center gap-3 text-lg ">
                     {t('weeklyOffers.allButton')}

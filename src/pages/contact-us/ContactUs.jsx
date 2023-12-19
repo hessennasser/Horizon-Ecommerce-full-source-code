@@ -164,9 +164,6 @@ const ContactUs = () => {
                                 {loading ?
                                     <>
                                         <Spinner aria-label="loading..." color="purple" />
-                                        <span className="pl-3">
-                                            {i18n.language === "ar" ? "جاري التحميل..." : "Loading..."}
-                                        </span>
                                     </>
                                     :
                                     i18n.language === "en" ? "Submit" : "تأكيد"

@@ -1,30 +1,61 @@
 import React, { useState, useEffect, useContext } from 'react';
-
-import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { useTranslation } from 'react-i18next';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import SingleProductCard from '../components/products/SingleProductCard';
 import { AppContext } from '../AppContext';
 
 const SearchPage = ({ }) => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const initialSearchQuery = queryParams.get('q') || ''; // Get the "q" parameter value
+    const initialSearchQuery = queryParams.get('q') || '';
 
+    const { websiteInfo } = useContext(AppContext)
     const { products, categories, searchQuery, setSearchQuery } = useContext(AppContext);
     const minProductPrice = Math.min(...products.map((product) => product.price)) === Infinity ? 0 : Math.min(...products.map((product) => product.price));
     const maxProductPrice = Math.max(...products.map((product) => product.price)) === -Infinity ? 10000 : Math.max(...products.map((product) => product.price));
     const [priceRange, setPriceRange] = useState([minProductPrice, maxProductPrice]);
     const { i18n } = useTranslation();
-    const [sidebarOpen, setSidebarOpen] = useState(true);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
+    const [sortedProducts, setSortedProducts] = useState([]);
+
+    const [sortOption, setSortOption] = useState(websiteInfo?.search || 0); // Initialize with the most recent
+
+    const sortFilteredProducts = () => {
+        const sortedProducts = [...products];
+
+        switch (sortOption) {
+            case 0:
+                sortedProducts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                break;
+            case 1:
+                sortedProducts.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+                break;
+            case 2:
+                sortedProducts.sort((a, b) => a.price - b.price);
+                break;
+            case 3:
+                sortedProducts.sort((a, b) => b.price - a.price);
+                break;
+            case 4:
+                sortedProducts.sort((a, b) => Math.floor(a.sale) - Math.floor(b.sale));
+                break;
+            case 5:
+                sortedProducts.sort((a, b) => Math.floor(b.sale) - Math.floor(a.sale));
+                break;
+            default:
+                sortedProducts.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+                break;
+        }
+
+        setSortedProducts(sortedProducts);
+    };
 
     useEffect(() => {
         // Update the filtered products when filters change
-        const filteredProducts = products.filter((product) => {
+        const filteredProducts = sortedProducts.filter((product) => {
             const titleEn = product.title.en.toLowerCase();
             const titleAr = product.title.ar.toLowerCase();
             const searchQueryLower = initialSearchQuery.toLocaleLowerCase() || searchQuery?.toLowerCase();
@@ -46,7 +77,8 @@ const SearchPage = ({ }) => {
         });
 
         setFilteredProducts(filteredProducts);
-    }, [products, searchQuery, priceRange, selectedCategories]);
+        sortFilteredProducts();
+    }, [products, sortedProducts, searchQuery, priceRange, selectedCategories, sortOption]);
 
     const handleCategorySelect = (category) => {
         if (selectedCategories.includes(category)) {
@@ -56,12 +88,16 @@ const SearchPage = ({ }) => {
         }
     };
 
+    useEffect(() => {
+        setSortOption(websiteInfo?.search)
+    }, [websiteInfo])
+
     return (
         <div className="flex flex-col container py-5 min-h-screen relative">
             <div className="flex flex-col sm:flex-row">
                 {/* Sidebar */}
                 <div
-                    className={`md:w-1/4 bg-white rounded-lg p-4 md:sticky md:top-44 h-fit overflow-y-auto shadow-lg flex flex-col gap-5 ${!sidebarOpen && ""}`}
+                    className={`md:w-1/4 bg-white rounded-lg p-4 md:sticky md:top-44 h-fit overflow-y-auto shadow-lg flex flex-col gap-5`}
                 >
                     <h3 className='font-bold text-lg border-b border-gray-400 pb-4'>{i18n.language === "en" ? "filter" : "تصفية"}</h3>
                     <div className='w-full border-b border-gray-400 pb-4'>
@@ -109,7 +145,7 @@ const SearchPage = ({ }) => {
                 </div>
 
                 {/* Main content */}
-                <div className={`md:w-3/4 p-4 ${sidebarOpen ? "" : ""}`}>
+                <div className={`md:w-3/4 p-4`}>
                     {/* Product grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
                         {filteredProducts.length > 0 ? (

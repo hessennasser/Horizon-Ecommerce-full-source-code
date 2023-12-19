@@ -20,25 +20,20 @@ const Order = () => {
     const { mainRequest } = useContext(AppContext);
 
     const [allOrders, setAllOrders] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [filteredData, setFilteredData] = useState([]);
-    console.log(allOrders);
     const getAllOrders = async () => {
         setIsLoading(true);
         try {
             const res = await mainRequest.post(`${apiUrl}/vendor/order`, { token: sellerToken });
             setAllOrders(res.data.data);
-            setFilteredData(res.data.data); // Initially, set filtered data to all orders
+            setFilteredData(res.data.data);
         } catch (error) {
-            console.log(error);
+            console.error("Error fetching orders:", error);
         } finally {
             setIsLoading(false);
         }
     };
-
-    useEffect(() => {
-        getAllOrders();
-    }, [sellerToken, sellerLogged]);
 
     // Function to get the status description based on status value
     const getStatusDescription = (status) => {
@@ -47,7 +42,6 @@ const Order = () => {
         const getStatusText = (statusValue) => {
             switch (statusValue) {
                 case 0:
-                    return i18n.language === 'en' ? 'Prepared' : 'قيد التحضير';
                 case 1:
                     return i18n.language === 'en' ? 'Prepared' : 'قيد التحضير';
                 case 2:
@@ -58,8 +52,8 @@ const Order = () => {
                     return i18n.language === 'en' ? 'Delivered' : 'تم التوصيل';
                 default:
                     return '';
-            }
-        };
+            };
+        }
 
         const statusText = getStatusText(statusValue);
         const statusColor =
@@ -124,13 +118,13 @@ const Order = () => {
             name: 'Due Date',
             selector: 'order.date',
             sortable: true,
-            cell: (row) => calculateDueDate(row.order.date),
+            cell: (row) => calculateDueDate(row?.order?.date),
         },
         {
             name: 'Status',
             selector: 'order?.status',
             sortable: true,
-            cell: (row) => getStatusDescription(row.order?.status)
+            cell: (row) => getStatusDescription(row?.order?.status)
         },
     ];
     const tableColumnsAR = [
@@ -173,46 +167,54 @@ const Order = () => {
             name: 'تاريخ الأستحقاق',
             selector: 'order.date',
             sortable: true,
-            cell: (row) => calculateDueDate(row.order.date),
+            cell: (row) => calculateDueDate(row?.order?.date),
         },
         {
             name: 'الحالة',
             selector: 'order?.status',
             sortable: true,
-            cell: (row) => getStatusDescription(row.order?.status),
+            cell: (row) => getStatusDescription(row?.order?.status),
         },
     ];
     // Use the appropriate set of columns based on the current language
     const columns = i18n.language === 'en' ? tableColumnsEN : tableColumnsAR;
 
 
-    // Function to handle the search filter
-    const handleFilter = (e) => {
-        const keyword = e.target.value;
-        if (keyword.trim() === '') {
+    const [keyword, setKeyword] = useState("");
+
+    useEffect(() => {
+        getAllOrders();
+    }, [sellerToken, sellerLogged]);
+
+    useEffect(() => {
+        setFilteredData(allOrders)
+        if (keyword.length == 0) {
             setFilteredData(allOrders);
         } else {
             const filteredResults = allOrders.filter((order) => {
-                // Here, it will search in the 'id', 'product_id', and 'user_id' fields
                 return (
-                    order.id.toString().includes(keyword) ||
-                    order.product_id.toString().includes(keyword) ||
-                    order.product.title.en.toString().includes(keyword) ||
-                    order.product.title.ar.toString().includes(keyword) ||
-                    order.user_id.toString().includes(keyword)
+                    order?.id?.toString().toLowerCase().includes(keyword) ||
+                    order?.product_id?.toString().toLowerCase().includes(keyword) ||
+                    order?.product.title.en?.toString().toLowerCase().includes(keyword) ||
+                    order?.product.title.ar?.toString().toLowerCase().includes(keyword) ||
+                    order?.user_id?.toString().toLowerCase().includes(keyword)
                 );
             });
             setFilteredData(filteredResults);
         }
-    };
+    }, [keyword, sellerLogged, sellerToken])
+
     if (isLoading) {
         return (
             <Loading />
         )
     }
+
+    console.log(allOrders);
+
     return (
         <div className="container py-10 min-h-[40dvh]">
-            {allOrders?.length > 0 ? (
+            {allOrders.length > 0 ? (
                 <div>
                     <div className="mb-10 flex flex-col items-start gap-2 sm:flex-row sm:items-center justify-between">
                         <Breadcrumbs />
@@ -220,8 +222,9 @@ const Order = () => {
                     {/* Add the search bar */}
                     <input
                         type="text"
-                        placeholder="Search by Order ID, Product ID, Product Title or User ID..."
-                        onChange={handleFilter}
+                        placeholder="Search by Order ID, Product ID or Product Title ..."
+                        value={keyword}
+                        onChange={(e) => { setKeyword(e.target.value) }}
                         className="px-4 py-2 w-full mb-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
                     />
                     <DataTable columns={columns} data={filteredData} className='order-table' />

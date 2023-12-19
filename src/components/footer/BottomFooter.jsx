@@ -12,8 +12,8 @@ const BottomFooter = () => {
                 {
                     pages.map(page => {
                         if (!sellerLogged) {
-                            if (page.id === 5) {
-                                return null
+                            if (page.id === pages.length) {
+                                return null;
                             }
                         }
                         return (

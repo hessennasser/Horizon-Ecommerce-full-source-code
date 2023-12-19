@@ -91,7 +91,6 @@ const EditModal = ({
                     },
                 }
             );
-            console.log(response.data);
             toast.success(i18n.language === "en" ? "The product has been updated" : "تم تعديل المنتج بنجاح")
         } catch (error) {
             console.log(error);

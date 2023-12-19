@@ -48,21 +48,24 @@ const AllNotifications = () => {
                     }
                     {
                         (!notificationError && !notificationLoading) && notifications.length > 0 ?
-                            notifications?.map((item, index) => {
+                            notifications?.slice().reverse().map((item, index) => {
                                 return (
-                                    <div key={item.id} class="relative flex items-center bg-white hover:bg-blue-400/10  py-2">
-                                        <div class="me-3 h-10 w-10 grid items-center justify-center bg-primary brround box-shadow-primary">
-                                            <SiGooglemessages className='text-2xl' />
+                                    <div
+                                        key={item.id}
+                                        className="relative flex items-center bg-white hover:bg-blue-400/10 px-8 py-2"
+                                    >
+                                        <div className="me-3 h-10 w-10 grid items-center justify-center bg-primary brround box-shadow-primary">
+                                            <SiGooglemessages className="text-2xl" />
                                         </div>
-                                        <div class="w-full">
-                                            <h5 class="notification-label mb-1">
-                                                {item.title}
-                                            </h5>
-                                            {
-                                                item.read_at === null && (
-                                                    <span class=" absolute bottom-2 end-2 bg-secondColor text-white text-xs p-1 rounded-lg">New</span>
-                                                )
-                                            }
+                                        <div className="w-full">
+                                            <h5 className="notification-label mb-1">{item.title}</h5>
+                                            <div className="flex items-center justify-end w-full">
+                                                {item.read_at === null && (
+                                                    <span className=" absolute bottom-2 end-2 bg-secondColor text-white text-xs p-1 rounded-lg">
+                                                        New
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 )

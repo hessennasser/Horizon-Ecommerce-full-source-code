@@ -4,7 +4,6 @@ import { FaTimes } from 'react-icons/fa';
 import { AppContext } from '../../../AppContext';
 
 const OrderModal = ({ setOrderModal, productOrders, isLoading }) => {
-    console.log(productOrders);
     const { i18n } = useTranslation();
 
     // Function to get the status description based on status value

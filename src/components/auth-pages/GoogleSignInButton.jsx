@@ -16,8 +16,6 @@ const GoogleSignInButton = ({ role }) => {
 
     const handleSuccess = async credentialResponse => {
         try {
-            console.log('Login Successful:', credentialResponse);
-
             // Check if the response structure matches your library's documentation
             if (credentialResponse.credential && credentialResponse.clientId) {
                 const { credential, clientId } = credentialResponse;
@@ -69,7 +67,6 @@ const GoogleSignInButton = ({ role }) => {
                 }
 
             } else {
-                console.log('Login data structure is not as expected:', credentialResponse);
             }
         } catch (error) {
             console.error('An error occurred:', error);

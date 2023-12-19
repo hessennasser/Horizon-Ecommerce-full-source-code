@@ -25,7 +25,6 @@ const ProductsInCategory = () => {
             setLoading(true);
             try {
                 const request = await axios(`${apiUrl}/categorySections/${categoryId}`);
-                console.log(request);
                 setCategoryData(request.data.data[0]);
             } catch (error) {
                 console.log(error);
@@ -48,23 +47,19 @@ const ProductsInCategory = () => {
             <div className="flex flex-col gap-5">
                 {
                     categoryData?.sections?.map(cat => {
-                        console.log(categoryData);
                         return (
                             <div className="py-4 px-2 ">
                                 <h2 className='mb-4 text-lg font-bold text-center'>{cat.title}</h2>
                                 <Swiper
                                     slidesPerView={1}
                                     spaceBetween={30}
-                                    pagination={{
-                                        clickable: true,
-                                    }}
                                     autoplay={{
                                         delay: 3000,
                                         disableOnInteraction: false,
                                         reverseDirection: true,
                                     }}
                                     navigation={true}
-                                    modules={[Pagination, Navigation, Autoplay]}
+                                    modules={[Navigation, Autoplay]}
                                     className="mySwiper"
                                     style={{ direction: "ltr" }}
                                     breakpoints={{
@@ -96,7 +91,6 @@ const ProductsInCategory = () => {
                                 </Swiper>
                                 {
                                     cat?.products?.map(product => {
-                                        console.log(product);
                                     })
                                 }
                             </div>

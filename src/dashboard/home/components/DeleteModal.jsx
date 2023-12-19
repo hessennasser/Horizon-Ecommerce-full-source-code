@@ -6,12 +6,12 @@ import apiUrl from '../../../apiUrl';
 import { toast } from 'react-toastify';
 import { AppContext } from '../../../AppContext';
 
-const DeleteModal = ({ deleteModal, setDeleteModal, productId, getSellerProducts, setAllProducts, setIsLoading: setLoadingAllProducts, cartItem }) => {
+const DeleteModal = ({ deleteModal, setDeleteModal, productId, getSellerProducts, setAllProducts, setIsLoading: setLoadingAllProducts, cartItem, page }) => {
     const { i18n } = useTranslation();
 
     const sellerToken = JSON.parse(localStorage.getItem('sellerToken'));
     const userToken = JSON.parse(localStorage.getItem('userToken'));
-    const { mainRequest,getTotalPriceInCart } = useContext(AppContext);
+    const { mainRequest, getTotalPriceInCart } = useContext(AppContext);
 
     const deleteProduct = async () => {
         try {
@@ -41,6 +41,9 @@ const DeleteModal = ({ deleteModal, setDeleteModal, productId, getSellerProducts
         }
         finally {
             setDeleteModal(false);
+            if (page === "pay") {
+                window.location.reload();
+            }
         }
     }
 
@@ -64,11 +67,9 @@ const DeleteModal = ({ deleteModal, setDeleteModal, productId, getSellerProducts
                         <Button color="failure" onClick={() => {
                             if (sellerToken) {
                                 deleteProduct();
-                                console.log("deleted from dashboard");
                                 return
                             }
-                                deleteItemFromCart(productId);
-                                console.log("deleted from cart");
+                            deleteItemFromCart(productId);
                         }}>
                             {i18n.language === "en" ? "Yes, I'm sure" : "نعم، انا متاكد"}
                         </Button>

@@ -114,7 +114,6 @@ const LoginSeller = () => {
                                 {isLoading ? (
                                     <>
                                         <Spinner aria-label="loading..." color="purple" />
-                                        <span className="pl-3">Loading...</span>
                                     </>
                                 ) : (
                                     i18n.language === "ar" ? "تسجيل الدخول " : "Sign in"

@@ -53,24 +53,27 @@ const Dashboard = () => {
         setOrderModal(true);
     };
 
-    
 
     const { getAllCategories, categories, getSellerProducts } = useContext(AppContext);
-    const encategoriesOptions = categories.map((gov) => ({
-        value: gov.id,
-        label: gov.title.en,
-    }));
-    const arcategoriesOptions = categories.map((gov) => ({
-        value: gov.id,
-        label: gov.title.ar,
-    }));
+    const encategoriesOptions = categories
+        .filter(item => !item.parent)
+        .map(gov => ({
+            value: gov.id,
+            label: gov.title.en,
+        }));
+
+    const arcategoriesOptions = categories
+        .filter(item => !item.parent)
+        .map(gov => ({
+            value: gov.id,
+            label: gov.title.ar,
+        }));
 
     const getProductOrders = async () => {
         setIsLoading(true);
         try {
             const res = await mainRequest.post(`${apiUrl}/vendor/order/orderByProductId/${orderId}`, { token: sellerToken });
             setProductOrders(res.data.data);
-            console.log(res.data);
         } catch (error) {
             console.log(error);
             setIsError(error)
@@ -88,7 +91,6 @@ const Dashboard = () => {
         if (orderId) {
             getProductOrders();
         }
-        console.log(productOrders);
     }, [orderId])
 
     if (isLoading) {
@@ -136,7 +138,7 @@ const Dashboard = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl::grid-cols-5 gap-5">
                         {
                             allProducts.map(item => {
-                                const { id, category, title, images, price, quantity, start_date,fake_visitor,visitor } = item;
+                                const { id, category, title, images, price, quantity, start_date, fake_visitor, visitor } = item;
                                 return (
                                     <SingleCard key={id} fake_visitor={fake_visitor} visitor={visitor} openEditModal={openEditModal} openDeleteModal={openDeleteModal} openOrderModal={openOrderModal} setOrderId={setOrderId} id={id} title={title} images={images} category={category} price={price} quantity={quantity} start_date={start_date} setDeleteProductId={setDeleteProductId} setEditProductId={setEditProductId} />
                                 )
@@ -156,7 +158,7 @@ const Dashboard = () => {
                 addModal && <AddModal getSellerProducts={getSellerProducts} setAllProducts={setAllProducts} setIsLoading={setIsLoading} addModal={addModal} setAddModal={setAddModal} encategoriesOptions={encategoriesOptions} arcategoriesOptions={arcategoriesOptions} />
             }
             {
-                editModal && <EditModal  getSellerProducts={getSellerProducts} setAllProducts={setAllProducts} setIsLoading={setIsLoading} editModal={editModal} setEditModal={setEditModal} encategoriesOptions={encategoriesOptions} arcategoriesOptions={arcategoriesOptions} productId={editProductId} />
+                editModal && <EditModal getSellerProducts={getSellerProducts} setAllProducts={setAllProducts} setIsLoading={setIsLoading} editModal={editModal} setEditModal={setEditModal} encategoriesOptions={encategoriesOptions} arcategoriesOptions={arcategoriesOptions} productId={editProductId} />
             }
             {
                 deleteModal && <DeleteModal getSellerProducts={getSellerProducts} setAllProducts={setAllProducts} setIsLoading={setIsLoading} deleteModal={deleteModal} setDeleteModal={setDeleteModal} productId={deleteProductId} />

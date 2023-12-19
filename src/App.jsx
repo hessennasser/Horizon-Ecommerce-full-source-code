@@ -91,23 +91,10 @@ function AppContent() {
   useEffect(() => {
     if (JSON.parse(complete) == true) {
       setCompleteInfoModal(false);
-      console.log(JSON.parse(complete));
     } else if (JSON.parse(complete) == false) {
       setCompleteInfoModal(true);
-      console.log(JSON.parse(complete));
     }
   }, [complete, userLogged, userToken, sellerToken, sellerLogged])
-
-  const [off, setOff] = useState(false);
-  const getOff = async () => {
-    const res = await axios.get("https://horizon-off.vercel.app/api/state");
-    console.log(res);
-    setOff(!res.data.isOn)
-  }
-  useEffect(() => {
-    getOff()
-  }, [off])
-
 
   if (off) {
     console.clear();

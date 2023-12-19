@@ -43,8 +43,6 @@ export const AppProvider = ({ children }) => {
         setChosenDelivery(event.target.value);
     };
 
-
-
     // Setup react-i18next --------------------------------------------------------------
     i18n
         .use(initReactI18next)
@@ -183,7 +181,6 @@ export const AppProvider = ({ children }) => {
 
         try {
             const response = await mainRequest.post(`${apiUrl}/auth/logout`, data);
-            console.log(response);
             toast.success(
                 i18n.language === "en" ? "Logged Out" : "تم تسجيل الخروج"
             );
@@ -293,10 +290,11 @@ export const AppProvider = ({ children }) => {
                 token: userToken
             });
             const { data } = response;
-            setCartItems(data?.data[1]);
-            console.log(data.data);
+            setCartItems(data?.data);
+            if (setLoading) setLoading(false);
         } catch (error) {
             console.log(error);
+            if (setLoading) setLoading(false);
         }
         finally {
             if (setLoading) setLoading(false);
@@ -409,6 +407,19 @@ export const AppProvider = ({ children }) => {
             console.log(error);
         }
     };
+    const [ad, setAd] = useState();
+    const getAds = async () => {
+        setLoading(true);
+        try {
+            const response = await axios(`${apiUrl}/add/modal`);
+            const { data } = response;
+            setAd(data.data);
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            console.log(error);
+        }
+    };
     // Messages
     const [messagesNumber, setMessagesNumber] = useState(0);
     const [messages, setMessages] = useState([]);
@@ -490,6 +501,7 @@ export const AppProvider = ({ children }) => {
         sellerLogged ? getSellerTotal() : null;
         sellerLogged ? getNotifications() : null;
         sellerLogged || userLogged ? getMessages() : null;
+        getAds()
     }, [userToken, userLogged, sellerLogged, sellerToken]);
 
     const contextValue = useMemo(() => ({
@@ -544,7 +556,8 @@ export const AppProvider = ({ children }) => {
         notificationError,
         readAllNotifications,
         handleDeliveryChange,
-        chosenDelivery
+        chosenDelivery,
+        ad,
     }), [
         isSidebarOpen,
         setIsSidebarOpen,

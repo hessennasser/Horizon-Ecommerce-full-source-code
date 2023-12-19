@@ -2,9 +2,7 @@ import React from 'react';
 import FacebookLogin from '@greatsumini/react-facebook-login';
 
 const FacebookSignInButton = () => {
-    const handleFacebookResponse = (response) => {
-        console.log('Facebook Login Response:', response);
-        
+    const handleFacebookResponse = (response) => {        
         if (response.accessToken) {
             // Login Successfully
             // You can perform actions like making API calls, setting user state, etc.
@@ -25,7 +23,6 @@ const FacebookSignInButton = () => {
                 console.log('Login Failed!', error);
             }}
             onProfileSuccess={(response) => {
-                console.log('Get Profile Success!', response);
             }}
             render={({ onClick, logout }) => (
                 <button

@@ -30,12 +30,14 @@ const HeroSlider = () => {
     return (
         <div className="w-full select-none">
             <Swiper
-                modules={[Autoplay, Navigation]}
-                autoplay={{ delay: 3000 }}
+                autoplay={{
+                    delay: 3000,
+                    disableOnInteraction: false
+                }}
                 navigation={true}
-                loop={true}
+                modules={[Navigation, Autoplay]}
                 className="heroSlider w-full"
-                style={{ direction: "ltr" }}
+                style={{ direction: i18n.language === "ar" ? "ltr" : "initial" }}
             >
                 {
                     slider.map(slide => {

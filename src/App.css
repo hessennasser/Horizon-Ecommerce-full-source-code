@@ -32,7 +32,7 @@ body[dir="rtl"] .breadcrumb svg.mx-1.h-6.w-6.text-gray-400.group-first\:hidden.m
     background-color: #125ed4;
 }
 
-.auth-buttons-holder>* {
+.auth-buttons-holder> * {
     width: 240px !important;
     height: 2.5rem !important;
     display: flex !important;
@@ -123,5 +123,11 @@ body[dir="rtl"] .breadcrumb svg.mx-1.h-6.w-6.text-gray-400.group-first\:hidden.m
         -moz-transform: translateY(0);
         -ms-transform: translateY(0);
         -o-transform: translateY(0);
+    }
 }
-}
+
+
+
+
+
+

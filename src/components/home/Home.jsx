@@ -27,7 +27,6 @@ const Home = () => {
         } catch (error) {
             setProductsOnSectionOneError(error);
             setProductsOnSectionOneLoading(false);
-            console.log(weeklyError);
         }
     };
     // Section Two
@@ -53,7 +52,7 @@ const Home = () => {
     const getProductsOnSectionThree = async () => {
         setProductsOnSectionThreeLoading(true);
         try {
-            const response = await axios.post(`${apiUrl}/section/lastCategory`);
+            const response = await axios.post(`${apiUrl}/section/firstProduct`);
             const { data } = response;
             setProductsOnSectionThree(data.data);
             setProductsOnSectionThreeLoading(false);

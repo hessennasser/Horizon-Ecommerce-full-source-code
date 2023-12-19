@@ -8,20 +8,31 @@ import { Link } from "react-router-dom";
 const HomeBanner = () => {
     const { i18n } = useTranslation();
     const [data, setData] = useState({});
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(true);
     const getData = async () => {
         setLoading(true);
         try {
             const response = await axios(`${apiUrl}/section/banner`);
             const { data } = response.data;
             setData(data);
+            setLoading(false);
         } catch (error) {
             console.log(error);
+            setError(true);
+            setLoading(false);
         }
+        setLoading(false);
+        setError(false);
     }
     useEffect(() => {
         getData();
-    }, [])
+    }, []);
+
+    if (loading || error) {
+        return;
+    }
+
     return (
         <div className="py-5 text-white bg-mainColor bg-gradient-to-r from-indigo-900 to-purple-900">
             <div className="container grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -41,11 +52,15 @@ const HomeBanner = () => {
                         </Link>
                     </div>
                 </div>
-
-                <div className="img">
-                    <img src={`https://admin.horriizon.com/public/${data?.image}`} alt="horizon" />
+                <div className="flex items-center gap-2">
+                    {
+                        data?.images?.map(image => (
+                            <div className="img">
+                                <img src={`https://admin.horriizon.com/public/${image?.image}`} alt="horizon" />
+                            </div>
+                        ))
+                    }
                 </div>
-
             </div>
         </div>
     )

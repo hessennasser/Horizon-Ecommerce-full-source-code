@@ -54,3 +54,37 @@
 /* .link:not(:last-child){
     border-bottom: 1px solid #000;
 } */
+
+
+.show-more-link a {
+    position: relative;
+    transition: color .3s;
+    -webkit-transition: color .3s;
+    -moz-transition: color .3s;
+    -ms-transition: color .3s;
+    -o-transition: color .3s;
+}
+
+.show-more-link a::before {
+    content: "";
+    width: 0;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #125ed4;
+    z-index: -1;
+    transition: width .3s;
+    -webkit-transition: width .3s;
+    -moz-transition: width .3s;
+    -ms-transition: width .3s;
+    -o-transition: width .3s;
+}
+
+.show-more-link:hover a {
+    color: #fff;
+}
+
+.show-more-link:hover a::before {
+    width: 100%;
+}
