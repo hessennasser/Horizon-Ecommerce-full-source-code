@@ -96,11 +96,6 @@ function AppContent() {
     }
   }, [complete, userLogged, userToken, sellerToken, sellerLogged])
 
-  if (off) {
-    console.clear();
-    return null;
-  }
-
   return (
     <div className="App bg-[#F4F4F4]">
       <Suspense fallback={
